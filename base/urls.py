@@ -6,6 +6,7 @@ from . import views
 
 urlpatterns = [
     path('', views.home,name='home'),
+    path('map/',views.map,name='map')
 ]
 
 if settings.DEBUG:

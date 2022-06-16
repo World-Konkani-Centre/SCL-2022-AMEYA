@@ -1,0 +1,51 @@
+{% extends 'main.html' %} {% block content %}
+<style>
+  #map {
+    height: 100vh;
+  }
+</style>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-9" id="map"></div>
+    <div class="col-3">
+      <ul class="nav nav-pills">
+        <li class="nav-item">
+          <a class="nav-link active" href="#">Directions</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Food</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Transport</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<script>
+  var map = L.map("map").setView([12.982810146798549, 77.58521536314493], 10);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution: "© OpenStreetMap",
+  }).addTo(map);
+  var marker = L.marker([12.982810146798549, 77.58521536314493]).addTo(map);
+  marker.bindPopup("<b>Hello world!</b><br>I am a popup.");
+  var marker2 = L.marker([12.88108723195882, 77.55912283614984]).addTo(map);
+  marker2.bindPopup("<b>Hello world!</b><br>I am a popup.");
+  function onMapClick(e) {
+    popup
+      .setLatLng(e.latlng)
+      .setContent("You clicked the map at " + e.latlng.toString())
+      .openOn(map);
+  }
+
+  map.on("click", onMapClick);
+  //   var latlngs = [
+  //     [12.982810146798549, 77.58521536314493],
+  //     [12.88108723195882, 77.55912283614984],
+  //     [12.986824673127433, 77.67173268949709],
+  //   ];
+
+  //   var polyline = L.polyline(latlngs, { color: "red" }).addTo(map);
+</script>
+{% endblock %}
