@@ -6,7 +6,10 @@ from . import views
 
 urlpatterns = [
     path('', views.home,name='home'),
-    path('map/',views.map,name='map')
+    path('map/',views.map,name='map'),
+    path('login/',views.login,name='login'),
+    path('signup/',views.signup,name='signup'),
+    path('recommendations/',views.recommendations,name='recommendations'),
 ]
 
 if settings.DEBUG:

@@ -8,3 +8,15 @@ def home(request):
 def map(request):
     context={}
     return render(request,"base/map.html",context)
+
+def login(request):
+    context={}
+    return render(request,"base/login.html",context)
+
+def signup(request):
+    context={}
+    return render(request,"base/signup.html",context)
+
+def recommendations(request):
+    context={}
+    return render(request,"base/recommendations.html",context)
