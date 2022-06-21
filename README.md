@@ -8,7 +8,7 @@
    git clone https://github.com/World-Konkani-Centre/SCL-2022-AMEYA.git
    cd SCL-2022-AMEYA
    ```
-   Make sure u have python installed on your system.
+   Make sure you have python installed on your system.
 2. Create a Virtual Environment for the Project
 
    If u don't have a virtualenv installed
@@ -40,10 +40,13 @@
 
 5. Create a super user.
    This is to access Admin panel and admin specific pages.
+
    ```djangotemplate
    python manage.py createsuperuser
    ```
+
    Enter your username, email and password.
+
 6. Run server
    ```bash
    python manage.py runserver

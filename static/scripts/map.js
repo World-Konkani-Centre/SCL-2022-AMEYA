@@ -1,4 +1,5 @@
 let curLatLang = [12.985409023466968, 77.58148936513626];
+
 var map = L.map("map").setView(curLatLang, 13);
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   maxZoom: 19,
@@ -42,7 +43,7 @@ const bus = [
 map.panTo(new L.LatLng(12.947962836536151, 77.57231830099437));
 var marker = L.marker([12.947962836536151, 77.57231830099437], {
   icon: new LeafIcon({
-    iconUrl: `${window.location.origin}/static/icons/my-location.png`,
+    iconUrl: `${window.location.origin}/static/icons/map/my-location.png`,
   }),
 }).addTo(map);
 marker.bindPopup("<b>Hello world!</b><br>I am a popup.");
@@ -52,7 +53,7 @@ L.circle([12.947962836536151, 77.57231830099437], { radius: 100 }).addTo(map);
 food.forEach((e) => {
   L.marker(e, {
     icon: new LeafIcon({
-      iconUrl: `${window.location.origin}/static/icons/restaurant.png`,
+      iconUrl: `${window.location.origin}/static/icons/map/restaurant.png`,
     }),
   }).addTo(map);
 });
@@ -60,7 +61,7 @@ food.forEach((e) => {
 shops.forEach((e) => {
   L.marker(e, {
     icon: new LeafIcon({
-      iconUrl: `${window.location.origin}/static/icons/shop.png`,
+      iconUrl: `${window.location.origin}/static/icons/map/shop.png`,
     }),
   }).addTo(map);
 });
@@ -68,19 +69,38 @@ shops.forEach((e) => {
 bus.forEach((e) => {
   L.marker(e, {
     icon: new LeafIcon({
-      iconUrl: `${window.location.origin}/static/icons/bus.png`,
+      iconUrl: `${window.location.origin}/static/icons/map/bus.png`,
     }),
   }).addTo(map);
 });
 
-L.Routing.control({
+const routing = L.Routing.control({
   waypoints: [
-    L.latLng(...curLatLang),
     L.latLng(15.823532842591865, 74.5033861005741),
     L.latLng(15.819472137774307, 74.50183027558413),
     L.latLng(15.818778585138219, 74.50519060954872),
   ],
-}).addTo(map);
+  // ,show:false
+})
+  .on("routesfound", function (e) {
+    // showDirections(e);
+  })
+  .addTo(map);
+
+const mapDir = document.getElementById("pills-directions");
+var routingControlContainer = routing.getContainer();
+var controlContainerParent = routingControlContainer.parentNode;
+controlContainerParent.removeChild(routingControlContainer);
+mapDir.appendChild(routingControlContainer.childNodes[0]);
+
+// Functions:
+function showDirections(e) {
+  const inst = e.routes[0].instructions;
+  console.log(e);
+  inst.forEach((i) => {
+    mapDir.insertAdjacentHTML("beforeend", `<div><p>${i.text}</p></div>`);
+  });
+}
 
 // Get user geolocation:
 // if ("geolocation" in navigator) {

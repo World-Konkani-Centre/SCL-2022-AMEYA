@@ -1,0 +1,25 @@
+.leaflet-routing-alt {
+  margin-top: 10px !important;
+  border-bottom: none !important;
+  max-height: fit-content !important;
+  overflow-y: visible !important;
+}
+.leaflet-routing-alt h2 {
+  font-size: 20px !important;
+}
+.leaflet-routing-alt h3 {
+  font-size: 16px !important;
+}
+
+/* Transport */
+#pills-transports {
+  display: flex;
+  justify-content: space-between;
+}
+#pills-transports .nav-link {
+  border-radius: 50%;
+  padding: 5px;
+}
+.transp-icons {
+  width: 32px;
+}
