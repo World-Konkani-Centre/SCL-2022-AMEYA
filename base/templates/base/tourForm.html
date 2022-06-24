@@ -7,31 +7,6 @@
 
 {% block content %} 
 <!-- Add code from body here -->
-  <!--Navigation bar-->
-  <div>
-    <nav class="navbar navbar-expand-lg">
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler"
-        aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
-        <i class="fa fa-bars fa-x" id="navicon" aria-hidden="true"></i>
-      </button>
-      <a class="navbar-brand" href="index.html"><button class="project-name">Yatra Mitra</button></a>
-
-      <div class="collapse navbar-collapse" id="navbarToggler">
-        <ul class="navbar-nav">
-          <li class="nav-item active">
-            <a class="items" href="profile.html"><button><span>Profile</span></button></a>
-          </li>
-          <li class="nav-item">
-            <a class="items" href="trips.html"><button><span>Your trips</span></button></a>
-          </li>
-          <li class="nav-item">
-            <a class="items" href="contact.html"><button><span>Contact-us</span></button></a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-  </div>
-
   <!--Destination-->
   <div class="py-5">
     <div class="container rounded">
@@ -53,7 +28,7 @@
               <div class="container">
                 <div class="carousel-inner">
                   <div class="carousel-item active">
-                    <img src="template/travel1.jpg" class="img-fluid" alt="..." />
+                    <img src="{% static 'images/tourForm/travel1.jpg' %}" class="img-fluid" alt="..." />
                     <div class="carousel-caption d-none d-md-block">
                       <h5>First slide label</h5>
                       <p>
@@ -63,7 +38,7 @@
                     </div>
                   </div>
                   <div class="carousel-item">
-                    <img src="template/travel2.jpg" class="img-fluid" alt="..." />
+                    <img src="{% static 'images/tourForm/travel2.jpg' %}" class="img-fluid" alt="..." />
                     <div class="carousel-caption d-none d-md-block">
                       <h5>Second slide label</h5>
                       <p>
@@ -73,7 +48,7 @@
                     </div>
                   </div>
                   <div class="carousel-item">
-                    <img src="template/travel3.jpg" class="img-fluid" alt="..." />
+                    <img src="{% static 'images/tourForm/travel3.jpg' %}" class="img-fluid" alt="..." />
                     <div class="carousel-caption d-none d-md-block">
                       <h5>Third slide label</h5>
                       <p>
