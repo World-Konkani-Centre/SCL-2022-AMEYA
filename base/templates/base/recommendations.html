@@ -2,9 +2,114 @@
 {% load static %} 
 {% block styles %}
 <!-- Replace {name} with the respective css file -->
-<link rel="stylesheet" href="{% static 'styles/{name}' %}" />
+<link rel="stylesheet" href="{% static 'styles/recommendation.css' %}" />
 {% endblock %}
 
 {% block content %} 
 <!-- Add code from body here -->
+ <!--Navigation bar-->
+  <div>
+    <nav class="navbar navbar-expand-lg">
+      <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler"
+        aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fa fa-bars fa-x" id="navicon" aria-hidden="true"></i>
+      </button>
+      <a class="navbar-brand" href="index.html"><button class="project-name">Yatra Mitra</button></a>
+        <a href="https://www.google.com/"> <span class="iconify-inline navbar-toggler-icon mx-4 fa-lg" data-icon="carbon:user-avatar-filled" data-width="40" data-height="40"></span> </a>
+      </div>
+    </nav>
+  </div>
+<br><br><br>
+
+<!-- Card-1 -->
+<div  class="container">
+<section class="card hover01">
+        <div class="row no-gutters">
+          <div class="col-md-4">
+            <img src="{%static 'icons/recommendation/Lalbagh.jpg' %}" class="card-img" alt="Lalbagh">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">Lalbagh  Bangalore</h5>
+              <section>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span class="hidden-text">5.0</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span class="info-1">Must See Temple</span>
+              </section>
+              <p class="card-text py-4">
+                Lalbagh Botanical Garden is located in Bangalore and is nationally and internationally renowned centre for botanical artwork, scientific study of plants and also conservation of plants. A haven for all nature lovers, Lal Bagh covers an area 240 acres in the heart of...
+              <p class="card-text"><a href="www.google.com"><small class="text-muted">See more..</small></a></p>
+            </div>
+          </div>
+      </div>
+</section>
+    </div>
+      <br><br><br><br>
+
+<!-- Card-2 -->
+<div  class="container">
+  <section class="card hover01">
+          <div class="row no-gutters">
+            <div class="col-md-4">
+              <img src="{%static 'icons/recommendation/BangalorePalace.jpg' %}" class="card-img" alt="Palace">
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title">Bangalore Palace</h5>
+                <section>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <span class="hidden-text">4.0</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <span class="info-1">Must See Palace</span>
+                </section>
+                <p class="card-text py-4">
+                  Bangalore Palace is a royal palace located in Bangalore, Karnataka, India, in an area that was owned by Rev. J. Garrett, the first principal of the Central High School in Bangalore, now famous as Central College. The commencement of the construction of the palace...
+                </p>
+                <p class="card-text"><a href="www.google.com"><small class="text-muted">See more..</small></a></p>
+              </div>
+            </div>
+        </div>
+  </section>
+      </div>
+      <br><br><br><br>
+
+<!-- Card-3 -->
+<div  class="container">
+  <section class="card hover01">
+          <div class="row no-gutters">
+            <div class="col-md-4">
+              <img src="{%static 'icons/recommendation/Iskcon.jpg' %}" class="card-img" alt="Lalbagh">
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title">Iskcon &nbsp;Bangalore</h5>
+                <section>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <span class="hidden-text">4.0</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <span class="info-1">Must See Temple</span>
+                </section>
+                <p class="card-text py-4">
+                  ISKCON Sri Radha Krishna Temple is recognized as one of the famous places to visit in Bangalore and best mentained ISKCON temple in the world.It is one largest temple for Lord Krishna in the world. The temple has got 6 shrines and the presiding deity is Prahlada Narasimha...
+                </p>
+                <p class="card-text"><a href="www.google.com"><small class="text-muted">See more..</small></a></p>
+              </div>
+            </div>
+        </div>
+  </section>
+      </div>
+</section>
+
 {% endblock %}
