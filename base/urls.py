@@ -7,9 +7,11 @@ from . import views
 urlpatterns = [
     path('', views.home,name='home'),
     path('map/',views.map,name='map'),
+    path('api/v1/tour/<int:id>',views.getTour,name='getTour'),
     path('login/',views.login,name='login'),
     path('signup/',views.signup,name='signup'),
     path('recommendations/',views.recommendations,name='recommendations'),
+    path('api/v1/dummy',views.DummyLatLng,name='dummyLatLng')
 ]
 
 if settings.DEBUG:
