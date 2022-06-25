@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.core.serializers import serialize
 from .models import DummyLatLng, Tour
-from haversine import haversine,Unit
+#from haversine import haversine,Unit
 
 
 # Create your views here.
