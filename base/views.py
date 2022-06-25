@@ -1,10 +1,10 @@
-
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.core.serializers import serialize
-from .models import DummyLatLng, Tour
+from .models import DummyLatLng, Tour,Restaurants
 from haversine import haversine,Unit
-
+from django.views.decorators.csrf import csrf_exempt
+import json
 
 # Create your views here.
 def home(request):
@@ -34,12 +34,6 @@ def recommendations(request):
     context={}
     return render(request,"base/recommendations.html",context)
 
-
-# Dummy data API:
-def getLatLngs(request):
-    latlng=DummyLatLng.objects.all()
-    data=serialize('json',[latlng])
-    return JsonResponse(data,safe=False)
 def aboutUs(request):
     context={}
     return render(request,"base/aboutUs.html",context)
@@ -67,3 +61,19 @@ def trips(request):
 def userProfile(request):
     context={}
     return render(request,"base/userProfile.html",context)
+
+
+# Dummy data API:
+def getLatLngs(request):
+    latlng=DummyLatLng.objects.all()
+    data=serialize('json',latlng)
+    return JsonResponse(data,safe=False)
+
+# method to get nearby restaurants
+@csrf_exempt
+def getNearbyRestaurants(request):
+    latLngs=json.loads(request.body.decode('utf-8'))
+    latlng=DummyLatLng.objects.values_list('latLng', flat=True)
+    print(list(latlng))
+    data=serialize('json',[latlng])
+    return JsonResponse(data,safe=False)

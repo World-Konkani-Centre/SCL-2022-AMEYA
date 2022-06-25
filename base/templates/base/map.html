@@ -206,6 +206,6 @@
 <script src="{% static 'scripts/map.js' %}"></script>
 <script>
   createWaypoints([["{{tour.lat}}","{{tour.lng}}"]]);
-  // getData("{{tour.id}}");
+  getTour("{{tour.id}}");
 </script>
 {% endblock %}

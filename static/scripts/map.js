@@ -1,4 +1,5 @@
 let curLatLang = [12.933969688632496, 77.61193685079267];
+let routeCoordinates = [];
 
 var map = L.map("map").setView(curLatLang, 13);
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -121,13 +122,13 @@ addMarkers(shops, "shop");
 // mapDir.appendChild(routingControlContainer.childNodes[0]);
 
 // Functions:
-function showDirections(e) {
-  const inst = e.routes[0].instructions;
-  console.log(e);
-  inst.forEach((i) => {
-    mapDir.insertAdjacentHTML("beforeend", `<div><p>${i.text}</p></div>`);
-  });
-}
+// function showDirections(e) {
+//   const inst = e.routes[0].instructions;
+//   console.log(e);
+//   inst.forEach((i) => {
+//     mapDir.insertAdjacentHTML("beforeend", `<div><p>${i.text}</p></div>`);
+//   });
+// }
 
 function createWaypoints(latLngArr) {
   if ("geolocation" in navigator) {
@@ -141,7 +142,12 @@ function createWaypoints(latLngArr) {
         createMarker: function () {
           return null;
         },
-      }).addTo(map);
+      })
+        .on("routesfound", (e) => {
+          routeCoordinates = e.routes[0].coordinates;
+          getNearByRestaurants(routeCoordinates);
+        })
+        .addTo(map);
       currentLocMarker(curLatLang);
       const mapDir = document.getElementById("pills-directions");
       var routingControlContainer = routing.getContainer();
@@ -167,14 +173,34 @@ function getTour(id) {
 }
 
 function getDummyLatLng() {
-  const url = `${window.location.origin}/api/v1/dummy`;
+  const url = `${window.location.origin}/api/v1/restaurants/dummy`;
   fetch(url)
     .then((res) => res.json())
     .then((data) => {
       data = JSON.parse(data);
-      console.log(data[0].fields);
+      data = data.map((e) => e.fields.latLng.split(","));
+      addMarkers(data, "restaurant");
+      console.log(data);
       return data;
     })
     .catch((err) => console.log(err));
 }
 getDummyLatLng();
+
+function getNearByRestaurants(data) {
+  const url = `${window.location.origin}/api/v1/restaurants/nearby`;
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      data = JSON.parse(data);
+      console.log(data);
+      return data;
+    })
+    .catch((err) => console.log(err));
+}
