@@ -2,9 +2,41 @@
 {% load static %} 
 {% block styles %}
 <!-- Replace {name} with the respective css file -->
-<link rel="stylesheet" href="{% static 'styles/{name}' %}" />
+<link rel="stylesheet" href="{% static 'styles/userprofile.css' %}" />
 {% endblock %}
 
 {% block content %} 
-<!-- Add code from body here -->
+<div class="container rounded">
+    <div class="row">
+        <div class="col border-right">
+            <div class="card mt-5 p-5 ">
+                <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle" width="150px" src="../static/images/Vinayaya_n_shenoy.jpg - Copy.jpg">
+                    <span class="font-weight-bold">Vinayak</span>
+                    <span class="text-black-50">nshenoyv@gmail.com</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-7 border-right">
+            <div class="p-2 py-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-right">Profile Settings</h4>
+                </div>
+                <div class="row">
+                    <div class="col-md-6"><label class="labels">Name</label><input type="text" class="form-control" placeholder="First Name" value=""></div>
+                    <div class="col-md-6"><label class="labels"></label><input type="text" class="form-control" value="" placeholder="Last Name"></div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12"><label class="labels">Mobile Number</label><input type="text" class="form-control" placeholder="Enter Phone number" value=""></div>
+                    <div class="col-md-12"><label class="labels">Email ID</label><input type="text" class="form-control" placeholder="Enter Email id" value=""></div>
+                    <div class="col-md-12"><label class="labels">Password</label><input type="password" class="form-control" value=""></div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-6"><label class="labels">Country</label><input type="text" class="form-control" placeholder="Country" value=""></div>
+                    <div class="col-md-6"><label class="labels">State/Region</label><input type="text" class="form-control" value="" placeholder="State"></div>
+                </div>
+                <div class="mt-3 text-center"><button class="btn btn-primary profile-button" type="button">Save Profile</button></div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
