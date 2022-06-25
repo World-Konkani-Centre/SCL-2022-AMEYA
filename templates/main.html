@@ -6,7 +6,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="{% static 'styles/styles.css' %}" />
     <link
       rel="stylesheet"
       href="{% static 'bootstrap/css/bootstrap.min.css' %}"
@@ -16,6 +15,7 @@
       rel="stylesheet"
       href="{% static 'leaflet-routing/dist/leaflet-routing-machine.css' %}"
     />
+    <link rel="stylesheet" href="{% static 'styles/styles.css' %}" />
     <!-- Scripts -->
     <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'leaflet/leaflet.js' %}"></script>
@@ -34,27 +34,27 @@
       <!--Navigation bar-->
   <div>
     <nav class="navbar navbar-expand-lg">
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler"
-        aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
-        <i class="fa fa-bars fa-x" id="navicon" aria-hidden="true"></i>
-      </button>
-      <a class="navbar-brand" href="index.html"><button class="project-name">Yatra Mitra</button></a>
-
-      <div class="collapse navbar-collapse" id="navbarToggler">
-        <ul class="navbar-nav">
-          <li class="nav-item active">
-            <a class="items" href="profile.html"><button><span>Profile</span></button></a>
-          </li>
-          <li class="nav-item">
-            <a class="items" href="trips.html"><button><span>Your trips</span></button></a>
-          </li>
-          <li class="nav-item">
-            <a class="items" href="contact.html"><button><span>Contact-us</span></button></a>
-          </li>
-          <li class="nav-item">
+      <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+          <i class="fa fa-bars fa-x" id="navicon" aria-hidden="true"></i>
+        </button>
+        <a class="navbar-brand" href="#"><button class="project-name">Yatra Mitra</button></a>
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link items" aria-current="page" href="userProfile.html"><button><span>Profile</span></button></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link items" href="trips.html"><button><span>Your trips</span></button></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link items" href="contact.html"><button><span >Contact-us</span></button></a>
+            </li>
+            <li class="nav-item">
             <a href="https://www.google.com/"> <span class="iconify-inline navbar-toggler-icon mx-4 my-2 fa-lg" data-icon="carbon:user-avatar-filled" data-width="60" data-height="60"></span> </a>
           </li>
-        </ul>
+          </ul>
+        </div>
       </div>
     </nav>
   </div>
