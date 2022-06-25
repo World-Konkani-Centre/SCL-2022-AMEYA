@@ -1,8 +1,10 @@
+.container-map {
+  height: 100vh;
+}
 .leaflet-routing-alt {
   margin-top: 10px !important;
   border-bottom: none !important;
-  max-height: fit-content !important;
-  overflow-y: visible !important;
+  max-height: 90vh !important;
 }
 .leaflet-routing-alt h2 {
   font-size: 20px !important;
@@ -10,7 +12,9 @@
 .leaflet-routing-alt h3 {
   font-size: 16px !important;
 }
-
+.leaflet-routing-alt::-webkit-scrollbar {
+  display: none;
+}
 /* Transport */
 #pills-transports {
   display: flex;
