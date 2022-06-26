@@ -1,5 +1,6 @@
 .container-map {
   height: 100vh;
+  margin-top: 60px;
 }
 .leaflet-routing-alt {
   margin-top: 10px !important;
