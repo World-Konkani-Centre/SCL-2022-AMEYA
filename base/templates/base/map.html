@@ -9,7 +9,19 @@
 </style>
 <div class="container-fluid container-map">
   <div class="row">
-    <div class="col-lg-9 col-md-8 col-sm-6" id="map"></div>
+    <div class="col-lg-9 col-md-8 col-sm-6" id="map">
+      <div class="map-buttons">
+        <button id="btn-nearby-food" data-a="food" class="nearby-btn">
+          <img src="{% static 'icons/map/food.png' %}" alt="Food">
+        </button>
+        <button id="btn-nearby-hotel" data-a="hotel" class="nearby-btn">
+          <img src="{% static 'icons/map/hotel.png' %}" alt="Hotel">
+        </button>
+        <button id="btn-nearby-repair" data-a="repair" class="nearby-btn">
+          <img src="{% static 'icons/map/repair.png' %}" alt="Repair">
+        </button>
+      </div>
+    </div>
     <div class="col-lg-3 col-md-4 col-sm-6">
       <div class="col-12">
         <ul class="nav nav-pills nav-fill mb-3" id="pills-tab" role="tablist">

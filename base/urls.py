@@ -13,14 +13,13 @@ urlpatterns = [
     path('recommendations/',views.recommendations,name='recommendations'),
     path('aboutUs/',views.aboutUs,name='aboutUs'),
     path('contact/',views.contact,name='contact'),
-    path('api/v1/dummy',views.DummyLatLng,name='dummyLatLng'),
     path('trip/',views.trip,name='trip'),
     path('trips/',views.trips,name='trips'),
     path('userProfile/',views.userProfile,name='userProfile'),
     path('tourForm/',views.tourForm,name='tourForm'),
     path('tourDetails/',views.tourDetails,name='tourDetails'),
     path('api/v1/tour/<int:id>',views.getTour,name='getTour'),
-    path('api/v1/restaurants/nearby',views.getNearbyRestaurants,name='getNearbyRestaurants'),
+    path('api/v1/nearby/<str:cat>/',views.getNearby,name='getNearby'),
     path('api/v1/restaurants/dummy',views.getLatLngs,name='dummyLatLng'),
 ]
 

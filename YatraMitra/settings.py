@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-_plp$en#$v54v^z)jprl1(67wx$++3u-*%1&@rklif2g@@vhn%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['https://yatra-mitra.herokuapp.com']
 
 
 # Application definition

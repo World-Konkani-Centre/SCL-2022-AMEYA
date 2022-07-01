@@ -1,7 +1,9 @@
+from asyncio.windows_events import NULL
+from unicodedata import category
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.core.serializers import serialize
-from .models import DummyLatLng, Tour,Restaurants
+from .models import DummyLatLng, Tour,Restaurant,Hotel,RepairShop
 from haversine import haversine,Unit
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -69,11 +71,28 @@ def getLatLngs(request):
     data=serialize('json',latlng)
     return JsonResponse(data,safe=False)
 
-# method to get nearby restaurants
+# method to get nearby restaurants,hotels and repair shops:
 @csrf_exempt
-def getNearbyRestaurants(request):
-    latLngs=json.loads(request.body.decode('utf-8'))
-    latlng=DummyLatLng.objects.values_list('latLng', flat=True)
-    print(list(latlng))
-    data=serialize('json',[latlng])
+def getNearby(request,cat):
+    nearby=[]
+    body=json.loads(request.body.decode('utf-8'))
+    routeCoords=body['routeCoordinates']
+    tourCoords=body['tourCoordinates']
+    centerCoord=body['center']
+    # Calculate radius of center:
+    radius=haversine((centerCoord[0],centerCoord[1]),(tourCoords[0][0],tourCoords[0][1]))+50
+    if(cat=='hotel'):
+        query=Hotel.objects.all()
+    elif(cat=='restaurant'):
+        query=Restaurant.objects.all()
+    elif(cat=='repair'):
+        query=RepairShop.objects.all()
+
+    locFiltered=[loc for loc in query if haversine((loc.lat,loc.lng),(centerCoord[0],centerCoord[1]))<=radius]
+    for item in locFiltered:
+        for route in routeCoords:
+            if haversine((item.lat,item.lng),(route["lat"],route["lng"]),unit=Unit.KILOMETERS)<=3:
+                nearby.append(item)
+                break
+    data=serialize('json',nearby)
     return JsonResponse(data,safe=False)
