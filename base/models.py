@@ -71,6 +71,18 @@ class RepairShop(models.Model):
     def __str__(self):
         return self.name
 
+# Transport model:
+class Transport(models.Model):
+    id=models.BigAutoField(primary_key=True)
+    name=models.CharField(max_length=100)
+    description=models.CharField(max_length=500)
+    rating=models.IntegerField(default=5,validators=[MinValueValidator(1),MaxValueValidator(5)])
+    lat=models.DecimalField(max_digits=20,decimal_places=15)
+    lng=models.DecimalField(max_digits=20,decimal_places=15)
+
+    def __str__(self):
+        return self.name
+
 class DummyLatLng(models.Model):
     lat=models.DecimalField(max_digits=20,decimal_places=15)
     lng=models.DecimalField(max_digits=20,decimal_places=15)
