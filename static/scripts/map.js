@@ -1,4 +1,7 @@
 let curLatLang = [12.933969688632496, 77.61193685079267];
+let routeCoordinates = [];
+let tourCoordinates = [];
+let nearby = [];
 
 var map = L.map("map").setView(curLatLang, 13);
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -43,6 +46,12 @@ function fitMarkers(markers) {
   map.fitBounds(group.getBounds());
 }
 
+function getCenter(data) {
+  lat = (parseFloat(data[0][0]) + parseFloat(data[1][0])) / 2;
+  lng = (parseFloat(data[0][1]) + parseFloat(data[1][1])) / 2;
+  return [lat, lng];
+}
+
 function addMarker(latLng, icon) {
   var marker = L.marker(latLng, {
     icon: new LeafIcon({
@@ -62,8 +71,37 @@ function addMarkers(data, icon) {
     markers.push(m);
   });
   fitMarkers(markers);
+  return markers;
 }
-
+function removeMarkers(data) {
+  data.forEach((e) => {
+    map.removeLayer(e);
+  });
+}
+function addMarkersWithPopup(data, icon) {
+  markers = [];
+  starIcon = `${window.location.origin}/static/icons/map/star.png`;
+  data.forEach((e) => {
+    m = L.marker([e.lat, e.lng], {
+      title: e.name,
+      icon: new LeafIcon({
+        iconUrl: `${window.location.origin}/static/icons/map/${icon}.png`,
+      }),
+    })
+      .bindPopup(
+        `<h3>${e.name}</h3><p>Rating: ${e.rating} <img width="15px" src=${starIcon} alt="stars"/></p><p>${e.description}</p>`
+      )
+      .addTo(map);
+    markers.push(m);
+  });
+  fitMarkers(markers);
+  return markers;
+}
+function removeMarkers(data) {
+  data.forEach((e) => {
+    map.removeLayer(e);
+  });
+}
 // Data:
 const food = [
   [12.947445452987786, 77.57142971731719],
@@ -88,9 +126,9 @@ const bus = [
   [12.949191766273346, 77.57360388117644],
   [12.949324781511196, 77.57379811157111],
 ];
-addMarkers(food, "restaurant");
-addMarkers(bus, "bus");
-addMarkers(shops, "shop");
+// addMarkers(food, "restaurant");
+// addMarkers(bus, "bus");
+// addMarkers(shops, "shop");
 
 // map.panTo(new L.LatLng(12.947962836536151, 77.57231830099437));
 // var marker = L.marker([12.947962836536151, 77.57231830099437], {
@@ -121,27 +159,35 @@ addMarkers(shops, "shop");
 // mapDir.appendChild(routingControlContainer.childNodes[0]);
 
 // Functions:
-function showDirections(e) {
-  const inst = e.routes[0].instructions;
-  console.log(e);
-  inst.forEach((i) => {
-    mapDir.insertAdjacentHTML("beforeend", `<div><p>${i.text}</p></div>`);
-  });
-}
+// function showDirections(e) {
+//   const inst = e.routes[0].instructions;
+//   console.log(e);
+//   inst.forEach((i) => {
+//     mapDir.insertAdjacentHTML("beforeend", `<div><p>${i.text}</p></div>`);
+//   });
+// }
 
 function createWaypoints(latLngArr) {
   if ("geolocation" in navigator) {
     navigator.geolocation.getCurrentPosition(function (pos) {
       curLatLang = [pos.coords.latitude, pos.coords.longitude];
       latLngArr = [curLatLang, ...latLngArr];
+      tourCoordinates = latLngArr;
       addMarkers(latLngArr, "marker");
       latLngArr = latLngArr.map((l) => L.latLng(...l));
       const routing = L.Routing.control({
         waypoints: latLngArr,
+        lineOptions: {
+          styles: [{ color: "#65b5ff", opacity: 1, weight: 5 }],
+        },
         createMarker: function () {
           return null;
         },
-      }).addTo(map);
+      })
+        .on("routesfound", (e) => {
+          routeCoordinates = e.routes[0].coordinates;
+        })
+        .addTo(map);
       currentLocMarker(curLatLang);
       const mapDir = document.getElementById("pills-directions");
       var routingControlContainer = routing.getContainer();
@@ -153,6 +199,31 @@ function createWaypoints(latLngArr) {
     alert("Browser doesnot support geolocation");
   }
 }
+// Map Eventlisteners:
+function nearbyHandler(e) {
+  let cat;
+  nearbyBtns.forEach((btn) => {
+    btn.classList.remove("active-btn");
+  });
+  removeMarkers(nearby);
+  if (e.target.tagName === "IMG") {
+    cat = e.target.parentElement.getAttribute("data-a");
+    e.target.parentNode.classList.add("active-btn");
+  } else {
+    cat = e.target.getAttribute("data-a");
+    e.target.classList.add("active-btn");
+  }
+  getNearBy(cat);
+}
+
+const nearbyBtns = document.querySelectorAll(".nearby-btn");
+// const btnNearByFood = document.getElementById("btn-nearby-food");
+// const btnNearByHotel = document.getElementById("btn-nearby-hotel");
+// const btnNearByRepair = document.getElementById("btn-nearby-repair");
+// const nearbyBtns = [btnNearByFood, btnNearByHotel, btnNearByRepair];
+nearbyBtns.forEach((btn) => {
+  btn.addEventListener("click", nearbyHandler);
+});
 
 // MAP API:
 function getTour(id) {
@@ -166,15 +237,49 @@ function getTour(id) {
     .catch((err) => console.log(err));
 }
 
-function getDummyLatLng() {
-  const url = `${window.location.origin}/api/v1/dummy`;
-  fetch(url)
+// function getDummyLatLng() {
+//   const url = `${window.location.origin}/api/v1/restaurants/dummy`;
+//   fetch(url)
+//     .then((res) => res.json())
+//     .then((data) => {
+//       data = JSON.parse(data);
+//       data = data.map((e) => [e.fields.lat, e.fields.lng]);
+//       addMarkers(data, "restaurant");
+//       return data;
+//     })
+//     .catch((err) => console.log(err));
+// }
+
+function getNearBy(cat) {
+  if (cat === "hotel") {
+    route = "hotel";
+    icon = "bed";
+  } else if (cat === "repair") {
+    route = "repair";
+    icon = "spanner";
+  } else {
+    route = "restaurant";
+    icon = "restaurant";
+  }
+  let data = {
+    routeCoordinates,
+    tourCoordinates,
+    center: getCenter(tourCoordinates),
+  };
+  const url = `${window.location.origin}/api/v1/nearby/${route}/`;
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  })
     .then((res) => res.json())
     .then((data) => {
       data = JSON.parse(data);
-      console.log(data[0].fields);
-      return data;
+      data = data.map((d) => d.fields);
+      console.log(data);
+      nearby = addMarkersWithPopup(data, icon);
     })
     .catch((err) => console.log(err));
 }
-getDummyLatLng();
