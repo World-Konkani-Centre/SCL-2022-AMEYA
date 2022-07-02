@@ -52,7 +52,7 @@ class Hotel(models.Model):
     name=models.CharField(max_length=100)
     description=models.CharField(max_length=500)
     website=models.CharField(max_length=50,default="www.google.com")
-    rating=models.IntegerField(default=5,validators=[MinValueValidator(1),MaxValueValidator(5)])
+    rating=models.FloatField(default=5,validators=[MinValueValidator(1),MaxValueValidator(5)])
     lat=models.DecimalField(max_digits=20,decimal_places=15)
     lng=models.DecimalField(max_digits=20,decimal_places=15)
 
@@ -64,7 +64,7 @@ class RepairShop(models.Model):
     id=models.BigAutoField(primary_key=True)
     name=models.CharField(max_length=100)
     description=models.CharField(max_length=500)
-    rating=models.IntegerField(default=5,validators=[MinValueValidator(1),MaxValueValidator(5)])
+    rating=models.FloatField(default=5,validators=[MinValueValidator(1),MaxValueValidator(5)])
     lat=models.DecimalField(max_digits=20,decimal_places=15)
     lng=models.DecimalField(max_digits=20,decimal_places=15)
 
@@ -76,7 +76,7 @@ class Transport(models.Model):
     id=models.BigAutoField(primary_key=True)
     name=models.CharField(max_length=100)
     description=models.CharField(max_length=500)
-    rating=models.IntegerField(default=5,validators=[MinValueValidator(1),MaxValueValidator(5)])
+    rating=models.FloatField(default=5,validators=[MinValueValidator(1),MaxValueValidator(5)])
     lat=models.DecimalField(max_digits=20,decimal_places=15)
     lng=models.DecimalField(max_digits=20,decimal_places=15)
 

@@ -78,6 +78,30 @@ function removeMarkers(data) {
     map.removeLayer(e);
   });
 }
+function addMarkersWithPopup(data, icon) {
+  markers = [];
+  starIcon = `${window.location.origin}/static/icons/map/star.png`;
+  data.forEach((e) => {
+    m = L.marker([e.lat, e.lng], {
+      title: e.name,
+      icon: new LeafIcon({
+        iconUrl: `${window.location.origin}/static/icons/map/${icon}.png`,
+      }),
+    })
+      .bindPopup(
+        `<h3>${e.name}</h3><p>Rating: ${e.rating} <img width="15px" src=${starIcon} alt="stars"/></p><p>${e.description}</p>`
+      )
+      .addTo(map);
+    markers.push(m);
+  });
+  fitMarkers(markers);
+  return markers;
+}
+function removeMarkers(data) {
+  data.forEach((e) => {
+    map.removeLayer(e);
+  });
+}
 // Data:
 const food = [
   [12.947445452987786, 77.57142971731719],
@@ -153,6 +177,9 @@ function createWaypoints(latLngArr) {
       latLngArr = latLngArr.map((l) => L.latLng(...l));
       const routing = L.Routing.control({
         waypoints: latLngArr,
+        lineOptions: {
+          styles: [{ color: "#65b5ff", opacity: 1, weight: 5 }],
+        },
         createMarker: function () {
           return null;
         },
@@ -224,15 +251,21 @@ function getTour(id) {
 // }
 
 function getNearBy(cat) {
-  if (cat === "hotel") route = "hotel";
-  else if (cat === "repair") route = "repair";
-  else route = "restaurant";
+  if (cat === "hotel") {
+    route = "hotel";
+    icon = "bed";
+  } else if (cat === "repair") {
+    route = "repair";
+    icon = "spanner";
+  } else {
+    route = "restaurant";
+    icon = "restaurant";
+  }
   let data = {
     routeCoordinates,
     tourCoordinates,
     center: getCenter(tourCoordinates),
   };
-  console.log(data);
   const url = `${window.location.origin}/api/v1/nearby/${route}/`;
   fetch(url, {
     method: "POST",
@@ -244,8 +277,9 @@ function getNearBy(cat) {
     .then((res) => res.json())
     .then((data) => {
       data = JSON.parse(data);
-      data = data.map((d) => [d.fields.lat, d.fields.lng]);
-      nearby = addMarkers(data, route);
+      data = data.map((d) => d.fields);
+      console.log(data);
+      nearby = addMarkersWithPopup(data, icon);
     })
     .catch((err) => console.log(err));
 }
