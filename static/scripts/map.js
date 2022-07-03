@@ -3,6 +3,8 @@ let curLatLang = [12.933969688632496, 77.61193685079267];
 let routeCoordinates = [];
 let tourCoordinates = [];
 let nearby = [];
+const baseURL = `${window.location.origin}/api/v1`;
+starIcon = `${window.location.origin}/static/icons/map/star.png`;
 
 var map = L.map("map").setView(curLatLang, 13);
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -101,7 +103,6 @@ function addMarkers(data, icon) {
 // Add multiple markers to map with popup details:
 function addMarkersWithPopup(data, icon) {
   markers = [];
-  starIcon = `${window.location.origin}/static/icons/map/star.png`;
   data.forEach((e) => {
     m = L.marker([e.lat, e.lng], {
       title: e.name,
@@ -118,7 +119,27 @@ function addMarkersWithPopup(data, icon) {
   fitMarkers(markers);
   return markers;
 }
-
+// Add tour details popup marker to map:
+function addDestinationMarker(latlng, id) {
+  console.log(latlng);
+  const url = `${baseURL}/tour/${+id}`;
+  fetch(url)
+    .then((res) => res.json())
+    .then((data) => {
+      data = JSON.parse(data);
+      data = data[0].fields;
+      m = new L.marker(latlng, {
+        icon: new LeafIcon({
+          iconUrl: `${window.location.origin}/static/icons/map/marker.png`,
+        }),
+      })
+        .bindPopup(
+          `<h3>${data.name}</h3><p>Rating: ${data.rating} <img width="18px" src=${starIcon} alt="stars"/></p><p>${data.description}</p>`
+        )
+        .addTo(map);
+    })
+    .catch((err) => console.log(err));
+}
 // Remove multiple markers from map:
 function removeMarkers(data) {
   data.forEach((e) => {
@@ -136,14 +157,14 @@ const food = [
 ];
 
 // Create Waypoints route:
-function createWaypoints(latLngArr) {
+function createWaypoints(latLngArr, tourId) {
   if ("geolocation" in navigator) {
     navigator.geolocation.getCurrentPosition(function (pos) {
       // Create an array of start and end points:
+      addDestinationMarker(latLngArr, tourId);
       curLatLang = [pos.coords.latitude, pos.coords.longitude];
-      latLngArr = [curLatLang, ...latLngArr];
+      latLngArr = [curLatLang, [...latLngArr]];
       tourCoordinates = latLngArr;
-      addMarkers(latLngArr, "marker");
       latLngArr = latLngArr.map((l) => L.latLng(...l));
       // Create a route:
       const routing = L.Routing.control({
@@ -198,7 +219,7 @@ nearbyBtns.forEach((btn) => {
 
 // Get tour data by id:
 function getTour(id) {
-  const url = `${window.location.origin}/api/v1/tour/${+id}`;
+  const url = `${baseURL}/tour/${+id}`;
   fetch(url)
     .then((res) => res.json())
     .then((data) => {
@@ -239,7 +260,7 @@ function getNearBy(cat) {
     tourCoordinates,
     center: getCenter(tourCoordinates),
   };
-  const url = `${window.location.origin}/api/v1/nearby/${route}/`;
+  const url = `${baseURL}/nearby/${route}/`;
   fetch(url, {
     method: "POST",
     headers: {

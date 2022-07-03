@@ -14,7 +14,7 @@ def home(request):
 def map(request):
     id=request.GET.get('id',1)
     tour=Tour.objects.get(id=id)
-    context={'tour':tour,'distance':haversine((tour.lat,tour.lng),(13.00918844987077,77.59796068053168),unit=Unit.METERS)}
+    context={'tour':tour}
     return render(request,"base/map.html",context)
 
 def getTour(request,id):
