@@ -1,3 +1,4 @@
+// Global Variables:
 let curLatLang = [12.933969688632496, 77.61193685079267];
 let routeCoordinates = [];
 let tourCoordinates = [];
@@ -18,40 +19,62 @@ var LeafIcon = L.Icon.extend({
   },
 });
 
-// Get user geolocation:
+var LeafIconLoc = L.Icon.extend({
+  options: {
+    iconSize: [16, 16],
+    iconAnchor: [8, 8],
+    popupAnchor: [0, -16],
+  },
+});
+
+// Get user geolocation every 10sec:
 function getCurrLoc() {
+  let loc = undefined;
   if ("geolocation" in navigator) {
     navigator.geolocation.getCurrentPosition(function (pos) {
-      console.log(pos.coords.latitude, pos.coords.longitude);
       curLatLang = [pos.coords.latitude, pos.coords.longitude];
-      // loadMap(curLatLang);
+      loc = currentLocMarker(curLatLang);
     });
+    setInterval(() => {
+      navigator.geolocation.getCurrentPosition(function (pos) {
+        curLatLang = [pos.coords.latitude, pos.coords.longitude];
+        if (loc) {
+          map.removeLayer(loc.m);
+          map.removeLayer(loc.c);
+        }
+        loc = currentLocMarker(curLatLang);
+      });
+    }, 10000);
   } else {
     alert("Browser doesnot support geolocation");
   }
 }
+// Add a marker to user location:
 function currentLocMarker(curLoc) {
-  // var marker = L.marker(curLoc, {
-  //   icon: new LeafIcon({
-  //     iconUrl: `${window.location.origin}/static/icons/map/my-location.png`,
-  //   }),
-  // }).addTo(map);
-  // marker.bindPopup("I am here");
-  L.circle(curLoc, { radius: 100 }).addTo(map);
-  map.panTo(new L.LatLng(...curLoc));
+  m = L.marker(curLoc, {
+    autoPan: false,
+    icon: new LeafIconLoc({
+      iconUrl: `${window.location.origin}/static/icons/map/loc.png`,
+    }),
+  })
+    .bindPopup("<h6>You are here</h6>")
+    .addTo(map);
+  c = L.circle(curLoc, { radius: 100 }).addTo(map);
+  return { m, c };
 }
-
+// Fit markers to screen:
 function fitMarkers(markers) {
   var group = new L.featureGroup(markers);
   map.fitBounds(group.getBounds());
 }
-
+// Get center of start and end coordinates:
 function getCenter(data) {
   lat = (parseFloat(data[0][0]) + parseFloat(data[1][0])) / 2;
   lng = (parseFloat(data[0][1]) + parseFloat(data[1][1])) / 2;
   return [lat, lng];
 }
 
+// Add a single marker to map:
 function addMarker(latLng, icon) {
   var marker = L.marker(latLng, {
     icon: new LeafIcon({
@@ -60,6 +83,7 @@ function addMarker(latLng, icon) {
   }).addTo(map);
 }
 
+// Add multiple markers to map:
 function addMarkers(data, icon) {
   markers = [];
   data.forEach((e) => {
@@ -73,11 +97,8 @@ function addMarkers(data, icon) {
   fitMarkers(markers);
   return markers;
 }
-function removeMarkers(data) {
-  data.forEach((e) => {
-    map.removeLayer(e);
-  });
-}
+
+// Add multiple markers to map with popup details:
 function addMarkersWithPopup(data, icon) {
   markers = [];
   starIcon = `${window.location.origin}/static/icons/map/star.png`;
@@ -97,12 +118,14 @@ function addMarkersWithPopup(data, icon) {
   fitMarkers(markers);
   return markers;
 }
+
+// Remove multiple markers from map:
 function removeMarkers(data) {
   data.forEach((e) => {
     map.removeLayer(e);
   });
 }
-// Data:
+// Dummy Data:
 const food = [
   [12.947445452987786, 77.57142971731719],
   [12.947167112379699, 77.57143991737327],
@@ -111,70 +134,18 @@ const food = [
   [12.947473932044836, 77.5743937923248],
   [12.946132904449533, 77.5706748048954],
 ];
-const shops = [
-  [12.948036643108097, 77.56988873020589],
-  [12.94802260364985, 77.5698429218563],
-  [12.948070892220445, 77.57017118002487],
-  [12.947825827627968, 77.57053288336533],
-  [12.94768779637963, 77.57018876744034],
-];
-const bus = [
-  [12.948148105785773, 77.5705801862596],
-  [12.94832204950334, 77.57066942725174],
-  [12.948424369280499, 77.57357238423153],
-  [12.948250425634344, 77.57367212416393],
-  [12.949191766273346, 77.57360388117644],
-  [12.949324781511196, 77.57379811157111],
-];
-// addMarkers(food, "restaurant");
-// addMarkers(bus, "bus");
-// addMarkers(shops, "shop");
 
-// map.panTo(new L.LatLng(12.947962836536151, 77.57231830099437));
-// var marker = L.marker([12.947962836536151, 77.57231830099437], {
-//   icon: new LeafIcon({
-//     iconUrl: `${window.location.origin}/static/icons/map/my-location.png`,
-//   }),
-// }).addTo(map);
-// marker.bindPopup("<b>Hello world!</b><br>I am a popup.");
-// L.circle([12.947962836536151, 77.57231830099437], { radius: 100 }).addTo(map);
-
-// const routing = L.Routing.control({
-//   waypoints: [
-//     L.latLng(15.823532842591865, 74.5033861005741),
-//     L.latLng(15.819472137774307, 74.50183027558413),
-//     L.latLng(15.818778585138219, 74.50519060954872),
-//   ],
-//   // ,show:false
-// })
-//   .on("routesfound", function (e) {
-//     // showDirections(e);
-//   })
-//   .addTo(map);
-
-// const mapDir = document.getElementById("pills-directions");
-// var routingControlContainer = routing.getContainer();
-// var controlContainerParent = routingControlContainer.parentNode;
-// controlContainerParent.removeChild(routingControlContainer);
-// mapDir.appendChild(routingControlContainer.childNodes[0]);
-
-// Functions:
-// function showDirections(e) {
-//   const inst = e.routes[0].instructions;
-//   console.log(e);
-//   inst.forEach((i) => {
-//     mapDir.insertAdjacentHTML("beforeend", `<div><p>${i.text}</p></div>`);
-//   });
-// }
-
+// Create Waypoints route:
 function createWaypoints(latLngArr) {
   if ("geolocation" in navigator) {
     navigator.geolocation.getCurrentPosition(function (pos) {
+      // Create an array of start and end points:
       curLatLang = [pos.coords.latitude, pos.coords.longitude];
       latLngArr = [curLatLang, ...latLngArr];
       tourCoordinates = latLngArr;
       addMarkers(latLngArr, "marker");
       latLngArr = latLngArr.map((l) => L.latLng(...l));
+      // Create a route:
       const routing = L.Routing.control({
         waypoints: latLngArr,
         lineOptions: {
@@ -188,7 +159,7 @@ function createWaypoints(latLngArr) {
           routeCoordinates = e.routes[0].coordinates;
         })
         .addTo(map);
-      currentLocMarker(curLatLang);
+      // Add directions to side panel:
       const mapDir = document.getElementById("pills-directions");
       var routingControlContainer = routing.getContainer();
       var controlContainerParent = routingControlContainer.parentNode;
@@ -200,6 +171,8 @@ function createWaypoints(latLngArr) {
   }
 }
 // Map Eventlisteners:
+
+// Nearby Btn toggler:
 function nearbyHandler(e) {
   let cat;
   nearbyBtns.forEach((btn) => {
@@ -217,15 +190,13 @@ function nearbyHandler(e) {
 }
 
 const nearbyBtns = document.querySelectorAll(".nearby-btn");
-// const btnNearByFood = document.getElementById("btn-nearby-food");
-// const btnNearByHotel = document.getElementById("btn-nearby-hotel");
-// const btnNearByRepair = document.getElementById("btn-nearby-repair");
-// const nearbyBtns = [btnNearByFood, btnNearByHotel, btnNearByRepair];
 nearbyBtns.forEach((btn) => {
   btn.addEventListener("click", nearbyHandler);
 });
 
 // MAP API:
+
+// Get tour data by id:
 function getTour(id) {
   const url = `${window.location.origin}/api/v1/tour/${+id}`;
   fetch(url)
@@ -250,7 +221,9 @@ function getTour(id) {
 //     .catch((err) => console.log(err));
 // }
 
+// POST request to get nearby locations:
 function getNearBy(cat) {
+  // Category selector:
   if (cat === "hotel") {
     route = "hotel";
     icon = "bed";

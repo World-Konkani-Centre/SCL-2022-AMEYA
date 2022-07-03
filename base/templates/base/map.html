@@ -216,6 +216,7 @@
 </div>
 <script src="{% static 'scripts/map.js' %}"></script>
 <script>
+  getCurrLoc();
   createWaypoints([["{{tour.lat}}","{{tour.lng}}"]]);
   getTour("{{tour.id}}");
 </script>
