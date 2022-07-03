@@ -27,7 +27,7 @@ var LeafIconLoc = L.Icon.extend({
   },
 });
 
-// Get user geolocation every 10sec:
+// Get user geolocation every second:
 function getCurrLoc() {
   let loc = undefined;
   if ("geolocation" in navigator) {
@@ -44,7 +44,7 @@ function getCurrLoc() {
         }
         loc = currentLocMarker(curLatLang);
       });
-    }, 10000);
+    }, 1000);
   } else {
     alert("Browser doesnot support geolocation");
   }
