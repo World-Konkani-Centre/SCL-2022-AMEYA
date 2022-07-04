@@ -20,7 +20,7 @@ urlpatterns = [
     path('userProfile/',views.userProfile,name='userProfile'),
     path('tourForm/',views.tourForm,name='tourForm'),
     path('tourDetails/',views.tourDetails,name='tourDetails')
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     urlpatterns+=static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)
