@@ -14,7 +14,7 @@ class Tour(models.Model):
     description=models.CharField(max_length=500)
     website=models.CharField(max_length=50,default="www.google.com")
     category=models.CharField(max_length=1,choices=category_choices,default='1')
-    rating=models.IntegerField(default=5,validators=[MinValueValidator(1),MaxValueValidator(5)])
+    rating=models.FloatField(default=5,validators=[MinValueValidator(1),MaxValueValidator(5)])
     # rating_count=
     avg_fare=models.FloatField(default=0)
     address=models.CharField(max_length=700)
@@ -27,15 +27,17 @@ class Tour(models.Model):
     def __str__(self):
         return self.name
 
-# User model:
-class Restaurants(models.Model):
+# Restaurant model:
+class Restaurant(models.Model):
     id=models.BigAutoField(primary_key=True)
     name=models.CharField(max_length=100)
     description=models.CharField(max_length=500)
-    website=models.CharField(max_length=50,default="www.google.com")
-    rating=models.IntegerField(default=5,validators=[MinValueValidator(1),MaxValueValidator(5)])
+    rating=models.FloatField(default=5,validators=[MinValueValidator(1),MaxValueValidator(5)])
     lat=models.DecimalField(max_digits=20,decimal_places=15)
     lng=models.DecimalField(max_digits=20,decimal_places=15)
+
+    def __str__(self):
+        return self.name
 
 # Reviews model:
 class Reviews(models.Model):
@@ -46,15 +48,46 @@ class Reviews(models.Model):
     review=models.CharField(max_length=500)
     date=models.DateField(auto_now_add=True)
 
+    def __str__(self):
+        return self.id
+
 # Hotel model:
 class Hotel(models.Model):
     id=models.BigAutoField(primary_key=True)
     name=models.CharField(max_length=100)
     description=models.CharField(max_length=500)
     website=models.CharField(max_length=50,default="www.google.com")
-    rating=models.IntegerField(default=5,validators=[MinValueValidator(1),MaxValueValidator(5)])
+    rating=models.FloatField(default=5,validators=[MinValueValidator(1),MaxValueValidator(5)])
     lat=models.DecimalField(max_digits=20,decimal_places=15)
     lng=models.DecimalField(max_digits=20,decimal_places=15)
 
+    def __str__(self):
+        return self.name
+        
+# Repair shop model:
+class RepairShop(models.Model):
+    id=models.BigAutoField(primary_key=True)
+    name=models.CharField(max_length=100)
+    description=models.CharField(max_length=500)
+    rating=models.FloatField(default=5,validators=[MinValueValidator(1),MaxValueValidator(5)])
+    lat=models.DecimalField(max_digits=20,decimal_places=15)
+    lng=models.DecimalField(max_digits=20,decimal_places=15)
+
+    def __str__(self):
+        return self.name
+
+# Transport model:
+class Transport(models.Model):
+    id=models.BigAutoField(primary_key=True)
+    name=models.CharField(max_length=100)
+    description=models.CharField(max_length=500)
+    rating=models.FloatField(default=5,validators=[MinValueValidator(1),MaxValueValidator(5)])
+    lat=models.DecimalField(max_digits=20,decimal_places=15)
+    lng=models.DecimalField(max_digits=20,decimal_places=15)
+
+    def __str__(self):
+        return self.name
+
 class DummyLatLng(models.Model):
-    latLng=models.CharField(max_length=100,default="")
+    lat=models.DecimalField(max_digits=20,decimal_places=15)
+    lng=models.DecimalField(max_digits=20,decimal_places=15)

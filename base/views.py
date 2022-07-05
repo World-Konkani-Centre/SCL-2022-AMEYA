@@ -5,8 +5,10 @@ from unittest.util import sorted_list_difference
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.core.serializers import serialize
-from .models import DummyLatLng, Tour
+from .models import DummyLatLng, Tour,Restaurant,Hotel,RepairShop
 from haversine import haversine,Unit
+from django.views.decorators.csrf import csrf_exempt
+import json
 
 # Create your views here.
 def home(request):
@@ -54,12 +56,6 @@ def recommendations(request):
        context={}
        return render(request,"base/recommendations.html",context)
 
-
-# Dummy data API:
-def getLatLngs(request):
-    latlng=DummyLatLng.objects.all()
-    data=serialize('json',[latlng])
-    return JsonResponse(data,safe=False)
 def aboutUs(request):
     context={}
     return render(request,"base/aboutUs.html",context)
@@ -87,3 +83,36 @@ def trips(request):
 def userProfile(request):
     context={}
     return render(request,"base/userProfile.html",context)
+
+
+# Dummy data API:
+def getLatLngs(request):
+    latlng=DummyLatLng.objects.all()
+    data=serialize('json',latlng)
+    return JsonResponse(data,safe=False)
+
+# method to get nearby restaurants,hotels and repair shops:
+@csrf_exempt
+def getNearby(request,cat):
+    nearby=[]
+    body=json.loads(request.body.decode('utf-8'))
+    routeCoords=body['routeCoordinates']
+    tourCoords=body['tourCoordinates']
+    centerCoord=body['center']
+    # Calculate radius of center:
+    radius=haversine((centerCoord[0],centerCoord[1]),(tourCoords[0][0],tourCoords[0][1]))+50
+    if(cat=='hotel'):
+        query=Hotel.objects.all()
+    elif(cat=='restaurant'):
+        query=Restaurant.objects.all()
+    elif(cat=='repair'):
+        query=RepairShop.objects.all()
+
+    locFiltered=[loc for loc in query if haversine((loc.lat,loc.lng),(centerCoord[0],centerCoord[1]))<=radius]
+    for item in locFiltered:
+        for route in routeCoords:
+            if haversine((item.lat,item.lng),(route["lat"],route["lng"]),unit=Unit.KILOMETERS)<=3:
+                nearby.append(item)
+                break
+    data=serialize('json',nearby)
+    return JsonResponse(data,safe=False)

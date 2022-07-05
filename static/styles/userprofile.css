@@ -1,37 +1,37 @@
-.container{
-    background-color: #ffffff;
-    margin-top: 50px; 
+.container {
+  background-color: #ffffff;
+  margin-top: 100px;
 }
 
-.card{
-    width: 70%;
-    margin-left: 15%;
+.card {
+  width: 70%;
+  margin-left: 15%;
 }
 
 .profile-button {
-    background: #1e1e1e;
-    box-shadow: none;
-    border: none
+  background: #1e1e1e;
+  box-shadow: none;
+  border: none;
 }
 
 .form-control:focus {
-    box-shadow: none;
-    border-color: #BA68C8;
-    transition: 0.5s ease-in;
+  box-shadow: none;
+  border-color: #ba68c8;
+  transition: 0.5s ease-in;
 }
 
 .profile-button:hover {
-    background: #682773;
-    transition: 0.5s ease;
-    padding: 9px;
+  background: #682773;
+  transition: 0.5s ease;
+  padding: 9px;
 }
 
 .profile-button:focus {
-    background: #682773;
-    box-shadow: none
+  background: #682773;
+  box-shadow: none;
 }
 
 .profile-button:active {
-    background: #682773;
-    box-shadow: none
+  background: #682773;
+  box-shadow: none;
 }
