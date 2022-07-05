@@ -1,3 +1,7 @@
+from http.client import HTTPResponse
+from turtle import title
+from unicodedata import category, name
+from unittest.util import sorted_list_difference
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.core.serializers import serialize
@@ -31,8 +35,26 @@ def signup(request):
     return render(request,"base/signup.html",context)
 
 def recommendations(request):
-    context={}
-    return render(request,"base/recommendations.html",context)
+    if request.method=='POST':
+        contents=Tour.objects.all()
+        category1= request.POST['category']  #Retrieves the category entered by the user
+        if(category1=='Adventure'):
+            tourinfo = Tour.objects.all().filter(category=3)
+            tourData = Tour.objects.all().filter(category=3).order_by('-rating').values()
+        elif(category1=='Trekking'):
+            tourinfo=Tour.objects.all().filter(category=2)
+            tourData = Tour.objects.all().filter(category=2).order_by('-rating').values()
+        elif(category1=='Hiking'):
+            tourinfo=Tour.objects.all().filter(category=1)
+            tourData = Tour.objects.all().filter(category=1).order_by('-rating').values() #Filter by highest rating
+        context={
+            'tourinfo': tourinfo,
+            'tourData':tourData
+        }
+        return render(request,"base/page.html",context)
+    else:
+       context={}
+       return render(request,"base/recommendations.html",context)
 
 def aboutUs(request):
     context={}
