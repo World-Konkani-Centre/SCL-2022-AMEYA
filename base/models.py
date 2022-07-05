@@ -1,3 +1,7 @@
+from asyncio.windows_events import NULL
+from distutils.command.upload import upload
+from email.policy import default
+from pickle import TRUE
 from unicodedata import category
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -20,6 +24,7 @@ class Tour(models.Model):
     lng=models.DecimalField(max_digits=20,decimal_places=15)
     createadAt=models.DateTimeField(auto_now_add=True)
     updateAt=models.DateTimeField(auto_now=True)
+    image=models.ImageField(upload_to='icons/recommendation',null=True)
 
     def __str__(self):
         return self.name
