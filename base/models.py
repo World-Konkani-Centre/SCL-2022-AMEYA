@@ -1,6 +1,6 @@
 from unicodedata import category
 from django.db import models
-from django.core.validators import MaxValueValidator, MinValueValidator 
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 # Tour model:
 class Tour(models.Model):
@@ -18,6 +18,8 @@ class Tour(models.Model):
     hours_open=models.CharField(max_length=100)
     lat=models.DecimalField(max_digits=20,decimal_places=15)
     lng=models.DecimalField(max_digits=20,decimal_places=15)
+    createadAt=models.DateTimeField(auto_now_add=True)
+    updateAt=models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
@@ -30,6 +32,8 @@ class Restaurant(models.Model):
     rating=models.FloatField(default=5,validators=[MinValueValidator(1),MaxValueValidator(5)])
     lat=models.DecimalField(max_digits=20,decimal_places=15)
     lng=models.DecimalField(max_digits=20,decimal_places=15)
+    createadAt=models.DateTimeField(auto_now_add=True)
+    updateAt=models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
@@ -42,6 +46,8 @@ class Reviews(models.Model):
     rating=models.IntegerField(default=5,validators=[MinValueValidator(1),MaxValueValidator(5)])
     review=models.CharField(max_length=500)
     date=models.DateField(auto_now_add=True)
+    createadAt=models.DateTimeField(auto_now_add=True)
+    updateAt=models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.id
@@ -55,6 +61,8 @@ class Hotel(models.Model):
     rating=models.FloatField(default=5,validators=[MinValueValidator(1),MaxValueValidator(5)])
     lat=models.DecimalField(max_digits=20,decimal_places=15)
     lng=models.DecimalField(max_digits=20,decimal_places=15)
+    createadAt=models.DateTimeField(auto_now_add=True)
+    updateAt=models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
@@ -67,6 +75,8 @@ class RepairShop(models.Model):
     rating=models.FloatField(default=5,validators=[MinValueValidator(1),MaxValueValidator(5)])
     lat=models.DecimalField(max_digits=20,decimal_places=15)
     lng=models.DecimalField(max_digits=20,decimal_places=15)
+    createadAt=models.DateTimeField(auto_now_add=True)
+    updateAt=models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
@@ -79,6 +89,31 @@ class Transport(models.Model):
     rating=models.FloatField(default=5,validators=[MinValueValidator(1),MaxValueValidator(5)])
     lat=models.DecimalField(max_digits=20,decimal_places=15)
     lng=models.DecimalField(max_digits=20,decimal_places=15)
+    createadAt=models.DateTimeField(auto_now_add=True)
+    updateAt=models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+# Registered Business model:
+class RegisteredBusiness(models.Model):
+    category_choices=[('1','Restaurant'),('2','Hotel'),('3','Clinic'),('4','Hospital'),('5','Pharmacy'),('6','Repair Shop'),('7','Travel')]
+    id=models.BigAutoField(primary_key=True)
+    name=models.CharField(max_length=100)
+    address=models.CharField(max_length=700)
+    description=models.CharField(max_length=500)
+    zipcode=models.CharField(max_length=6)
+    category=models.CharField(max_length=1,choices=category_choices,default='5')
+    phone=models.CharField(max_length=10)
+    email=models.EmailField(max_length=100)
+    website=models.CharField(max_length=50,null=True)
+    rating=models.FloatField(default=5,validators=[MinValueValidator(1),MaxValueValidator(5)],null=True)
+    lat=models.DecimalField(max_digits=20,decimal_places=15)
+    lng=models.DecimalField(max_digits=20,decimal_places=15)
+    logo=models.ImageField(upload_to='logos/',null=True)
+    banner=models.ImageField(upload_to='banners/',null=True)
+    createadAt=models.DateTimeField(auto_now_add=True)
+    updateAt=models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name

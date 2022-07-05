@@ -18,6 +18,7 @@ urlpatterns = [
     path('userProfile/',views.userProfile,name='userProfile'),
     path('tourForm/',views.tourForm,name='tourForm'),
     path('tourDetails/',views.tourDetails,name='tourDetails'),
+    path('registerBusiness/',views.registerBusiness,name='registerBusiness'),
     path('api/v1/tour/<int:id>',views.getTour,name='getTour'),
     path('api/v1/nearby/<str:cat>/',views.getNearby,name='getNearby'),
     path('api/v1/restaurants/dummy',views.getLatLngs,name='dummyLatLng'),

@@ -181,11 +181,13 @@ function createWaypoints(latLngArr, tourId) {
         })
         .addTo(map);
       // Add directions to side panel:
-      const mapDir = document.getElementById("pills-directions");
-      var routingControlContainer = routing.getContainer();
-      var controlContainerParent = routingControlContainer.parentNode;
-      controlContainerParent.removeChild(routingControlContainer);
-      mapDir.appendChild(routingControlContainer.childNodes[0]);
+      if (screen.width < 768) {
+        let mapDir = document.getElementById("pills-directions");
+        var routingControlContainer = routing.getContainer();
+        var controlContainerParent = routingControlContainer.parentNode;
+        controlContainerParent.removeChild(routingControlContainer);
+        mapDir.appendChild(routingControlContainer.childNodes[0]);
+      }
     });
   } else {
     alert("Browser doesnot support geolocation");

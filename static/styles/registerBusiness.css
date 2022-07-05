@@ -1,0 +1,27 @@
+.req-biz-form {
+  margin-top: 80px !important;
+}
+.req-biz-form .form-group {
+  margin: 20px 0;
+}
+.req-biz-form .form-group label {
+  padding-bottom: 10px;
+}
+.req-biz-form button[type="submit"] {
+  float: right;
+  background-color: #1e1e1e;
+}
+.loc-form-group button {
+  background-color: #1e1e1e;
+}
+.loc-form-group button:hover {
+  background-color: #1e1e1e;
+}
+.modal-body {
+  height: 350px;
+  width: 100%;
+}
+#map {
+  height: 100%;
+  width: 100%;
+}

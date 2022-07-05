@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.core.serializers import serialize
-from .models import DummyLatLng, Tour,Restaurant,Hotel,RepairShop
+from .models import DummyLatLng, RegisteredBusiness, Tour,Restaurant,Hotel,RepairShop
 from haversine import haversine,Unit
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -62,6 +62,29 @@ def userProfile(request):
     context={}
     return render(request,"base/userProfile.html",context)
 
+def registerBusiness(request):
+    if request.method=='POST':
+        name=request.POST.get('name')
+        address=request.POST.get('address')
+        zipcode=request.POST.get('zipcode')
+        phone=request.POST.get('phone')
+        email=request.POST.get('email')
+        category=request.POST.get('category')
+        website=request.POST.get('website')
+        description=request.POST.get('description')
+        lat=request.POST.get('latitude')
+        lng=request.POST.get('longitude')
+        logo=request.FILES.get('logo')
+        banner=request.FILES.get('banner')
+        business=RegisteredBusiness(name=name,address=address,zipcode=zipcode,phone=phone,email=email,category=category,description=description,lat=lat,lng=lng,logo=logo,banner=banner,website=website)
+        business.save()
+    return render(request,"base/registerBusiness.html")
+
+# view to get registered business details by id:
+def getBusinessDetails(request,id):
+    business=RegisteredBusiness.objects.get(id=id)
+    return render(request,"base/businessDetails.html",{'business':business})
+
 
 # Dummy data API:
 def getLatLngs(request):
@@ -93,4 +116,10 @@ def getNearby(request,cat):
                 nearby.append(item)
                 break
     data=serialize('json',nearby)
+    return JsonResponse(data,safe=False)
+
+# method to get registered business by id
+def getBusiness(request,id):
+    business=RegisteredBusiness.objects.get(id=id)
+    data=serialize('json',[business])
     return JsonResponse(data,safe=False)
