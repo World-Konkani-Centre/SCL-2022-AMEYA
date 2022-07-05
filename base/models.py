@@ -38,6 +38,9 @@ class Restaurant(models.Model):
     def __str__(self):
         return self.name
 
+    def __str__(self):
+        return self.name
+
 # Reviews model:
 class Reviews(models.Model):
     id=models.BigAutoField(primary_key=True)
@@ -48,6 +51,9 @@ class Reviews(models.Model):
     date=models.DateField(auto_now_add=True)
     createadAt=models.DateTimeField(auto_now_add=True)
     updateAt=models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.id
 
     def __str__(self):
         return self.id
@@ -114,6 +120,33 @@ class RegisteredBusiness(models.Model):
     banner=models.ImageField(upload_to='banners/',null=True)
     createadAt=models.DateTimeField(auto_now_add=True)
     updateAt=models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+    def __str__(self):
+        return self.name
+        
+# Repair shop model:
+class RepairShop(models.Model):
+    id=models.BigAutoField(primary_key=True)
+    name=models.CharField(max_length=100)
+    description=models.CharField(max_length=500)
+    rating=models.FloatField(default=5,validators=[MinValueValidator(1),MaxValueValidator(5)])
+    lat=models.DecimalField(max_digits=20,decimal_places=15)
+    lng=models.DecimalField(max_digits=20,decimal_places=15)
+
+    def __str__(self):
+        return self.name
+
+# Transport model:
+class Transport(models.Model):
+    id=models.BigAutoField(primary_key=True)
+    name=models.CharField(max_length=100)
+    description=models.CharField(max_length=500)
+    rating=models.FloatField(default=5,validators=[MinValueValidator(1),MaxValueValidator(5)])
+    lat=models.DecimalField(max_digits=20,decimal_places=15)
+    lng=models.DecimalField(max_digits=20,decimal_places=15)
 
     def __str__(self):
         return self.name
