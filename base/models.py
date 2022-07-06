@@ -24,7 +24,7 @@ class Tour(models.Model):
     lng=models.DecimalField(max_digits=20,decimal_places=15)
     createadAt=models.DateTimeField(auto_now_add=True)
     updateAt=models.DateTimeField(auto_now=True)
-    image=models.ImageField(upload_to='icons/recommendation',null=True)
+    image=models.ImageField(upload_to='images/recommendation',null=True)
 
     def __str__(self):
         return self.name
@@ -121,8 +121,8 @@ class RegisteredBusiness(models.Model):
     rating=models.FloatField(default=5,validators=[MinValueValidator(1),MaxValueValidator(5)],null=True)
     lat=models.DecimalField(max_digits=20,decimal_places=15)
     lng=models.DecimalField(max_digits=20,decimal_places=15)
-    logo=models.ImageField(upload_to='logos/',null=True)
-    banner=models.ImageField(upload_to='banners/',null=True)
+    logo=models.ImageField(upload_to='images/regBiz',null=True)
+    banner=models.ImageField(upload_to='images/regBiz',null=True)
     createadAt=models.DateTimeField(auto_now_add=True)
     updateAt=models.DateTimeField(auto_now=True)
 
