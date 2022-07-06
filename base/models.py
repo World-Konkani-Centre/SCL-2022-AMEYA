@@ -1,8 +1,3 @@
-from asyncio.windows_events import NULL
-from distutils.command.upload import upload
-from email.policy import default
-from pickle import TRUE
-from unicodedata import category
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 

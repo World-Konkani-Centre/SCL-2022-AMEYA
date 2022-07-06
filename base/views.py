@@ -1,7 +1,3 @@
-from http.client import HTTPResponse
-from turtle import title
-from unicodedata import category, name
-from unittest.util import sorted_list_difference
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.core.serializers import serialize
