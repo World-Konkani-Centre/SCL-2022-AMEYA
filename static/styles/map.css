@@ -75,8 +75,22 @@
   left: 90%;
 }
 /* Media query  */
+@media (max-width: 1350px) {
+  .btn-save-tour {
+    left: 85%;
+  }
+}
+@media (max-width: 900px) {
+  .btn-save-tour {
+    left: 80%;
+  }
+}
 @media (max-width: 768px) {
   .btn-save-tour {
     left: 70%;
+    top: 85%;
+  }
+  #recommendation-panel {
+    display: none;
   }
 }

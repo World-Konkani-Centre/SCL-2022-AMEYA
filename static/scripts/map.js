@@ -46,7 +46,7 @@ function getCurrLoc() {
         }
         loc = currentLocMarker(curLatLang);
       });
-    }, 1000);
+    }, 5000);
   } else {
     alert("Browser doesnot support geolocation");
   }
@@ -121,7 +121,6 @@ function addMarkersWithPopup(data, icon) {
 }
 // Add tour details popup marker to map:
 function addDestinationMarker(latlng, id) {
-  console.log(latlng);
   const url = `${baseURL}/tour/${+id}`;
   fetch(url)
     .then((res) => res.json())
@@ -181,7 +180,7 @@ function createWaypoints(latLngArr, tourId) {
         })
         .addTo(map);
       // Add directions to side panel:
-      if (screen.width < 768) {
+      if (screen.width > 768) {
         let mapDir = document.getElementById("pills-directions");
         var routingControlContainer = routing.getContainer();
         var controlContainerParent = routingControlContainer.parentNode;

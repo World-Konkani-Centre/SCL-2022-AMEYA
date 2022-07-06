@@ -9,7 +9,7 @@
     <div class="col-md-12">
       <div class="card">
         <div class="card-body">
-          <form action="" method="POST">
+          <form action="" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-group">
               <label for="name">Business Name</label>
@@ -83,7 +83,7 @@
                 required
               >
                 >
-                <option value="1">Restaurant</option>
+                <option value="1" selected>Restaurant</option>
                 <option value="2">Hotel</option>
                 <option value="3">Clinic</option>
                 <option value="4">Hosptial</option>
