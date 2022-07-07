@@ -2,11 +2,6 @@
 <link rel="stylesheet" href="{% static 'styles/map.css' %}" />
 {% endblock %}
 {% block content %}
-<style>
-  #map {
-    height: 100vh;
-  }
-</style>
 <div class="container-fluid container-map">
   <div class="row">
     <div class="col-lg-9 col-md-8 col-sm-6" id="map">
@@ -21,8 +16,11 @@
           <img src="{% static 'icons/map/repair.png' %}" alt="Repair">
         </button>
       </div>
+      <button class="btn btn-primary btn-save-tour">
+        Save Tour
+      </button>
     </div>
-    <div class="col-lg-3 col-md-4 col-sm-6">
+    <div class="col-lg-3 col-md-4 col-sm-6" id="recommendation-panel">
       <div class="col-12">
         <ul class="nav nav-pills nav-fill mb-3" id="pills-tab" role="tablist">
           <li class="nav-item" role="presentation">
@@ -216,7 +214,8 @@
 </div>
 <script src="{% static 'scripts/map.js' %}"></script>
 <script>
-  createWaypoints([["{{tour.lat}}","{{tour.lng}}"]]);
-  getTour("{{tour.id}}");
+  getCurrLoc();
+  createWaypoints(["{{tour.lat}}","{{tour.lng}}"],"{{tour.id}}");
+  // getTour();
 </script>
 {% endblock %}

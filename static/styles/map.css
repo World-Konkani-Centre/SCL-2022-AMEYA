@@ -1,3 +1,7 @@
+#map {
+  height: 100vh;
+  position: relative;
+}
 .container-map {
   height: 100vh;
   margin-top: 60px;
@@ -15,6 +19,10 @@
 }
 .leaflet-routing-alt::-webkit-scrollbar {
   display: none;
+}
+/* Directions */
+#pills-directions {
+  padding-top: 50px;
 }
 /* Transport */
 #pills-transports {
@@ -57,4 +65,32 @@
 }
 .active-btn {
   background-color: #65b5ff !important;
+}
+.btn-save-tour {
+  width: fit-content;
+  background-color: #1e1e1e !important;
+  z-index: 9999;
+  position: absolute;
+  top: 80%;
+  left: 90%;
+}
+/* Media query  */
+@media (max-width: 1350px) {
+  .btn-save-tour {
+    left: 85%;
+  }
+}
+@media (max-width: 900px) {
+  .btn-save-tour {
+    left: 80%;
+  }
+}
+@media (max-width: 768px) {
+  .btn-save-tour {
+    left: 70%;
+    top: 85%;
+  }
+  #recommendation-panel {
+    display: none;
+  }
 }
