@@ -35,21 +35,21 @@ def recommendations(request):
         contents=Tour.objects.all()
         category1= request.POST['category']  #Retrieves the category entered by the user
         if(category1=='Adventure'):
-            tourinfo = Tour.objects.all().filter(category=3)
-            tourData = Tour.objects.all().filter(category=3).order_by('-rating').values()
+            category=1
+            tourData = Tour.objects.all().filter(category=category).order_by('-rating').values()
         elif(category1=='Trekking'):
-            tourinfo=Tour.objects.all().filter(category=2)
-            tourData = Tour.objects.all().filter(category=2).order_by('-rating').values()
+            category=2
+            tourData = Tour.objects.all().filter(category=category).order_by('-rating').values()
         elif(category1=='Hiking'):
-            tourinfo=Tour.objects.all().filter(category=1)
-            tourData = Tour.objects.all().filter(category=1).order_by('-rating').values() #Filter by highest rating
+            category=3
+            tourData = Tour.objects.all().filter(category=category).order_by('-rating').values() #Filter by highest rating
         context={
-            'tourinfo': tourinfo,
             'tourData':tourData
         }
-        return render(request,"base/page.html",context)
+        return render(request,"base/recommendations.html",context)
     else:
-       context={}
+       tourData=Tour.objects.all().order_by('-rating').values()
+       context={'tourData':tourData}
        return render(request,"base/recommendations.html",context)
 
 def aboutUs(request):
