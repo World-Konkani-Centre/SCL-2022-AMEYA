@@ -1,0 +1,59 @@
+.tour-rev-form {
+  margin-top: 80px !important;
+  margin-bottom: 20px;
+}
+.tour-rev-form .form-group {
+  margin: 20px 0;
+}
+.tour-rev-form .form-group label {
+  padding-bottom: 10px;
+}
+.tour-rev-form .btn-primary {
+  background-color: #1e1e1e;
+}
+.tour-rev-form .btn-primary:hover {
+  background-color: #1e1e1e;
+}
+.tour-rev-form .btn-primary:focus {
+  background-color: #1e1e1e;
+  border-color: none !important;
+}
+.tour-rev-form button[type="submit"] {
+  float: right;
+}
+.card-desc {
+  padding: 20px;
+}
+.card-desc .tour-img {
+  width: 100%;
+  height: auto;
+}
+/* 5 ⭐ rating*/
+.rate {
+  float: left;
+  height: 46px;
+  padding: 0 10px;
+}
+.rate:not(:checked) > input {
+  position: absolute;
+  top: -9999px;
+}
+.rate:not(:checked) > label {
+  float: right;
+  width: 1em;
+  overflow: hidden;
+  white-space: nowrap;
+  cursor: pointer;
+  font-size: 40px;
+  color: #ccc;
+}
+.rate:not(:checked) > label:before {
+  content: "★ ";
+}
+.rate > input:checked ~ label {
+  color: #ffc700;
+}
+.rate:not(:checked) > label:hover,
+.rate:not(:checked) > label:hover ~ label {
+  color: #ffc700;
+}

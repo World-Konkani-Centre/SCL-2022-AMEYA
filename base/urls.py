@@ -19,6 +19,7 @@ urlpatterns = [
     path('trips/',views.trips,name='trips'),
     path('userProfile/',views.userProfile,name='userProfile'),
     path('tourForm/',views.tourForm,name='tourForm'),
+    path('tourReview/<int:id>/',views.tourReview,name='tourReview'),
     path('registerBusiness/',views.registerBusiness,name='registerBusiness'),
     path('api/v1/tour/<int:id>',views.getTour,name='getTour'),
     path('api/v1/nearby/<str:cat>/',views.getNearby,name='getNearby'),

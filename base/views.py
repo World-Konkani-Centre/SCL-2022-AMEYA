@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.core.serializers import serialize
-from .models import DummyLatLng, RegisteredBusiness, Tour,Restaurant,Hotel,RepairShop
+from .models import DummyLatLng,RegisteredBusiness,Tour,Restaurant,Hotel,RepairShop,TourReviews
 from haversine import haversine,Unit
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -36,13 +36,11 @@ def recommendations(request):
         category1= request.POST['category']  #Retrieves the category entered by the user
         if(category1=='Adventure'):
             category=1
-            tourData = Tour.objects.all().filter(category=category).order_by('-rating').values()
         elif(category1=='Trekking'):
             category=2
-            tourData = Tour.objects.all().filter(category=category).order_by('-rating').values()
         elif(category1=='Hiking'):
             category=3
-            tourData = Tour.objects.all().filter(category=category).order_by('-rating').values() #Filter by highest rating
+        tourData = Tour.objects.all().filter(category=category).order_by('-rating').values() #Filter by highest rating
         context={
             'tourData':tourData
         }
@@ -67,6 +65,17 @@ def tourDetails(request):
 def tourForm(request):
     context={}
     return render(request,"base/tourForm.html",context)
+
+def tourReview(request,id):
+    tour=Tour.objects.get(id=id)
+    if request.method=='POST':
+        rating=request.POST.get('rating')
+        review=request.POST.get('review')
+        if(rating==None): rating=1
+        rev=TourReviews(rating=float(rating),review=review,tour=tour)
+        rev.save()
+    context={'tour':tour}
+    return render(request,"base/tourReview.html",context)
 
 def trip(request):
     context={}
@@ -94,8 +103,6 @@ def registerBusiness(request):
         lng=request.POST.get('longitude')
         logo=request.FILES.get('logo')
         banner=request.FILES.get('banner')
-        print(request.FILES)
-        print(banner)
         business=RegisteredBusiness(name=name,address=address,zipcode=zipcode,phone=phone,email=email,category=category,description=description,lat=lat,lng=lng,logo=logo,banner=banner,website=website)
         business.save()
     return render(request,"base/registerBusiness.html")
