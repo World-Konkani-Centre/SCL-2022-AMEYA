@@ -1,10 +1,32 @@
-{% extends 'main.html' %}
-{% load static %} 
-{% block styles %}
+{% extends 'main.html' %} {% load static %} {% block styles %}
 <!-- Replace {name} with the respective css file -->
-<link rel="stylesheet" href="{% static 'styles/{name}' %}" />
-{% endblock %}
+<link rel="stylesheet" href="{% static 'styles/login.css' %}" />
+{% endblock %} {% block content %}
+<div class="container">
+  <form action="#">
+    <h2>Login</h2>
+    <div class="input-box underline">
+      <input type="text" placeholder="Enter Your Email" required />
+      <div class="underline"></div>
+    </div>
+    <div class="input-box">
+      <input type="password" placeholder="Enter Your Password" required />
+      <div class="underline"></div>
+    </div>
 
-{% block content %} 
-<!-- Add code from body here -->
+    <br />
+    <div class="input-box button">
+      <input type="submit" name="" value="Login" />
+    </div>
+
+    <div style="text-align: center">
+      <p id="er">
+        New User?
+        <a href="{% url 'signup' %}" style="color: rgb(62, 156, 255)"
+          >Sign up here
+        </a>
+      </p>
+    </div>
+  </form>
+</div>
 {% endblock %}

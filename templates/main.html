@@ -15,14 +15,24 @@
       rel="stylesheet"
       href="{% static 'leaflet-routing/dist/leaflet-routing-machine.css' %}"
     />
+<<<<<<< HEAD
+=======
+    <link
+      rel="stylesheet"
+      href="{% static 'leaflet-geocoding/leaflet-geocoding.css' %}"
+    />
+>>>>>>> 931b868023fdaf85d608113735b42a0e1db283ea
     <link rel="stylesheet" href="{% static 'styles/styles.css' %}" />
     <!-- Scripts -->
     <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'leaflet/leaflet.js' %}"></script>
     <script src="{% static 'leaflet-routing/dist/leaflet-routing-machine.js' %}"></script>
-
+    <script src="{% static 'leaflet-geocoding/leaflet-geocoding.js' %}"></script>
     <!-- Font-awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
 
     <!-- Iconify -->
     <script src="https://code.iconify.design/2/2.2.1/iconify.min.js"></script>
@@ -31,6 +41,7 @@
     <title>Yatra Mitra</title>
   </head>
   <body>
+<<<<<<< HEAD
       <!--Navigation bar-->
   <div>
     <nav class="navbar navbar-expand-lg">
@@ -55,6 +66,61 @@
       </div>
     </nav>
   </div>
+=======
+    <!--Navigation bar-->
+    <div>
+      <nav class="navbar navbar-expand-lg main-navbar">
+        <div class="container-fluid">
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarTogglerDemo03"
+            aria-controls="navbarTogglerDemo03"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <i class="fa fa-bars fa-x" id="navicon" aria-hidden="true"></i>
+          </button>
+          <a class="navbar-brand" href="/"
+            ><button class="project-name">Yatra Mitra</button></a
+          >
+          <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a
+                  class="nav-link items"
+                  aria-current="page"
+                  href="{% url 'recommendations' %}"
+                  ><button><span>Recommendations</span></button></a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link items" href="{% url 'trips' %}"
+                  ><button><span>Your trips</span></button></a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link items" href="{% url 'aboutUs' %}"
+                  ><button><span>About Us</span></button></a
+                >
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'userProfile' %}">
+                  <span
+                    class="iconify-inline navbar-toggler-icon mx-4 my-2 fa-lg"
+                    data-icon="carbon:user-avatar-filled"
+                    data-width="60"
+                    data-height="60"
+                  ></span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </div>
+>>>>>>> 931b868023fdaf85d608113735b42a0e1db283ea
     {% block content %} {% endblock %}
   </body>
 </html>

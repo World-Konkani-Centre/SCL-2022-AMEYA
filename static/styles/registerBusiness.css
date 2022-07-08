@@ -1,0 +1,32 @@
+.req-biz-form {
+  margin-top: 80px !important;
+  margin-bottom: 20px;
+}
+.req-biz-form .form-group {
+  margin: 20px 0;
+}
+.req-biz-form .form-group label {
+  padding-bottom: 10px;
+}
+.req-biz-form .btn-primary,
+#exampleModal .btn-primary {
+  background-color: #1e1e1e;
+}
+.req-biz-form .btn-primary:hover {
+  background-color: #1e1e1e;
+}
+.req-biz-form .btn-primary:focus {
+  background-color: #1e1e1e;
+  border-color: none !important;
+}
+.req-biz-form button[type="submit"] {
+  float: right;
+}
+.modal-body {
+  height: 350px;
+  width: 100%;
+}
+#map {
+  height: 100%;
+  width: 100%;
+}

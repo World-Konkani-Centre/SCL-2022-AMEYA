@@ -1,9 +1,15 @@
+<<<<<<< HEAD
 @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
 *{
+=======
+@import url("https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap");
+* {
+>>>>>>> 931b868023fdaf85d608113735b42a0e1db283ea
   margin: 0;
   padding: 0;
   user-select: none;
   box-sizing: border-box;
+<<<<<<< HEAD
   font-family: 'Poppins', sans-serif;
 }
 body{
@@ -15,40 +21,70 @@ body{
 nav{
     padding: 20px;
     color: #ffffff;
+=======
+  font-family: "Poppins", sans-serif;
+}
+body {
+  background-color: #e2e2e291;
+}
+/* Scroll bar */
+::-webkit-scrollbar {
+  width: 8px;
 }
 
-.navbar{
-    position: relative;
-    background-color: #1e1e1e;
-    color: #ffffff;
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+>>>>>>> 931b868023fdaf85d608113735b42a0e1db283ea
 }
 
-.navbar-toggler-icon,.navbar-toggler{
-    color: #ffffff;
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #1e1e1e;
+  border-radius: 10px;
 }
 
-a{
-    text-decoration: none;
-    color: #ffffff;
-}
-.nav-item button, .project-name{
-    margin: 0 10px 0 10px;
-    padding: 10px;
-    border: none;
-    background-color: transparent;
+/* Standard styling for navbar*/
+.main-navbar {
+  width: 100%;
+  padding: 0 20px;
+  position: fixed !important;
+  top: 0;
+  background-color: #1e1e1e;
+  color: #ffffff;
+  z-index: 9999;
 }
 
-.nav-item button:hover,.project-name:hover{
-    background-color: #cecccc7c;
-    border-radius: 5px;
-    color: #ffffff;
+.main-navbar .navbar-toggler-icon,
+.main-navbar .navbar-toggler {
+  color: #ffffff;
 }
-.project-name, .items span{
-    color: #ffffff;
+
+.main-navbar a {
+  text-decoration: none;
+  color: #ffffff;
 }
-@media (min-width:992px){
-    .navbar-nav{
-        position: absolute;
-        right: 2px;
-    }
+.main-navbar .nav-item button,
+.main-navbar .project-name {
+  margin: 0 10px 0 10px;
+  padding: 10px;
+  border: none;
+  background-color: transparent;
+}
+
+.main-navbar .nav-item button:hover,
+.main-navbar .project-name:hover {
+  background-color: #cecccc7c;
+  border-radius: 5px;
+  color: #ffffff;
+}
+.main-navbar .project-name,
+.main-navbar .items span {
+  color: #ffffff;
+}
+@media (min-width: 992px) {
+  .main-navbar .navbar-nav {
+    position: absolute;
+    right: 2px;
+  }
 }
