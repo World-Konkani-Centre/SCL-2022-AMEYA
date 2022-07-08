@@ -1,0 +1,212 @@
+{% extends 'main.html' %} {% load static %} {% block styles %}
+<!-- Replace {name} with the respective css file -->
+<link rel="stylesheet" href="{% static 'styles/registerBusiness.css' %}" />
+{% endblock %} {% block content %}
+<!-- Add code from body here -->
+<div class="container req-biz-form">
+  <h3>Register your Business with us</h3>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body">
+          <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="name">Business Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="name"
+                placeholder="Enter Business Name"
+                name="name"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="email">Email address</label>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                placeholder="Enter email"
+                name="email"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="address">Address</label>
+              <input
+                type="text"
+                class="form-control"
+                id="address"
+                placeholder="Enter Address"
+                name="address"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="phone">Phone</label>
+              <input
+                type="text"
+                class="form-control"
+                id="phone"
+                placeholder="Enter Phone"
+                name="phone"
+              />
+            </div>
+            <div class="form-group">
+              <label for="website">Website</label>
+              <input
+                type="text"
+                class="form-control"
+                id="website"
+                placeholder="Enter Website"
+                name="website"
+              />
+            </div>
+            <div class="form-group">
+              <label for="description">Description</label>
+              <textarea
+                class="form-control"
+                id="description"
+                rows="3"
+                name="description"
+                required
+              ></textarea>
+            </div>
+            <div class="form-group">
+              <label for="category">Category</label>
+              <select
+                class="form-control"
+                id="category"
+                name="category"
+                required
+              >
+                >
+                <option value="1" selected>Restaurant</option>
+                <option value="2">Hotel</option>
+                <option value="3">Clinic</option>
+                <option value="4">Hosptial</option>
+                <option value="5">Pharmacy</option>
+                <option value="6">Repair Shop</option>
+                <option value="7">Travel</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="zipcode">Zipcode</label>
+              <input
+                type="text"
+                class="form-control"
+                id="zipcode"
+                placeholder="Enter Zipcode"
+                name="zipcode"
+                required
+              />
+            </div>
+            <div class="row loc-form-group align-items-end">
+              <div class="col-md-5">
+                <div class="form-group">
+                  <label for="latitude">Latitude</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="latitude"
+                    placeholder="Enter Latitude"
+                    name="latitude"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="col-md-5">
+                <div class="form-group">
+                  <label for="longitude">Longitude</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="longitude"
+                    placeholder="Enter Longitude"
+                    name="longitude"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group">
+                  <button
+                    class="btn btn-primary btn-picklocation"
+                    data-bs-toggle="modal"
+                    data-bs-target="#exampleModal"
+                  >
+                    Pick Location
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="logo">Logo</label>
+              <input
+                type="file"
+                class="form-control"
+                id="logo"
+                placeholder="Enter Logo"
+                name="logo"
+              />
+            </div>
+            <div class="form-group">
+              <label for="banner">Banner</label>
+              <input
+                type="file"
+                class="form-control"
+                id="banner"
+                placeholder="Enter Banner"
+                name="banner"
+              />
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Pick Your Business Location
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div id="map"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary btn-picksave"
+          data-bs-dismiss="modal"
+        >
+          Pick
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="{% static 'scripts/locationPicker.js' %}"></script>
+{% endblock %}

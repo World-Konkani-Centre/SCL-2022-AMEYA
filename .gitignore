@@ -1,7 +1,6 @@
 db.sqlite3
 .env
 env/
-keys.txt
 base/__pycache__
 base/migrations/__pycache__
 YatraMitra/__pycache__
