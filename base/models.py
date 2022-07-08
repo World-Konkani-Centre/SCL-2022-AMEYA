@@ -1,10 +1,6 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
-<<<<<<< HEAD
 from django.forms import PasswordInput 
-=======
-
->>>>>>> 931b868023fdaf85d608113735b42a0e1db283ea
 # Tour model:
 class Tour(models.Model):
     category_choices=[('1','Hiking'),('2','Trekking'),('3','Adventure')]
