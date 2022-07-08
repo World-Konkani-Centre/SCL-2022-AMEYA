@@ -98,6 +98,9 @@
     font-size: 14px;
     text-align: center;
   }
+.href-login{
+color: #0d6efd !important;
+}
   /* browser window is 600px or smaller, apply changes max-width:600px */
   /* browser window is  larger , apply changes min-width:600px */
   /* @media (min-width: 1012px) {
