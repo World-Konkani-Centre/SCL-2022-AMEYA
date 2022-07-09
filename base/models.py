@@ -1,5 +1,8 @@
 from django.db import models
+<<<<<<< HEAD
 from django.core.validators import MaxValueValidator, MinValueValidator
+=======
+>>>>>>> 435bd44723f39b4550e9798d399fcb234d2ea96a
 
 # Tour model:
 class Tour(models.Model):
@@ -48,8 +51,17 @@ class TourReviews(models.Model):
     # user_id=models.ForeignKey(User,on_delete=models.CASCADE)
     rating=models.IntegerField(default=5,validators=[MinValueValidator(1),MaxValueValidator(5)])
     review=models.CharField(max_length=500)
+<<<<<<< HEAD
     createadAt=models.DateTimeField(auto_now_add=True)
     updateAt=models.DateTimeField(auto_now=True)
+=======
+    date=models.DateField(auto_now_add=True)
+    createadAt=models.DateTimeField(auto_now_add=True)
+    updateAt=models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.id
+>>>>>>> 435bd44723f39b4550e9798d399fcb234d2ea96a
 
 
 # Hotel model:
