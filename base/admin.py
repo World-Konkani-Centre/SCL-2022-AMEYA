@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Tour,Restaurant,Reviews,Hotel,RepairShop,DummyLatLng,RegisteredBusiness,Users,TourReviews
+from .models import Tour,Restaurant,Hotel,RepairShop,DummyLatLng,RegisteredBusiness,Users,TourReviews
 
 # Register your models here.
 admin.site.register(Tour)
