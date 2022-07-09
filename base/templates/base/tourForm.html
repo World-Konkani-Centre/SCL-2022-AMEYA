@@ -74,48 +74,50 @@
         </div>
 
         <!--Destination profile-->
-        <div class="col-md-6 border-right">
+        <form class="col-md-6 border-right" name = "form" method="POST" action="{% url 'recommendations' %}">
+          {% csrf_token %}
           <div class="p-2 py-3">
             <div class="container rounded-end">
               <div class="mb-4">
                 <label for="destination" class="form-label">Enter your Destination</label>
-                <input type="email" class="form-control" id="destination" placeholder="Destination" />
+                <input type="text" class="form-control" id="destination" name="name" placeholder="Destination" />
               </div>
               <div class="mb-4">
                 <label for="category" class="form-label">Select Category</label>
-                <input class="form-control" list="datalistOptions" id="category" placeholder="ex: adventure" />
+                <input class="form-control" list="datalistOptions" id="category" name="category" placeholder="ex: adventure" />
                 <datalist id="datalistOptions">
-                  <option value="Temple"></option>
-                  <option value="park"></option>
-                  <option value="malls"></option>
-                  <option value="hills"></option>
+                  <option type="submit" name="choice1" value="Hiking"></option>
+                  <option type="submit" name="choice2" value="Trekking"></option>
+                  <option type="submit" name="choice3" value="Adventure"></option>        
                 </datalist>
               </div>
               <div class="mb-4">
                 <label for="startdate" class="form-label">Start Date</label>
-                <input type="date" class="form-control" id="startdate" />
+                <input type="date" class="form-control" id="startdate" name="startdate" />
               </div>
               <div class="mb-4">
                 <label for="enddate" class="form-label">End Date</label>
-                <input type="date" class="form-control" id="enddate" />
+                <input type="date" class="form-control" id="enddate" name="enddate" />
               </div>
             </div>
             <div class="row">
               <div class="col">
                 <button class="m-3 btn btn-primary profile-button mx-4" type="button">
-                  <a href="index.html">Back</a>
+                  <a href="{{request.META.HTTP_REFERER}}">Back</a>
                 </button>
               </div>
               <div class="col text-end mx-2">
-                <button class="m-3 btn btn-primary profile-button" type="button">
-                  <a href="profile.html">Submit</a>
+                <button class="m-3 btn btn-primary profile-button" type="submit">
+                  <!-- <a href="profile.html">Submit</a> -->
+                  Submit
                 </button>
               </div>
               <div class="py-2"></div>
             </div>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   </div>
 {% endblock %}
+
