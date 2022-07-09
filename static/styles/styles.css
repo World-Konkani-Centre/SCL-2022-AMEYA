@@ -41,6 +41,10 @@ body {
   color: #ffffff;
 }
 
+.navbar a{
+    text-decoration: none;
+    color: #ffffff;
+}
 .main-navbar a {
   text-decoration: none;
   color: #ffffff;
