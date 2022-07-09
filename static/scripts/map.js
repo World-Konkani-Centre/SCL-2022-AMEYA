@@ -261,6 +261,7 @@ function getNearBy(cat) {
     tourCoordinates,
     center: getCenter(tourCoordinates),
   };
+  console.log(data);
   const url = `${baseURL}/nearby/${route}/`;
   fetch(url, {
     method: "POST",

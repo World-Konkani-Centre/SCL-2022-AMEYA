@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.core.serializers import serialize
+from django.contrib import messages
 from .models import DummyLatLng,RegisteredBusiness,Tour,Restaurant,Hotel,RepairShop,TourReviews
 from haversine import haversine,Unit
 from django.views.decorators.csrf import csrf_exempt
@@ -74,6 +75,7 @@ def tourReview(request,id):
         if(rating==None): rating=1
         rev=TourReviews(rating=float(rating),review=review,tour=tour)
         rev.save()
+        messages.add_message(request, messages.SUCCESS, 'Your Review has been submitted successfully!')
     context={'tour':tour}
     return render(request,"base/tourReview.html",context)
 
