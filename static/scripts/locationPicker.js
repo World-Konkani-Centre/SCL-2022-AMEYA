@@ -15,7 +15,11 @@ map.on("click", function (e) {
   }
   m = L.marker(latlng).addTo(map);
 
+<<<<<<< HEAD
+  map.setView(latlng);
+=======
   map.setView(latlng, 15);
+>>>>>>> 435bd44723f39b4550e9798d399fcb234d2ea96a
 });
 
 // To set the map when container size changes
