@@ -88,8 +88,17 @@ def trips(request):
     return render(request,"base/trips.html",context)
 
 def userProfile(request):
-    context={}
-    return render(request,"base/userProfile.html",context)
+    if request.method == 'POST':       
+        fname=request.POST['fname']
+        lname=request.POST['lname']
+        phone=request.POST['phone']
+        email=request.POST['email']
+        password=request.POST['password']
+        country=request.POST['country']
+        state=request.POST['state']
+        print(fname, lname,phone,email,password,country,state)
+        print("got the post")
+    return render(request,"base/userProfile.html")
 
 def registerBusiness(request):
     if request.method=='POST':
