@@ -31,13 +31,9 @@ def login(request):
     if request.method == 'POST': 
         login_username=request.POST.get('usernamel')
         login_password=request.POST.get('passwordl')
-        print(login_username)
-        print(login_password)
         user = authenticate(request, username = login_username, password = login_password)
-        print(user)
         if user is not None:
             auth_login(request,user)
-            print('\n User logged in\n')
             return redirect('/')
         else:
             return render(request,"base/login.html")
@@ -55,7 +51,6 @@ def signup(request):
         else :
             user = User.objects.create(email=gmail,username=username,password=password)
             user.save()       
-            print("user created")
             return redirect('/login/')
     else:
         return render(request,"base/signup.html")
@@ -130,10 +125,8 @@ def userProfile(request):
         password=request.POST['password']
         country=request.POST['country']
         state=request.POST['state']
-        print(firstname, lastname,phone,email,password,country,state)
         user=Profile.objects.create(email=email,username=firstname,password=password,firstname=firstname,lastname=lastname,country=country,state=state,phone=phone)
         user.save();       
-        print("user created")
         return redirect('/')
     else:
         return render(request,"base/userProfile.html")
