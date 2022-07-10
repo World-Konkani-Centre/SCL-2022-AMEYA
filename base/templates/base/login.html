@@ -3,32 +3,6 @@
 {% block styles %}
 <!-- Replace {name} with the respective css file -->
 <link rel="stylesheet" href="{% static 'styles/login.css' %}" />
-<<<<<<< HEAD
-{% endblock %}
-
-{% block content %} 
-<div class="container my-5">
-    <form action="#">
-      <h2>Login</h2>
-      <div class="input-box underline">
-        <input type="text" placeholder="Enter Your Email" required>
-        <div class="underline"></div>
-      </div>
-      <div class="input-box">
-        <input type="password" placeholder="Enter Your Password" required>
-        <div class="underline"></div>
-      </div>
-
-      <br>
-      <div class="input-box button">
-        <input type="submit" name="" value="Login">
-      </div>
-     
-      <div style="text-align: center ;">
-          <p id="er">New User? <a href="{% url 'signup' %}" style="color: rgb(62, 156, 255);" >Sign up here </a></p>
-      </div> 
-    </form> 
-=======
 {% endblock %} {% block content %}
 <div class="container">
   <form action="#">
@@ -56,6 +30,5 @@
       </p>
     </div>
   </form>
->>>>>>> 931b868023fdaf85d608113735b42a0e1db283ea
 </div>
 {% endblock %}

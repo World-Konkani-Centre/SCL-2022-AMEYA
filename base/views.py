@@ -34,7 +34,8 @@ def signup(request):
 def recommendations(request):
     if request.method=='POST':
         contents=Tour.objects.all()
-        category1= request.POST['category']  #Retrieves the category entered by the user
+        category1= request.POST['category'] #Retrieves the category entered by the user
+        category=1  
         if(category1=='Adventure'):
             category=1
         elif(category1=='Trekking'):
