@@ -15,7 +15,7 @@ map.on("click", function (e) {
   }
   m = L.marker(latlng).addTo(map);
 
-  map.setView(latlng, 15);
+  map.setView(latlng);
 });
 
 // To set the map when container size changes

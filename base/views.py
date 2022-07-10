@@ -1,8 +1,9 @@
 from http.client import HTTPResponse
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import JsonResponse
 from django.core.serializers import serialize
-from .models import DummyLatLng, RegisteredBusiness, Tour,Restaurant,Hotel,RepairShop
+from django.contrib import messages
+from .models import DummyLatLng,RegisteredBusiness,Tour,Restaurant,Hotel,RepairShop,TourReviews,Profile
 from haversine import haversine,Unit
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -41,16 +42,15 @@ def signuptrial(request):
 def recommendations(request):
     if request.method=='POST':
         contents=Tour.objects.all()
-        category1= request.POST['category']  #Retrieves the category entered by the user
+        category1= request.POST['category'] #Retrieves the category entered by the user
+        category=1  
         if(category1=='Adventure'):
             category=1
-            tourData = Tour.objects.all().filter(category=category).order_by('-rating').values()
         elif(category1=='Trekking'):
             category=2
-            tourData = Tour.objects.all().filter(category=category).order_by('-rating').values()
         elif(category1=='Hiking'):
             category=3
-            tourData = Tour.objects.all().filter(category=category).order_by('-rating').values() #Filter by highest rating
+        tourData = Tour.objects.all().filter(category=category).order_by('-rating').values() #Filter by highest rating
         context={
             'tourData':tourData
         }
@@ -76,6 +76,18 @@ def tourForm(request):
     context={}
     return render(request,"base/tourForm.html",context)
 
+def tourReview(request,id):
+    tour=Tour.objects.get(id=id)
+    if request.method=='POST':
+        rating=request.POST.get('rating')
+        review=request.POST.get('review')
+        if(rating==None): rating=1
+        rev=TourReviews(rating=float(rating),review=review,tour=tour)
+        rev.save()
+        messages.add_message(request, messages.SUCCESS, 'Your Review has been submitted successfully!')
+    context={'tour':tour}
+    return render(request,"base/tourReview.html",context)
+
 def trip(request):
     context={}
     return render(request,"base/trip.html",context)
@@ -90,16 +102,21 @@ def trips(request):
 
 def userProfile(request):
     if request.method == 'POST':       
-        fname=request.POST['fname']
-        lname=request.POST['lname']
+        firstname=request.POST['firstname']
+        lastname=request.POST['lastname']
         phone=request.POST['phone']
         email=request.POST['email']
         password=request.POST['password']
         country=request.POST['country']
         state=request.POST['state']
-        print(fname, lname,phone,email,password,country,state)
-        print("got the post")
-    return render(request,"base/userProfile.html")
+        print(firstname, lastname,phone,email,password,country,state)
+        user=Profile.objects.create(email=email,username=firstname,password=password,firstname=firstname,lastname=lastname,country=country,state=state,phone=phone)
+        user.save();       
+        print("user created")
+        return redirect('/')
+    else:
+        return render(request,"base/userProfile.html")
+
 
 def registerBusiness(request):
     if request.method=='POST':
@@ -115,8 +132,6 @@ def registerBusiness(request):
         lng=request.POST.get('longitude')
         logo=request.FILES.get('logo')
         banner=request.FILES.get('banner')
-        print(request.FILES)
-        print(banner)
         business=RegisteredBusiness(name=name,address=address,zipcode=zipcode,phone=phone,email=email,category=category,description=description,lat=lat,lng=lng,logo=logo,banner=banner,website=website)
         business.save()
     return render(request,"base/registerBusiness.html")
