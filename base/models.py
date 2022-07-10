@@ -3,7 +3,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 # Tour model:
 class Tour(models.Model):
-    category_choices=[('1','Hiking'),('2','Trekking'),('3','Adventure')]
+    category_choices=[('1','Adventure'),('2','Trekking'),('3','Hiking')]
     id=models.BigAutoField(primary_key=True)
     name=models.CharField(max_length=100)
     description=models.CharField(max_length=500)

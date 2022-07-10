@@ -133,11 +133,7 @@ function addDestinationMarker(latlng, id) {
         }),
       })
         .bindPopup(
-<<<<<<< HEAD
           `<h3>${data.name}</h3><p>Rating: ${data.rating} <img width="18px" src=${starIcon} alt="stars"/></p><img width="100%" height="auto" src="/media/${data.image}"/><p>${data.description}</p>`
-=======
-          `<h3>${data.name}</h3><p>Rating: ${data.rating} <img width="18px" src=${starIcon} alt="stars"/></p><p>${data.description}</p>`
->>>>>>> 435bd44723f39b4550e9798d399fcb234d2ea96a
         )
         .addTo(map);
     })
@@ -265,10 +261,6 @@ function getNearBy(cat) {
     tourCoordinates,
     center: getCenter(tourCoordinates),
   };
-<<<<<<< HEAD
-  console.log(data);
-=======
->>>>>>> 435bd44723f39b4550e9798d399fcb234d2ea96a
   const url = `${baseURL}/nearby/${route}/`;
   fetch(url, {
     method: "POST",
