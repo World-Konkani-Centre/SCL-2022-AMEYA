@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import JsonResponse
 from django.core.serializers import serialize
 from django.contrib import messages
@@ -6,6 +6,7 @@ from .models import DummyLatLng,RegisteredBusiness,Tour,Restaurant,Hotel,RepairS
 from haversine import haversine,Unit
 from django.views.decorators.csrf import csrf_exempt
 import json
+from .models import Profile
 
 # Create your views here.
 def home(request):
@@ -90,16 +91,21 @@ def trips(request):
 
 def userProfile(request):
     if request.method == 'POST':       
-        fname=request.POST['fname']
-        lname=request.POST['lname']
+        firstname=request.POST['firstname']
+        lastname=request.POST['lastname']
         phone=request.POST['phone']
         email=request.POST['email']
         password=request.POST['password']
         country=request.POST['country']
         state=request.POST['state']
-        print(fname, lname,phone,email,password,country,state)
-        print("got the post")
-    return render(request,"base/userProfile.html")
+        print(firstname, lastname,phone,email,password,country,state)
+        user=Profile.objects.create(email=email,username=firstname,password=password,firstname=firstname,lastname=lastname,country=country,state=state,phone=phone)
+        user.save();       
+        print("user created")
+        return redirect('/')
+    else:
+        return render(request,"base/userProfile.html")
+
 
 def registerBusiness(request):
     if request.method=='POST':
