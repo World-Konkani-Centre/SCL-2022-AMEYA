@@ -1,12 +1,15 @@
+import email
+from http.client import HTTPResponse
 from django.shortcuts import render,redirect
 from django.http import JsonResponse
 from django.core.serializers import serialize
 from django.contrib import messages
-from .models import DummyLatLng,RegisteredBusiness,Tour,Restaurant,Hotel,RepairShop,TourReviews
+from .models import DummyLatLng,RegisteredBusiness,Tour,Restaurant,Hotel,RepairShop,TourReviews,Profile
 from haversine import haversine,Unit
 from django.views.decorators.csrf import csrf_exempt
 import json
-from .models import Profile
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login as auth_login, logout
 
 # Create your views here.
 def home(request):
@@ -25,12 +28,32 @@ def getTour(request,id):
     return JsonResponse(data,safe=False)
 
 def login(request):
-    context={}
-    return render(request,"base/login.html",context)
+    if request.method == 'POST': 
+        login_username=request.POST.get('usernamel')
+        login_password=request.POST.get('passwordl')
+        user = authenticate(request, username = login_username, password = login_password)
+        if user is not None:
+            auth_login(request,user)
+            return redirect('/')
+        else:
+            return render(request,"base/login.html")
+    return render(request,"base/login.html")
 
 def signup(request):
-    context={}
-    return render(request,"base/signup.html",context)
+    if request.method == 'POST': 
+        username=request.POST['username']
+        gmail=request.POST['gmail']
+        password=request.POST['password']
+        if User.objects.filter(username=username).exists():
+            return render(request,"base/login.html")
+        elif User.objects.filter(email=gmail).exists():
+            return render(request,"base/login.html")
+        else :
+            user = User.objects.create(email=gmail,username=username,password=password)
+            user.save()       
+            return redirect('/login/')
+    else:
+        return render(request,"base/signup.html")
 
 def recommendations(request):
     if request.method=='POST':
@@ -89,6 +112,10 @@ def trips(request):
     context={}
     return render(request,"base/trips.html",context)
 
+# def userProfile(request):
+#     context={}
+#     return render(request,"base/userProfile.html",context)
+
 def userProfile(request):
     if request.method == 'POST':       
         firstname=request.POST['firstname']
@@ -98,10 +125,8 @@ def userProfile(request):
         password=request.POST['password']
         country=request.POST['country']
         state=request.POST['state']
-        print(firstname, lastname,phone,email,password,country,state)
         user=Profile.objects.create(email=email,username=firstname,password=password,firstname=firstname,lastname=lastname,country=country,state=state,phone=phone)
         user.save();       
-        print("user created")
         return redirect('/')
     else:
         return render(request,"base/userProfile.html")
