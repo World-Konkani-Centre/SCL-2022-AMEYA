@@ -12,6 +12,7 @@ urlpatterns = [
     path('contact/',views.contact,name='contact'),
     path('login/',views.login,name='login'),
     path('signup/',views.signup,name='signup'),
+    path('signuptrial/',views.signuptrial,name='signuptrial'),
     path('recommendations/',views.recommendations,name='recommendations'),
     path('api/v1/tour/<int:id>',views.getTour,name='getTour'),
     path('api/v1/dummy',views.DummyLatLng,name='dummyLatLng'),

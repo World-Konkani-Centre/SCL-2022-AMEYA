@@ -1,41 +1,3 @@
-<<<<<<< HEAD
-.container{
-    background-color: #ffffff;
-    margin-top: 50px; 
-}
-
-.card{
-    width: 70%;
-    margin-left: 15%;
-}
-
-.profile-button {
-    background: #1e1e1e;
-    box-shadow: none;
-    border: none
-}
-
-.form-control:focus {
-    box-shadow: none;
-    border-color: #BA68C8;
-    transition: 0.5s ease-in;
-}
-
-.profile-button:hover {
-    background: #682773;
-    transition: 0.5s ease;
-    padding: 9px;
-}
-
-.profile-button:focus {
-    background: #682773;
-    box-shadow: none
-}
-
-.profile-button:active {
-    background: #682773;
-    box-shadow: none
-=======
 .container {
   background-color: #ffffff;
   margin-top: 100px;
@@ -72,5 +34,4 @@
 .profile-button:active {
   background: #682773;
   box-shadow: none;
->>>>>>> 931b868023fdaf85d608113735b42a0e1db283ea
 }

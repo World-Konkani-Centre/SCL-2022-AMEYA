@@ -7,31 +7,32 @@
 
 {% block content %} 
 <div class="container my-5">
-    <form action="#">
-      <h2>Sign Up</h2>
-      <div class="input-box">
-        <input type="text" placeholder="Enter Your Name" required>
-        <div class="underline"></div>
-      </div>
-      <div class="input-box">
-        <input type="password" placeholder="Enter Your Email" required>
-        <div class="underline"></div>
-      </div>
-      <div class="input-box">
-          <input type="password" placeholder="Enter Your Password" required>
-          <div class="underline"></div>
+    <form action="/signuptrial" method="POST" class="form-container">
+      {% csrf_token %}
+        <h2>Sign Up</h2>
+        <div class="input-box">
+            <input type="text" placeholder="Enter Your Name" required name="UserName">
+            <div class="underline"></div>
         </div>
-<br/>
+        <div class="input-box">
+            <input type="password" placeholder="Enter Your Email" required name=>
+            <div class="underline"></div>
+        </div>
+        <div class="input-box">
+            <input type="password" placeholder="Enter Your Password" required>
+            <div class="underline"></div>
+        </div>
+        <br/>
         <div style="text-align: center ;">
           <p>By creating the account you agree to our <a href="#" style="color:blue">Terms & Privacy</a></p>
-      </div> 
+        </div> 
 
-      <div class="input-box button">
-        <input type="submit" name="" value="Sign Up">
-      </div>
-      <div>
-        <p style="text-align: center ;">Already a user?<a href="{% url 'login' %}" style="color: rgb(62, 156, 255);">Login here</a></p>
-      </div>
+        <div class="input-box button">
+            <input type="submit" name="" value="Sign Up">
+        </div>
+        <div>
+            <p style="text-align: center ;">Already a user?<a href="{% url 'login' %}" style="color: rgb(62, 156, 255);">Login here</a></p>
+        </div>
     </form>  
 </div>
 {% endblock %}

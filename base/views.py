@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-
 from http.client import HTTPResponse
-=======
->>>>>>> 931b868023fdaf85d608113735b42a0e1db283ea
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.core.serializers import serialize
@@ -10,6 +6,7 @@ from .models import DummyLatLng, RegisteredBusiness, Tour,Restaurant,Hotel,Repai
 from haversine import haversine,Unit
 from django.views.decorators.csrf import csrf_exempt
 import json
+from django.contrib.auth.models import User
 
 # Create your views here.
 def home(request):
@@ -34,6 +31,12 @@ def login(request):
 def signup(request):
     context={}
     return render(request,"base/signup.html",context)
+
+def signuptrial(request):
+    if request.method == 'POST':
+        name = request.POST['name']
+        gmail = request.POST['gmail']
+        password = request.POST['password']
 
 def recommendations(request):
     if request.method=='POST':
@@ -81,9 +84,22 @@ def trips(request):
     context={}
     return render(request,"base/trips.html",context)
 
+# def userProfile(request):
+#     context={}
+#     return render(request,"base/userProfile.html",context)
+
 def userProfile(request):
-    context={}
-    return render(request,"base/userProfile.html",context)
+    if request.method == 'POST':       
+        fname=request.POST['fname']
+        lname=request.POST['lname']
+        phone=request.POST['phone']
+        email=request.POST['email']
+        password=request.POST['password']
+        country=request.POST['country']
+        state=request.POST['state']
+        print(fname, lname,phone,email,password,country,state)
+        print("got the post")
+    return render(request,"base/userProfile.html")
 
 def registerBusiness(request):
     if request.method=='POST':

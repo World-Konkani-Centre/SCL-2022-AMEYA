@@ -15,15 +15,10 @@
       rel="stylesheet"
       href="{% static 'leaflet-routing/dist/leaflet-routing-machine.css' %}"
     />
-<<<<<<< HEAD
-=======
     <link
       rel="stylesheet"
       href="{% static 'leaflet-geocoding/leaflet-geocoding.css' %}"
     />
->>>>>>> 931b868023fdaf85d608113735b42a0e1db283ea
-    <link rel="stylesheet" href="{% static 'styles/styles.css' %}" />
-    <!-- Scripts -->
     <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'leaflet/leaflet.js' %}"></script>
     <script src="{% static 'leaflet-routing/dist/leaflet-routing-machine.js' %}"></script>
@@ -36,37 +31,14 @@
 
     <!-- Iconify -->
     <script src="https://code.iconify.design/2/2.2.1/iconify.min.js"></script>
+    
+    <link rel="stylesheet" href="{% static 'styles/styles.css' %}" />
+    <!-- Scripts -->
     {% block styles %} {% endblock %}
 
     <title>Yatra Mitra</title>
   </head>
   <body>
-<<<<<<< HEAD
-      <!--Navigation bar-->
-  <div>
-    <nav class="navbar navbar-expand-lg">
-      <div class="container-fluid">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-          <i class="fa fa-bars fa-x" id="navicon" aria-hidden="true"></i>
-        </button>
-        <a class="navbar-brand" href="#"><button class="project-name">Yatra Mitra</button></a>
-        <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link items" aria-current="page" href="userProfile"><button><span>Profile</span></button></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link items" href="trips.html"><button><span>Your trips</span></button></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link items" href="contact.html"><button><span >Contact-us</span></button></a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-  </div>
-=======
     <!--Navigation bar-->
     <div>
       <nav class="navbar navbar-expand-lg main-navbar">
@@ -120,7 +92,6 @@
         </div>
       </nav>
     </div>
->>>>>>> 931b868023fdaf85d608113735b42a0e1db283ea
     {% block content %} {% endblock %}
   </body>
 </html>

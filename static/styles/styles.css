@@ -1,15 +1,9 @@
-<<<<<<< HEAD
 @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
 *{
-=======
-@import url("https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap");
-* {
->>>>>>> 931b868023fdaf85d608113735b42a0e1db283ea
   margin: 0;
   padding: 0;
   user-select: none;
   box-sizing: border-box;
-<<<<<<< HEAD
   font-family: 'Poppins', sans-serif;
 }
 body{
@@ -21,11 +15,7 @@ body{
 nav{
     padding: 20px;
     color: #ffffff;
-=======
   font-family: "Poppins", sans-serif;
-}
-body {
-  background-color: #e2e2e291;
 }
 /* Scroll bar */
 ::-webkit-scrollbar {
@@ -35,7 +25,6 @@ body {
 /* Track */
 ::-webkit-scrollbar-track {
   background: #f1f1f1;
->>>>>>> 931b868023fdaf85d608113735b42a0e1db283ea
 }
 
 /* Handle */
