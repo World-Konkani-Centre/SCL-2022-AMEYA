@@ -66,3 +66,4 @@ wcwidth==0.2.5
 Werkzeug==2.1.1
 whitenoise==5.2.0
 yarl==1.7.2
+haversine==2.5.1
