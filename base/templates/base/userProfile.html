@@ -3,6 +3,7 @@
 <link rel="stylesheet" href="{% static 'styles/userprofile.css' %}" />
 {% endblock %} {% block content %}
 <div class="container rounded">
+
     <form method="POST" action="{% url 'userProfile' %}">
     {% csrf_token %}
     <div class="row">
@@ -20,6 +21,7 @@
             <span class="text-black-50">nshenoyv@gmail.com</span>
           </div>
         </div>
+
         <div class="col-lg border-right">
             <div class="p-2 py-4">
                 <div class="d-flex justify-content-between align-items-center mb-3">
@@ -121,5 +123,6 @@
       </div>
     </div>
     </form>
+
 </div>
 {% endblock %}

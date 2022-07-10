@@ -105,6 +105,7 @@ def userProfile(request):
     else:
         return render(request,"base/userProfile.html")
 
+
 def registerBusiness(request):
     if request.method=='POST':
         name=request.POST.get('name')
