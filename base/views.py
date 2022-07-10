@@ -1,3 +1,4 @@
+import email
 from http.client import HTTPResponse
 from django.shortcuts import render,redirect
 from django.http import JsonResponse
@@ -8,6 +9,7 @@ from haversine import haversine,Unit
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login as auth_login, logout
 
 # Create your views here.
 def home(request):
@@ -26,18 +28,37 @@ def getTour(request,id):
     return JsonResponse(data,safe=False)
 
 def login(request):
-    context={}
-    return render(request,"base/login.html",context)
+    if request.method == 'POST': 
+        login_username=request.POST.get('usernamel')
+        login_password=request.POST.get('passwordl')
+        print(login_username)
+        print(login_password)
+        user = authenticate(request, username = login_username, password = login_password)
+        print(user)
+        if user is not None:
+            auth_login(request,user)
+            print('\n User logged in\n')
+            return redirect('/')
+        else:
+            return render(request,"base/login.html")
+    return render(request,"base/login.html")
 
 def signup(request):
-    context={}
-    return render(request,"base/signup.html",context)
-
-def signuptrial(request):
-    if request.method == 'POST':
-        name = request.POST['name']
-        gmail = request.POST['gmail']
-        password = request.POST['password']
+    if request.method == 'POST': 
+        username=request.POST['username']
+        gmail=request.POST['gmail']
+        password=request.POST['password']
+        if User.objects.filter(username=username).exists():
+            return render(request,"base/login.html")
+        elif User.objects.filter(email=gmail).exists():
+            return render(request,"base/login.html")
+        else :
+            user = User.objects.create(email=gmail,username=username,password=password)
+            user.save()       
+            print("user created")
+            return redirect('/login/')
+    else:
+        return render(request,"base/signup.html")
 
 def recommendations(request):
     if request.method=='POST':
