@@ -41,7 +41,7 @@ class Restaurant(models.Model):
     def __str__(self):
         return self.name
 
-class Users(models.Model):
+class Profile(models.Model):
     gender_choices=[('1','Male'),('2','Female'),('3','Dont want to specify')]
     id=models.BigAutoField(primary_key=True)
     firstname = models.CharField(max_length=255)
@@ -50,7 +50,7 @@ class Users(models.Model):
     email = models.EmailField(blank=True, default="")
     password = models.CharField(max_length=20)
     gender=models.CharField(max_length=1,choices=gender_choices,default='1')
-    DOB=models.DateField()
+    DOB=models.DateField(blank=True,default="2001-01-01")
     phone = models.CharField(max_length=10)
     country=models.CharField(max_length=200, default="")
     state=models.CharField(max_length=200, default="")
