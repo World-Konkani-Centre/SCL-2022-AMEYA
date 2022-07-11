@@ -1,10 +1,42 @@
 {% extends 'main.html' %}
-{% load static %} 
+
+{% load static %}
+
 {% block styles %}
 <!-- Replace {name} with the respective css file -->
-<link rel="stylesheet" href="{% static 'styles/{name}' %}" />
+<link rel="stylesheet" href="{% static 'styles/recommendation.css' %}" />
 {% endblock %}
 
-{% block content %} 
-<!-- Add code from body here -->
+{% block content %}
+
+<br><br><br>
+{% for data in tourData %}
+<br><br>
+<div  class="container shadow p-3 mb-5 bg-white rounded">
+    <section class="card hover01">
+            <div class="row no-gutters">
+              <div class="col-md-4">
+                <img src='/media/{{data.image}}' class="card-img" alt="{{data.name}}">
+              </div>
+              <div class="col-md-8">
+                <div class="card-body">
+                  <h5 class="card-title">{{data.name}}</h5>
+                  <section>
+                    <span class="hidden-text">{{data.rating}}</span>&nbsp;
+                    <span class="fa fa-star checked"></span>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span class="info-1">Must See Temple</span>
+                  </section>
+                  <p class="card-text py-4">
+                    {{data.description}}
+                  <p class="card-text"><a href="www.google.com"><small class="text-muted">See more..</small></a></p>
+                </div>
+              </div>
+          </div>
+    </section>
+    </div>
+
+{% endfor %}
+
 {% endblock %}
