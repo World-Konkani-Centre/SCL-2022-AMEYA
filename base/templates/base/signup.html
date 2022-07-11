@@ -7,19 +7,19 @@
 
 {% block content %}
  <div class="container my-5">
-    <form action="" method="POST" class="form-container">
+    <form action="{% url 'signup' %}" method="POST" class="form-container">
       {% csrf_token %}
         <h2>Sign Up</h2>
         <div class="input-box">
-            <input type="text" placeholder="Enter Username" required name="username">
+            <input type="text" id="username" placeholder="Enter Username" required name="username">
             <div class="underline"></div>
         </div>
         <div class="input-box">
-            <input type="gmail" placeholder="Enter Your Email" required name="gmail">
+            <input type="gmail" id="gmail" placeholder="Enter Your Email" required name="gmail">
             <div class="underline"></div>
         </div>
         <div class="input-box">
-            <input type="password" placeholder="Enter Your Password" required name="password">
+            <input type="password" id="password" placeholder="Enter Your Password" required name="password">
             <div class="underline"></div>
         </div>
         <br/>

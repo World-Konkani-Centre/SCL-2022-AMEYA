@@ -9,8 +9,10 @@ from haversine import haversine,Unit
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login as auth_login, logout
-
+from django.contrib.auth import authenticate, login as auth_login, logout 
+from .forms import UserUpdateForm, ProfileUpdateForm
+from .models import Profile
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 def home(request):
     context={'name':"Kishor"}
@@ -45,6 +47,7 @@ def signup(request):
         gmail=request.POST['gmail']
         password=request.POST['password']
         if User.objects.filter(username=username).exists():
+            print("userexists")
             return render(request,"base/login.html")
         elif User.objects.filter(email=gmail).exists():
             return render(request,"base/login.html")
@@ -115,21 +118,27 @@ def trips(request):
 # def userProfile(request):
 #     context={}
 #     return render(request,"base/userProfile.html",context)
-
+@login_required
 def userProfile(request):
-    if request.method == 'POST':       
-        firstname=request.POST['firstname']
-        lastname=request.POST['lastname']
-        phone=request.POST['phone']
-        email=request.POST['email']
-        password=request.POST['password']
-        country=request.POST['country']
-        state=request.POST['state']
-        user=Profile.objects.create(email=email,username=firstname,password=password,firstname=firstname,lastname=lastname,country=country,state=state,phone=phone)
-        user.save();       
-        return redirect('/')
+    if request.method == 'POST':
+        u_form =UserUpdateForm(request.POST, instance=request.user)
+        p_form = ProfileUpdateForm(request.POST,request.FILES, instance=request.user.profile)
+
+        if u_form.is_valid() and p_form.is_valid():
+            u_form.save()
+            p_form.save()
+            messages.success(request, f'Your account has been Updated')
+            return redirect('userProfile')
     else:
-        return render(request,"base/userProfile.html")
+        u_form =UserUpdateForm(instance=request.user)
+        p_form = ProfileUpdateForm(instance=request.user.profile)
+
+    context={
+        'u_form':u_form,
+        'p_form':p_form
+    }
+    return render(request, "base/userProfile.html",context)
+        
 
 def registerBusiness(request):
     if request.method=='POST':
@@ -192,3 +201,11 @@ def getBusiness(request,id):
     business=RegisteredBusiness.objects.get(id=id)
     data=serialize('json',[business])
     return JsonResponse(data,safe=False)
+
+
+def logout(request):
+    auth.logout(request)
+    messages.info(request,'You logged out.')
+    return redirect('/')
+    
+
