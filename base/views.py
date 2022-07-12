@@ -38,14 +38,14 @@ def signup(request):
         password=request.POST['password']
         if User.objects.filter(username=username).exists(): 
             print("userexists")
-            return render(request,"base/login.html")
+            return render(request,"base/signup.html")
 
         elif User.objects.filter(email=gmail).exists():
-            return render(request,"base/login.html")
+            return render(request,"base/signup.html")
 
         else :
-            user = User.objects.create(email=gmail,username=username,password=make_password(password))
-            user.save()       
+            user = User.objects.create(email=gmail, username=username, password=make_password(password))
+            user.save()      
             return redirect('/login/')
     else:
         return render(request,"base/signup.html")
@@ -123,7 +123,7 @@ def trips(request):
 # def userProfile(request):
 #     context={}
 #     return render(request,"base/userProfile.html",context)
-@login_required
+
 def userProfile(request):
     if request.method == 'POST':
         u_form =UserUpdateForm(request.POST, instance=request.user)

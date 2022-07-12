@@ -3,8 +3,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserChangeForm
 from .models import Profile
 
+
 class UserUpdateForm(forms.ModelForm):
-    email =forms.EmailField()
+    email =forms.EmailField(max_length=30)
 
     class Meta:
         model = User

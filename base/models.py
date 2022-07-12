@@ -47,17 +47,18 @@ class Profile(models.Model):
     id=models.BigAutoField(primary_key=True)
     role_choices=[('1','User'),('2','Business')]
     gender_choices=[('1','Male'),('2','Female'),('3','Dont want to specify')]
-    gender=models.CharField(max_length=1,choices=gender_choices,default='1')
-    phone=models.CharField(max_length=10,default='')
-    DOB=models.DateField()
-    role=models.CharField(max_length=1,choices=role_choices,default='1')
-    image=models.ImageField(upload_to='profile_pics', height_field=None, width_field=None, max_length=100,default='')
+    gender=models.CharField(blank=True, max_length=1,choices=gender_choices,default='1')
+    phone=models.CharField(blank=True, max_length=10,default='')
+    DOB=models.DateField(blank=True,default='2001-01-01')
+    role=models.CharField(blank=True, max_length=1,choices=role_choices,default='1')
+    image=models.ImageField(blank=True, upload_to='profile_pics', height_field=None, width_field=None, max_length=100,default='default.jpg')
 
     def __str__(self):
         return f'{self.user.username} Profile'
 
-    def save(self):
-        super().save()
+    def save(self, *args, **kwargs):
+        super(Profile, self).save(*args, **kwargs)
+        
         img= Image.open(self.image.path)
 
         if img.height > 300 or img.width > 300:
