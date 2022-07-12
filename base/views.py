@@ -9,10 +9,12 @@ from haversine import haversine,Unit
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login as auth_login, logout 
+from django.contrib.auth import authenticate, login as auth_login, logout
 from .forms import UserUpdateForm, ProfileUpdateForm
 from .models import Profile
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import make_password
+
 # Create your views here.
 def home(request):
     context={'name':"Kishor"}
@@ -29,34 +31,37 @@ def getTour(request,id):
     data=serialize('json',[tour])
     return JsonResponse(data,safe=False)
 
-def login(request):
-    if request.method == 'POST': 
-        login_username=request.POST.get('usernamel')
-        login_password=request.POST.get('passwordl')
-        user = authenticate(request, username = login_username, password = login_password)
-        if user is not None:
-            auth_login(request,user)
-            return redirect('/')
-        else:
-            return render(request,"base/login.html")
-    return render(request,"base/login.html")
-
 def signup(request):
     if request.method == 'POST': 
         username=request.POST['username']
         gmail=request.POST['gmail']
         password=request.POST['password']
-        if User.objects.filter(username=username).exists():
+        if User.objects.filter(username=username).exists(): 
             print("userexists")
             return render(request,"base/login.html")
+
         elif User.objects.filter(email=gmail).exists():
             return render(request,"base/login.html")
+
         else :
-            user = User.objects.create(email=gmail,username=username,password=password)
+            user = User.objects.create(email=gmail,username=username,password=make_password(password))
             user.save()       
             return redirect('/login/')
     else:
         return render(request,"base/signup.html")
+
+def login(request):
+    if request.method == 'POST': 
+        login_username=request.POST['usernamel']
+        login_password=request.POST['passwordl']
+        user = authenticate(request, username = login_username, password = login_password)
+        if user is not None:
+            auth_login(request, user)
+            print("User logged in")
+            return redirect('/')
+        else:
+            return render(request,"base/login.html")
+    return render(request,"base/login.html")
 
 def recommendations(request):
     if request.method=='POST':

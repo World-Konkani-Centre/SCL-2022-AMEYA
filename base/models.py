@@ -43,7 +43,7 @@ class Restaurant(models.Model):
         return self.name
 
 class Profile(models.Model):
-    user = models.OneToOneField(User,null=True, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     id=models.BigAutoField(primary_key=True)
     role_choices=[('1','User'),('2','Business')]
     gender_choices=[('1','Male'),('2','Female'),('3','Dont want to specify')]
@@ -51,7 +51,7 @@ class Profile(models.Model):
     phone=models.CharField(max_length=10,default='')
     DOB=models.DateField()
     role=models.CharField(max_length=1,choices=role_choices,default='1')
-    image=models.ImageField(upload_to='profile_pics', height_field=None, width_field=None, max_length=100,default='default.jpg')
+    image=models.ImageField(upload_to='profile_pics', height_field=None, width_field=None, max_length=100,default='')
 
     def __str__(self):
         return f'{self.user.username} Profile'
