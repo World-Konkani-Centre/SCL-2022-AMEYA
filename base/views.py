@@ -38,15 +38,16 @@ def signup(request):
         password=request.POST['password']
         if User.objects.filter(username=username).exists(): 
             print("userexists")
-            return render(request,"base/signup.html")
+            return render(request,"base/login.html")
 
         elif User.objects.filter(email=gmail).exists():
-            return render(request,"base/signup.html")
+            return render(request,"base/login.html")
 
         else :
             user = User.objects.create(email=gmail, username=username, password=make_password(password))
-            user.save()      
-            return redirect('/login/')
+            user.save() 
+            auth_login(request, user)    
+            return redirect('/')
     else:
         return render(request,"base/signup.html")
 
