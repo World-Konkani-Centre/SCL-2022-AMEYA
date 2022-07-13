@@ -39,9 +39,6 @@ class Restaurant(models.Model):
     def __str__(self):
         return self.name
 
-    def __str__(self):
-        return self.name
-
 class Profile(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     id=models.BigAutoField(primary_key=True)
@@ -51,7 +48,7 @@ class Profile(models.Model):
     phone=models.CharField(blank=True, max_length=10,default='')
     DOB=models.DateField(default='2001-01-01')
     role=models.CharField(blank=True, max_length=1,choices=role_choices,default='1')
-    image=models.ImageField(upload_to='profile_pics', height_field=None, width_field=None, max_length=100,default='default.jpg')
+    image=models.ImageField(upload_to='images/user', height_field=None, width_field=None, max_length=100,null=True)
 
     def __str__(self):
         return f'{self.user.username} Profile'
@@ -59,19 +56,13 @@ class Profile(models.Model):
     def save(self, *args, **kwargs):
         super(Profile, self).save(*args, **kwargs)
         
-        img= Image.open(self.image.path)    
+        if(self.image):
+            img= Image.open(self.image.path)    
+            if img.height > 300 or img.width > 300:
+                output_size = (300,300)
+                img.thumbnail(output_size)
+                img.save(self.image.path)
 
-        if img.height > 300 or img.width > 300:
-            output_size = (300,300)
-            img.thumbnail(output_size)
-            img.save(self.image.path)
-
-
-
-
-
-
-        
 # Reviews model:
 class TourReviews(models.Model):
     id=models.BigAutoField(primary_key=True)
@@ -81,7 +72,6 @@ class TourReviews(models.Model):
     review=models.CharField(max_length=500)
     createadAt=models.DateTimeField(auto_now_add=True)
     updateAt=models.DateTimeField(auto_now=True)
-
 
 # Hotel model:
 class Hotel(models.Model):
@@ -145,9 +135,6 @@ class RegisteredBusiness(models.Model):
     banner=models.ImageField(upload_to='images/regBiz',null=True)
     createadAt=models.DateTimeField(auto_now_add=True)
     updateAt=models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.name
 
     def __str__(self):
         return self.name
