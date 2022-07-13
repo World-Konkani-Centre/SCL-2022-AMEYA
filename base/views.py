@@ -1,4 +1,3 @@
-import email
 from http.client import HTTPResponse
 from django.shortcuts import render,redirect
 from django.http import JsonResponse
@@ -9,12 +8,10 @@ from haversine import haversine,Unit
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login as auth_login, logout
+from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from .forms import UserUpdateForm, ProfileUpdateForm
-from .models import Profile
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
-
 # Create your views here.
 def home(request):
     context={'name':"Kishor"}
@@ -34,17 +31,16 @@ def getTour(request,id):
 def signup(request):
     if request.method == 'POST': 
         username=request.POST['username']
-        gmail=request.POST['gmail']
+        email=request.POST['email']
         password=request.POST['password']
         if User.objects.filter(username=username).exists(): 
-            print("userexists")
-            return render(request,"base/login.html")
+            return render(request,"base/signup.html")
 
-        elif User.objects.filter(email=gmail).exists():
-            return render(request,"base/login.html")
+        elif User.objects.filter(email=email).exists():
+            return render(request,"base/signup.html")
 
         else :
-            user = User.objects.create(email=gmail, username=username, password=make_password(password))
+            user = User.objects.create(email=email, username=username, password=make_password(password))
             user.save() 
             auth_login(request, user)    
             return redirect('/')
@@ -58,7 +54,6 @@ def login(request):
         user = authenticate(request, username = login_username, password = login_password)
         if user is not None:
             auth_login(request, user)
-            print("User logged in")
             return redirect('/')
         else:
             return render(request,"base/login.html")
@@ -120,10 +115,6 @@ def trip(request):
 def trips(request):
     context={}
     return render(request,"base/trips.html",context)
-
-# def userProfile(request):
-#     context={}
-#     return render(request,"base/userProfile.html",context)
 
 def userProfile(request):
     if request.method == 'POST':
@@ -210,7 +201,7 @@ def getBusiness(request,id):
 
 
 def logout(request):
-    auth.logout(request)
+    auth_logout(request)
     messages.info(request,'You logged out.')
     return redirect('/')
     
