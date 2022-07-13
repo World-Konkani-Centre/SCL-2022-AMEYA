@@ -48,7 +48,7 @@ class Profile(models.Model):
     phone=models.CharField(blank=True, max_length=10,default='')
     DOB=models.DateField(null=True)
     role=models.CharField(max_length=1,choices=role_choices,default='1')
-    image=models.ImageField(upload_to='images/user', height_field=None, width_field=None, max_length=100,null=True)
+    image=models.ImageField(blank=True,upload_to='images/user', height_field=None, width_field=None, max_length=100,null=True)
 
     def __str__(self):
         return f'{self.user.username} Profile'
