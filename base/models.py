@@ -38,9 +38,6 @@ class Restaurant(models.Model):
     def __str__(self):
         return self.name
 
-    def __str__(self):
-        return self.name
-
 class Profile(models.Model):
     gender_choices=[('1','Male'),('2','Female'),('3','Dont want to specify')]
     id=models.BigAutoField(primary_key=True)

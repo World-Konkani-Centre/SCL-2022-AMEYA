@@ -1,4 +1,3 @@
-import email
 from http.client import HTTPResponse
 from django.shortcuts import render,redirect
 from django.http import JsonResponse
@@ -146,6 +145,31 @@ def registerBusiness(request):
         lng=request.POST.get('longitude')
         logo=request.FILES.get('logo')
         banner=request.FILES.get('banner')
+        business=RegisteredBusiness(name=name,address=address,zipcode=zipcode,phone=phone,email=email,category=category,description=description,lat=lat,lng=lng,logo=logo,banner=banner,website=website)
+        business.save()
+    return render(request,"base/registerBusiness.html")
+
+# view to get registered business details by id:
+def getBusinessDetails(request,id):
+    business=RegisteredBusiness.objects.get(id=id)
+    return render(request,"base/businessDetails.html",{'business':business})
+
+def registerBusiness(request):
+    if request.method=='POST':
+        name=request.POST.get('name')
+        address=request.POST.get('address')
+        zipcode=request.POST.get('zipcode')
+        phone=request.POST.get('phone')
+        email=request.POST.get('email')
+        category=request.POST.get('category')
+        website=request.POST.get('website')
+        description=request.POST.get('description')
+        lat=request.POST.get('latitude')
+        lng=request.POST.get('longitude')
+        logo=request.FILES.get('logo')
+        banner=request.FILES.get('banner')
+        print(request.FILES)
+        print(banner)
         business=RegisteredBusiness(name=name,address=address,zipcode=zipcode,phone=phone,email=email,category=category,description=description,lat=lat,lng=lng,logo=logo,banner=banner,website=website)
         business.save()
     return render(request,"base/registerBusiness.html")
