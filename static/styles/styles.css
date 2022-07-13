@@ -1,13 +1,21 @@
-@import url("https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap");
-* {
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
+*{
   margin: 0;
   padding: 0;
   user-select: none;
   box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
-body {
+body{
   background-color: #e2e2e291;
+}
+
+
+/* Standard styling for navbar*/
+nav{
+    padding: 20px;
+    color: #ffffff;
+  font-family: "Poppins", sans-serif;
 }
 /* Scroll bar */
 ::-webkit-scrollbar {
@@ -41,6 +49,10 @@ body {
   color: #ffffff;
 }
 
+.navbar a{
+    text-decoration: none;
+    color: #ffffff;
+}
 .main-navbar a {
   text-decoration: none;
   color: #ffffff;

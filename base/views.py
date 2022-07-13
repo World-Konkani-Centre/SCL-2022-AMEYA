@@ -1,10 +1,14 @@
-from django.shortcuts import render
+from http.client import HTTPResponse
+from django.shortcuts import render,redirect
 from django.http import JsonResponse
 from django.core.serializers import serialize
-from .models import DummyLatLng, RegisteredBusiness, Tour,Restaurant,Hotel,RepairShop
+from django.contrib import messages
+from .models import DummyLatLng,RegisteredBusiness,Tour,Restaurant,Hotel,RepairShop,TourReviews,Profile
 from haversine import haversine,Unit
 from django.views.decorators.csrf import csrf_exempt
 import json
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login as auth_login, logout
 
 # Create your views here.
 def home(request):
@@ -23,26 +27,45 @@ def getTour(request,id):
     return JsonResponse(data,safe=False)
 
 def login(request):
-    context={}
-    return render(request,"base/login.html",context)
+    if request.method == 'POST': 
+        login_username=request.POST.get('usernamel')
+        login_password=request.POST.get('passwordl')
+        user = authenticate(request, username = login_username, password = login_password)
+        if user is not None:
+            auth_login(request,user)
+            return redirect('/')
+        else:
+            return render(request,"base/login.html")
+    return render(request,"base/login.html")
 
 def signup(request):
-    context={}
-    return render(request,"base/signup.html",context)
+    if request.method == 'POST': 
+        username=request.POST['username']
+        gmail=request.POST['gmail']
+        password=request.POST['password']
+        if User.objects.filter(username=username).exists():
+            return render(request,"base/login.html")
+        elif User.objects.filter(email=gmail).exists():
+            return render(request,"base/login.html")
+        else :
+            user = User.objects.create(email=gmail,username=username,password=password)
+            user.save()       
+            return redirect('/login/')
+    else:
+        return render(request,"base/signup.html")
 
 def recommendations(request):
     if request.method=='POST':
         contents=Tour.objects.all()
-        category1= request.POST['category']  #Retrieves the category entered by the user
+        category1= request.POST['category'] #Retrieves the category entered by the user
+        category=1  
         if(category1=='Adventure'):
             category=1
-            tourData = Tour.objects.all().filter(category=category).order_by('-rating').values()
         elif(category1=='Trekking'):
             category=2
-            tourData = Tour.objects.all().filter(category=category).order_by('-rating').values()
         elif(category1=='Hiking'):
             category=3
-            tourData = Tour.objects.all().filter(category=category).order_by('-rating').values() #Filter by highest rating
+        tourData = Tour.objects.all().filter(category=category).order_by('-rating').values() #Filter by highest rating
         context={
             'tourData':tourData
         }
@@ -68,6 +91,18 @@ def tourForm(request):
     context={}
     return render(request,"base/tourForm.html",context)
 
+def tourReview(request,id):
+    tour=Tour.objects.get(id=id)
+    if request.method=='POST':
+        rating=request.POST.get('rating')
+        review=request.POST.get('review')
+        if(rating==None): rating=1
+        rev=TourReviews(rating=float(rating),review=review,tour=tour)
+        rev.save()
+        messages.add_message(request, messages.SUCCESS, 'Your Review has been submitted successfully!')
+    context={'tour':tour}
+    return render(request,"base/tourReview.html",context)
+
 def trip(request):
     context={}
     return render(request,"base/trip.html",context)
@@ -76,9 +111,48 @@ def trips(request):
     context={}
     return render(request,"base/trips.html",context)
 
+# def userProfile(request):
+#     context={}
+#     return render(request,"base/userProfile.html",context)
+
 def userProfile(request):
-    context={}
-    return render(request,"base/userProfile.html",context)
+    if request.method == 'POST':       
+        firstname=request.POST['firstname']
+        lastname=request.POST['lastname']
+        phone=request.POST['phone']
+        email=request.POST['email']
+        password=request.POST['password']
+        country=request.POST['country']
+        state=request.POST['state']
+        user=Profile.objects.create(email=email,username=firstname,password=password,firstname=firstname,lastname=lastname,country=country,state=state,phone=phone)
+        user.save();       
+        return redirect('/')
+    else:
+        return render(request,"base/userProfile.html")
+
+
+def registerBusiness(request):
+    if request.method=='POST':
+        name=request.POST.get('name')
+        address=request.POST.get('address')
+        zipcode=request.POST.get('zipcode')
+        phone=request.POST.get('phone')
+        email=request.POST.get('email')
+        category=request.POST.get('category')
+        website=request.POST.get('website')
+        description=request.POST.get('description')
+        lat=request.POST.get('latitude')
+        lng=request.POST.get('longitude')
+        logo=request.FILES.get('logo')
+        banner=request.FILES.get('banner')
+        business=RegisteredBusiness(name=name,address=address,zipcode=zipcode,phone=phone,email=email,category=category,description=description,lat=lat,lng=lng,logo=logo,banner=banner,website=website)
+        business.save()
+    return render(request,"base/registerBusiness.html")
+
+# view to get registered business details by id:
+def getBusinessDetails(request,id):
+    business=RegisteredBusiness.objects.get(id=id)
+    return render(request,"base/businessDetails.html",{'business':business})
 
 def registerBusiness(request):
     if request.method=='POST':

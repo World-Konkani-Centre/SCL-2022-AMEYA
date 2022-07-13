@@ -1,0 +1,65 @@
+{% extends 'main.html' %} {% load static %} {% block styles %}
+<!-- Replace {name} with the respective css file -->
+<link rel="stylesheet" href="{% static 'styles/tourReview.css' %}" />
+{% endblock %} {% block content %}
+<div class="container tour-rev-form">
+  {% include 'base/messages.html' %}
+  <h3>Tour Review</h3>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-desc">
+          <h4>{{tour.name}}</h4>
+          <div class="row">
+            <div class="col-lg-6">
+              <img
+                src="/media/{{tour.image}}"
+                alt="Tour Image"
+                class="tour-img"
+              />
+            </div>
+            <div class="col-lg-6">
+              <p>
+                {{tour.rating}}
+                <img width="15px" src="{% static 'icons/map/star.png'%}" />
+              </p>
+              <p>{{tour.description}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <form action="" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="review">Review</label>
+              <textarea
+                class="form-control"
+                id="review"
+                name="review"
+                rows="3"
+                maxlength="500"
+                required
+              ></textarea>
+            </div>
+            <div class="form-group">
+              <div class="rate">
+                <input type="radio" id="star5" name="rating" value="5" />
+                <label for="star5" title="text">5 stars</label>
+                <input type="radio" id="star4" name="rating" value="4" />
+                <label for="star4" title="text">4 stars</label>
+                <input type="radio" id="star3" name="rating" value="3" />
+                <label for="star3" title="text">3 stars</label>
+                <input type="radio" id="star2" name="rating" value="2" />
+                <label for="star2" title="text">2 stars</label>
+                <input type="radio" id="star1" name="rating" value="1" />
+                <label for="star1" title="text">1 star</label>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block scripts %} {% endblock %}

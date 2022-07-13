@@ -133,7 +133,7 @@ function addDestinationMarker(latlng, id) {
         }),
       })
         .bindPopup(
-          `<h3>${data.name}</h3><p>Rating: ${data.rating} <img width="18px" src=${starIcon} alt="stars"/></p><p>${data.description}</p>`
+          `<h3>${data.name}</h3><p>Rating: ${data.rating} <img width="18px" src=${starIcon} alt="stars"/></p><img width="100%" height="auto" src="/media/${data.image}"/><p>${data.description}</p>`
         )
         .addTo(map);
     })

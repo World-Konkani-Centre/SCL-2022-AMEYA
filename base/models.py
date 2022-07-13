@@ -3,7 +3,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 # Tour model:
 class Tour(models.Model):
-    category_choices=[('1','Hiking'),('2','Trekking'),('3','Adventure')]
+    category_choices=[('1','Adventure'),('2','Trekking'),('3','Hiking')]
     id=models.BigAutoField(primary_key=True)
     name=models.CharField(max_length=100)
     description=models.CharField(max_length=500)
@@ -38,25 +38,33 @@ class Restaurant(models.Model):
     def __str__(self):
         return self.name
 
-    def __str__(self):
-        return self.name
-
-# Reviews model:
-class Reviews(models.Model):
+class Profile(models.Model):
+    gender_choices=[('1','Male'),('2','Female'),('3','Dont want to specify')]
     id=models.BigAutoField(primary_key=True)
-    tour_id=models.ForeignKey(Tour,on_delete=models.CASCADE)
+    firstname = models.CharField(max_length=255)
+    lastname = models.CharField(max_length=255)
+    username= models.CharField(max_length=255)
+    email = models.EmailField(blank=True, default="")
+    password = models.CharField(max_length=20)
+    gender=models.CharField(max_length=1,choices=gender_choices,default='1')
+    DOB=models.DateField(blank=True,default="2001-01-01")
+    phone = models.CharField(max_length=10)
+    country=models.CharField(max_length=200, default="")
+    state=models.CharField(max_length=200, default="")
+    profile=models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=100)
+    def __str__(self):
+        return self.firstname
+        
+# Reviews model:
+class TourReviews(models.Model):
+    id=models.BigAutoField(primary_key=True)
+    tour=models.ForeignKey(Tour,on_delete=models.CASCADE)
     # user_id=models.ForeignKey(User,on_delete=models.CASCADE)
     rating=models.IntegerField(default=5,validators=[MinValueValidator(1),MaxValueValidator(5)])
     review=models.CharField(max_length=500)
-    date=models.DateField(auto_now_add=True)
     createadAt=models.DateTimeField(auto_now_add=True)
     updateAt=models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return self.id
-
-    def __str__(self):
-        return self.id
 
 # Hotel model:
 class Hotel(models.Model):
