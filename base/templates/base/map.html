@@ -40,15 +40,15 @@
           <li class="nav-item" role="presentation">
             <button
               class="nav-link"
-              id="pills-food-tab"
+              id="pills-recm-tab"
               data-bs-toggle="pill"
-              data-bs-target="#pills-food"
+              data-bs-target="#pills-recm"
               type="button"
               role="tab"
-              aria-controls="pills-food"
+              aria-controls="pills-recm"
               aria-selected="false"
             >
-              Food
+             Recommendations
             </button>
           </li>
           <li class="nav-item" role="presentation">
@@ -77,11 +77,11 @@
           ></div>
           <div
             class="tab-pane fade"
-            id="pills-food"
+            id="pills-recm"
             role="tabpanel"
-            aria-labelledby="pills-food-tab"
+            aria-labelledby="pills-recm-tab"
           >
-            Food
+            Recommendations
           </div>
           <div
             class="tab-pane fade"
@@ -216,6 +216,5 @@
 <script>
   getCurrLoc();
   createWaypoints(["{{tour.lat}}","{{tour.lng}}"],"{{tour.id}}");
-  // getTour();
 </script>
 {% endblock %}

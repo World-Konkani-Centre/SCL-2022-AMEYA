@@ -1,15 +1,18 @@
 #map {
-  height: 100vh;
+  height: calc(100vh - 60px);
   position: relative;
 }
+#recommendation-panel {
+  height: calc(100vh - 60px) !important;
+}
 .container-map {
-  height: 100vh;
+  height: calc(100vh - 60px);
   margin-top: 60px;
 }
 .leaflet-routing-alt {
+  max-height: calc(100vh - 180px) !important;
   margin-top: 10px !important;
   border-bottom: none !important;
-  max-height: 90vh !important;
 }
 .leaflet-routing-alt h2 {
   font-size: 20px !important;
@@ -19,10 +22,6 @@
 }
 .leaflet-routing-alt::-webkit-scrollbar {
   display: none;
-}
-/* Directions */
-#pills-directions {
-  padding-top: 50px;
 }
 /* Transport */
 #pills-transports {
@@ -69,9 +68,9 @@
 .btn-save-tour {
   width: fit-content;
   background-color: #1e1e1e !important;
-  z-index: 9999;
+  z-index: 999;
   position: absolute;
-  top: 80%;
+  top: 5%;
   left: 90%;
 }
 /* Media query  */
