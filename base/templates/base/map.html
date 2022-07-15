@@ -1,28 +1,29 @@
 {% extends 'main.html' %} {% load static %} {% block styles %}
 <link rel="stylesheet" href="{% static 'styles/map.css' %}" />
-{% endblock %}
-{% block content %}
+{% endblock %} {% block content %}
 <div class="container-fluid container-map">
   <div class="row">
     <div class="col-lg-9 col-md-8 col-sm-6" id="map">
       <div class="map-buttons">
         <button id="btn-nearby-food" data-a="food" class="nearby-btn">
-          <img src="{% static 'icons/map/food.png' %}" alt="Food">
+          <img src="{% static 'icons/map/food.png' %}" alt="Food" />
         </button>
         <button id="btn-nearby-hotel" data-a="hotel" class="nearby-btn">
-          <img src="{% static 'icons/map/hotel.png' %}" alt="Hotel">
+          <img src="{% static 'icons/map/hotel.png' %}" alt="Hotel" />
         </button>
         <button id="btn-nearby-repair" data-a="repair" class="nearby-btn">
-          <img src="{% static 'icons/map/repair.png' %}" alt="Repair">
+          <img src="{% static 'icons/map/repair.png' %}" alt="Repair" />
         </button>
       </div>
-      <button class="btn btn-primary btn-save-tour">
-        Save Tour
-      </button>
+      <button class="btn btn-primary btn-save-tour">Save Tour</button>
     </div>
     <div class="col-lg-3 col-md-4 col-sm-6" id="recommendation-panel">
       <div class="col-12">
-        <ul class="nav nav-pills nav-fill mb-3" id="pills-tab" role="tablist">
+        <ul
+          class="nav nav-pills nav-fill mb-3 panel-tabs"
+          id="pills-tab"
+          role="tablist"
+        >
           <li class="nav-item" role="presentation">
             <button
               class="nav-link active"
@@ -48,7 +49,7 @@
               aria-controls="pills-recm"
               aria-selected="false"
             >
-             Recommendations
+              Recommendations
             </button>
           </li>
           <li class="nav-item" role="presentation">
@@ -81,7 +82,131 @@
             role="tabpanel"
             aria-labelledby="pills-recm-tab"
           >
-            Recommendations
+            <ul class="nav nav-pills mb-3" id="pills-reco" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link active"
+                  id="pills-food-tab"
+                  data-bs-toggle="pill"
+                  data-bs-target="#pills-food"
+                  type="button"
+                  role="tab"
+                  aria-controls="pills-food"
+                  aria-selected="true"
+                >
+                  <img
+                    src="{% static 'icons/map/food_rec.png' %}"
+                    alt="food"
+                    class="rec-icons"
+                  />
+                  Food
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link"
+                  id="pills-hotel-tab"
+                  data-bs-toggle="pill"
+                  data-bs-target="#pills-hotel"
+                  type="button"
+                  role="tab"
+                  aria-controls="pills-hotel"
+                  aria-selected="false"
+                >
+                  <img
+                    src="{% static 'icons/map/hotel_rec.png' %}"
+                    alt="hotel"
+                    class="rec-icons"
+                  />
+                  Hotels
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link"
+                  id="pills-shoping-tab"
+                  data-bs-toggle="pill"
+                  data-bs-target="#pills-shoping"
+                  type="button"
+                  role="tab"
+                  aria-controls="pills-shoping"
+                  aria-selected="false"
+                >
+                  <img
+                    src="{% static 'icons/map/shoping_rec.png' %}"
+                    alt="shoping"
+                    class="rec-icons"
+                  />Shoping
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link"
+                  id="pills-gas-tab"
+                  data-bs-toggle="pill"
+                  data-bs-target="#pills-gas"
+                  type="button"
+                  role="tab"
+                  aria-controls="pills-gas"
+                  aria-selected="false"
+                >
+                  <img
+                    src="{% static 'icons/map/gas_rec.png' %}"
+                    alt="gas"
+                    class="rec-icons"
+                  />
+                  Gas
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link"
+                  id="pills-bank-tab"
+                  data-bs-toggle="pill"
+                  data-bs-target="#pills-bank"
+                  type="button"
+                  role="tab"
+                  aria-controls="pills-bank"
+                  aria-selected="false"
+                >
+                  <img
+                    src="{% static 'icons/map/bank_rec.png' %}"
+                    alt="bank"
+                    class="rec-icons"
+                  />
+                  Banks
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link"
+                  id="pills-attraction-tab"
+                  data-bs-toggle="pill"
+                  data-bs-target="#pills-attraction"
+                  type="button"
+                  role="tab"
+                  aria-controls="pills-attraction"
+                  aria-selected="false"
+                >
+                  <img
+                    src="{% static 'icons/map/attraction_rec.png' %}"
+                    alt="bank"
+                    class="rec-icons"
+                  />
+                  Attractions
+                </button>
+              </li>
+            </ul>
+            <div class="tab-content" id="pills-transContent">
+              <div
+                class="tab-pane fade show active"
+                id="pills-food"
+                role="tabpanel"
+                aria-labelledby="pills-bus-tab"
+              >
+                Food
+              </div>
+            </div>
           </div>
           <div
             class="tab-pane fade"
@@ -101,7 +226,11 @@
                   aria-controls="pills-bus"
                   aria-selected="true"
                 >
-                  <img src="{% static 'icons/transport/bus.png' %}" alt="bus" class="transp-icons">
+                  <img
+                    src="{% static 'icons/transport/bus.png' %}"
+                    alt="bus"
+                    class="transp-icons"
+                  />
                 </button>
               </li>
               <li class="nav-item" role="presentation">
@@ -115,8 +244,11 @@
                   aria-controls="pills-train"
                   aria-selected="false"
                 >
-                <img src="{% static 'icons/transport/train.png' %}" alt="bus" class="transp-icons">
-
+                  <img
+                    src="{% static 'icons/transport/train.png' %}"
+                    alt="bus"
+                    class="transp-icons"
+                  />
                 </button>
               </li>
               <li class="nav-item" role="presentation">
@@ -130,8 +262,11 @@
                   aria-controls="pills-taxi"
                   aria-selected="false"
                 >
-                <img src="{% static 'icons/transport/taxi.png' %}" alt="bus" class="transp-icons">
-
+                  <img
+                    src="{% static 'icons/transport/taxi.png' %}"
+                    alt="bus"
+                    class="transp-icons"
+                  />
                 </button>
               </li>
               <li class="nav-item" role="presentation">
@@ -145,23 +280,30 @@
                   aria-controls="pills-auto"
                   aria-selected="false"
                 >
-                <img src="{% static 'icons/transport/auto.png' %}" alt="bus" class="transp-icons">
-              </button>
-                <li class="nav-item" role="presentation">
-                  <button
-                    class="nav-link"
-                    id="pills-bike-tab"
-                    data-bs-toggle="pill"
-                    data-bs-target="#pills-bike"
-                    type="button"
-                    role="tab"
-                    aria-controls="pills-bike"
-                    aria-selected="false"
-                  >
-                  <img src="{% static 'icons/transport/bike.png' %}" alt="bus" class="transp-icons">
-
-                  </button>
-                </li>
+                  <img
+                    src="{% static 'icons/transport/auto.png' %}"
+                    alt="bus"
+                    class="transp-icons"
+                  />
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button
+                  class="nav-link"
+                  id="pills-bike-tab"
+                  data-bs-toggle="pill"
+                  data-bs-target="#pills-bike"
+                  type="button"
+                  role="tab"
+                  aria-controls="pills-bike"
+                  aria-selected="false"
+                >
+                  <img
+                    src="{% static 'icons/transport/bike.png' %}"
+                    alt="bus"
+                    class="transp-icons"
+                  />
+                </button>
               </li>
             </ul>
             <div class="tab-content" id="pills-transContent">
@@ -215,6 +357,6 @@
 <script src="{% static 'scripts/map.js' %}"></script>
 <script>
   getCurrLoc();
-  createWaypoints(["{{tour.lat}}","{{tour.lng}}"],"{{tour.id}}");
+  createWaypoints(["{{tour.lat}}", "{{tour.lng}}"], "{{tour.id}}");
 </script>
 {% endblock %}

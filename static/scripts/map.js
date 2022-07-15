@@ -6,6 +6,7 @@ let nearby = [];
 const baseURL = `${window.location.origin}/api/v1`;
 starIcon = `${window.location.origin}/static/icons/map/star.png`;
 
+// s
 var map = L.map("map").setView(curLatLang, 13);
 L.tileLayer("https://tile.osm.ch/switzerland/{z}/{x}/{y}.png", {
   maxZoom: 19,
