@@ -2,8 +2,9 @@ let curLatLng = [12.98524495891317, 77.58443296741585];
 let latlng;
 let m = undefined;
 var map = L.map("map").setView(curLatLng, 15);
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  attribution: "© OpenStreetMap",
+L.tileLayer("https://tile.osm.ch/switzerland/{z}/{x}/{y}.png", {
+  attribution:
+    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 }).addTo(map);
 L.Control.geocoder().addTo(map);
 
