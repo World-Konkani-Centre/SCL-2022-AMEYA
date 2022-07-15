@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
-
+from django.contrib.auth.models import User
+from PIL import Image
 # Tour model:
 class Tour(models.Model):
     category_choices=[('1','Adventure'),('2','Trekking'),('3','Hiking')]
@@ -39,22 +40,29 @@ class Restaurant(models.Model):
         return self.name
 
 class Profile(models.Model):
-    gender_choices=[('1','Male'),('2','Female'),('3','Dont want to specify')]
+    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     id=models.BigAutoField(primary_key=True)
-    firstname = models.CharField(max_length=255)
-    lastname = models.CharField(max_length=255)
-    username= models.CharField(max_length=255)
-    email = models.EmailField(blank=True, default="")
-    password = models.CharField(max_length=20)
+    role_choices=[('1','User'),('2','Business')]
+    gender_choices=[('1','Male'),('2','Female'),('3','Dont want to specify')]
     gender=models.CharField(max_length=1,choices=gender_choices,default='1')
-    DOB=models.DateField(blank=True,default="2001-01-01")
-    phone = models.CharField(max_length=10)
-    country=models.CharField(max_length=200, default="")
-    state=models.CharField(max_length=200, default="")
-    profile=models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=100)
+    phone=models.CharField(blank=True, max_length=10,default='')
+    DOB=models.DateField(null=True)
+    role=models.CharField(max_length=1,choices=role_choices,default='1')
+    image=models.ImageField(blank=True,upload_to='images/user', height_field=None, width_field=None, max_length=100,null=True)
+
     def __str__(self):
-        return self.firstname
+        return f'{self.user.username} Profile'
+
+    def save(self, *args, **kwargs):
+        super(Profile, self).save(*args, **kwargs)
         
+        if(self.image):
+            img= Image.open(self.image.path)    
+            if img.height > 300 or img.width > 300:
+                output_size = (300,300)
+                img.thumbnail(output_size)
+                img.save(self.image.path)
+
 # Reviews model:
 class TourReviews(models.Model):
     id=models.BigAutoField(primary_key=True)
@@ -64,7 +72,6 @@ class TourReviews(models.Model):
     review=models.CharField(max_length=500)
     createadAt=models.DateTimeField(auto_now_add=True)
     updateAt=models.DateTimeField(auto_now=True)
-
 
 # Hotel model:
 class Hotel(models.Model):
@@ -128,9 +135,6 @@ class RegisteredBusiness(models.Model):
     banner=models.ImageField(upload_to='images/regBiz',null=True)
     createadAt=models.DateTimeField(auto_now_add=True)
     updateAt=models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.name
 
     def __str__(self):
         return self.name

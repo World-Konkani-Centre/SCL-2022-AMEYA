@@ -1,38 +1,58 @@
-{% extends 'main.html' %}
-{% load static %} 
-{% block styles %}
+{% extends 'main.html' %} {% load static %} {% block styles %}
 <!-- Replace {name} with the respective css file -->
 <link rel="stylesheet" href="{% static 'styles/signup.css' %}" />
-{% endblock %}
+{% endblock %} {% block content %}
+<div class="container">
+  <form action="{% url 'signup' %}" method="POST" class="form-container">
+    {% csrf_token %}
+    <h2>Sign Up</h2>
+    <div class="input-box">
+      <input
+        type="text"
+        id="username"
+        placeholder="Enter Username"
+        name="username"
+      />
+      <div class="underline"></div>
+    </div>
+    <div class="input-box">
+      <input
+        type="email"
+        id="email"
+        placeholder="Enter Your Email"
+        name="email"
+      />
+      <div class="underline"></div>
+    </div>
+    <div class="input-box">
+      <input
+        type="password"
+        id="password"
+        placeholder="Enter Your Password"
+        name="password"
+      />
+      <div class="underline"></div>
+    </div>
+    <br />
+    <div style="text-align: center">
+      <p>
+        By creating the account you agree to our
+        <a href="#" style="color: blue">Terms & Privacy</a>
+      </p>
+    </div>
 
-{% block content %}
- <div class="container my-5">
-    <form action="" method="POST" class="form-container">
-      {% csrf_token %}
-        <h2>Sign Up</h2>
-        <div class="input-box">
-            <input type="text" placeholder="Enter Username" required name="username">
-            <div class="underline"></div>
-        </div>
-        <div class="input-box">
-            <input type="gmail" placeholder="Enter Your Email" required name="gmail">
-            <div class="underline"></div>
-        </div>
-        <div class="input-box">
-            <input type="password" placeholder="Enter Your Password" required name="password">
-            <div class="underline"></div>
-        </div>
-        <br/>
-        <div style="text-align: center ;">
-          <p>By creating the account you agree to our <a href="#" style="color:blue">Terms & Privacy</a></p>
-        </div> 
-
-        <div class="input-box button">
-            <input type="submit" name="" value="Sign Up">
-        </div>
-        <div>
-            <p style="text-align: center ;">Already a user?<a href="{% url 'login' %}" style="color: rgb(62, 156, 255);">Login here</a></p>
-        </div>
-    </form>  
+    <div class="input-box button">
+      <input type="submit" name="" value="Sign Up" />
+    </div>
+    <div>
+      <p style="text-align: center">
+        Already a user?<a
+          href="{% url 'login' %}"
+          style="color: rgb(62, 156, 255)"
+          >Login here</a
+        >
+      </p>
+    </div>
+  </form>
 </div>
 {% endblock %}
