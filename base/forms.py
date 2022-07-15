@@ -5,7 +5,7 @@ from .models import Profile
 
 
 class UserUpdateForm(forms.ModelForm):
-    email =forms.EmailField(max_length=30, widget=forms.EmailInput(attrs={ 'class' : 'form-control', 'placeholder':'Email'})) 
+    email =forms.EmailField(max_length=30, widget=forms.EmailInput(attrs={ 'class' : 'form-control', 'placeholder':'Email','readonly':True})) 
     username =forms.CharField(widget=forms.TextInput(attrs={ 'class' : 'form-control', 'placeholder':'Username'}))
     first_name =forms.CharField(widget=forms.TextInput(attrs={ 'class' : 'form-control', 'placeholder':'First Name'}))
     last_name =forms.CharField(widget=forms.TextInput(attrs={ 'class' : 'form-control', 'placeholder':'Last Name'}))
