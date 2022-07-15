@@ -16,8 +16,6 @@ class UserUpdateForm(forms.ModelForm):
     
 
 
-
-
 class ProfileUpdateForm(forms.ModelForm):
     phone =forms.CharField(max_length=10, min_length=10, widget=forms.TextInput(attrs={ 'class' : 'form-control','placeholder':'phone number','type':'number'}))
     DOB =forms.DateField(widget=forms.DateInput(attrs={ 'class' : 'form-control','placeholder':'DD-MM-YYYY','type':'date','autoclose': True}))
