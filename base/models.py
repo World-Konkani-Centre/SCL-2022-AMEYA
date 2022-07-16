@@ -116,6 +116,24 @@ class Transport(models.Model):
     def __str__(self):
         return self.name
 
+# Businesses model:
+class Business(models.Model):
+    category_choices=[('1','Restaurant'),('2','Hotel'),('3','Repair'),('4','Transport'),('5','Shoping')]
+    id=models.BigAutoField(primary_key=True)
+    name=models.CharField(max_length=100)
+    category=models.CharField(max_length=100,choices=category_choices)
+    description=models.CharField(max_length=500)
+    website=models.CharField(max_length=50,blank=True)
+    rating=models.FloatField(default=5,validators=[MinValueValidator(1),MaxValueValidator(5)])
+    lat=models.DecimalField(max_digits=20,decimal_places=15)
+    lng=models.DecimalField(max_digits=20,decimal_places=15)
+    createadAt=models.DateTimeField(auto_now_add=True)
+    updateAt=models.DateTimeField(auto_now=True)
+    image=models.ImageField(blank=True,upload_to='images/business',null=True)
+
+    def __str__(self):
+        return self.name
+
 # Registered Business model:
 class RegisteredBusiness(models.Model):
     category_choices=[('1','Restaurant'),('2','Hotel'),('3','Clinic'),('4','Hospital'),('5','Pharmacy'),('6','Repair Shop'),('7','Travel')]
