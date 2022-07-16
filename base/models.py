@@ -46,11 +46,11 @@ class Profile(models.Model):
     id=models.BigAutoField(primary_key=True)
     role_choices=[('1','User'),('2','Business')]
     gender_choices=[('1','Male'),('2','Female'),('3','Dont want to specify')]
-    gender=models.CharField(blank=True, max_length=1,choices=gender_choices,default='1')
+    gender=models.CharField(max_length=1,choices=gender_choices,default='1')
     phone=models.CharField(blank=True, max_length=10,default='')
-    DOB=models.DateField(default='2001-01-01')
-    role=models.CharField(blank=True, max_length=1,choices=role_choices,default='1')
-    image=models.ImageField(upload_to='images/user', height_field=None, width_field=None, max_length=100,null=True)
+    DOB=models.DateField(null=True)
+    role=models.CharField(max_length=1,choices=role_choices,default='1')
+    image=models.ImageField(blank=True,upload_to='images/user', height_field=None, width_field=None, max_length=100,null=True)
 
     def __str__(self):
         return f'{self.user.username} Profile'
@@ -114,6 +114,24 @@ class Transport(models.Model):
     lng=models.DecimalField(max_digits=20,decimal_places=15)
     createadAt=models.DateTimeField(auto_now_add=True)
     updateAt=models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+# Businesses model:
+class Business(models.Model):
+    category_choices=[('1','Restaurant'),('2','Hotel'),('3','Repair'),('4','Transport'),('5','Shoping')]
+    id=models.BigAutoField(primary_key=True)
+    name=models.CharField(max_length=100)
+    category=models.CharField(max_length=100,choices=category_choices)
+    description=models.CharField(max_length=500)
+    website=models.CharField(max_length=50,blank=True)
+    rating=models.FloatField(default=5,validators=[MinValueValidator(1),MaxValueValidator(5)])
+    lat=models.DecimalField(max_digits=20,decimal_places=15)
+    lng=models.DecimalField(max_digits=20,decimal_places=15)
+    createadAt=models.DateTimeField(auto_now_add=True)
+    updateAt=models.DateTimeField(auto_now=True)
+    image=models.ImageField(blank=True,upload_to='images/business',null=True)
 
     def __str__(self):
         return self.name
