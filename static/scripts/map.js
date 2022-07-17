@@ -1,6 +1,7 @@
 // Global Variables:
 let tourId = 1;
 let recMarker = null;
+let recRouting = null;
 let curLatLang = [12.933969688632496, 77.61193685079267];
 let routeCoordinates = [];
 let tourCoordinates = [];
@@ -10,7 +11,7 @@ const baseURL = `${window.location.origin}/api/v1`;
 starIcon = `${window.location.origin}/static/icons/map/star.png`;
 
 var map = L.map("map").setView(curLatLang, 13);
-L.tileLayer("https://tile.osm.ch/sswitzerland/{z}/{x}/{y}.png", {
+L.tileLayer("https://tile.osm.ch/switzerland/{z}/{x}/{y}.png", {
   maxZoom: 19,
   attribution:
     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -207,6 +208,48 @@ function createWaypoints(latLngArr, tourId) {
     alert("Browser doesnot support geolocation");
   }
 }
+
+// Create a waypoint route for recommendation
+function createRecWaypoints(cat, id) {
+  if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(function (pos) {
+      // Create an array of start and end points:
+      rec = recommendations[cat][id];
+      addRecommendationMarker(cat, id);
+      recMarker.closePopup();
+      curLatLang = [pos.coords.latitude, pos.coords.longitude];
+      let latLngArr = [curLatLang, [rec.lat, rec.lng]];
+      recCoordinates = latLngArr;
+      latLngArr = latLngArr.map((l) => L.latLng(...l));
+      // Create a route:
+      if (recRouting) map.removeControl(recRouting);
+      recRouting = L.Routing.control({
+        waypoints: latLngArr,
+        lineOptions: {
+          styles: [{ color: "#58D68D", opacity: 1, weight: 5 }],
+        },
+        createMarker: function () {
+          return null;
+        },
+      })
+        .on("routesfound", (e) => {
+          recRouteCoordinates = e.routes[0].coordinates;
+        })
+        .addTo(map);
+      // Add directions to side panel:
+      if (screen.width > 768) {
+        let mapDir = document.getElementById("pills-directions");
+        var routingControlContainer = recRouting.getContainer();
+        var controlContainerParent = routingControlContainer.parentNode;
+        controlContainerParent.removeChild(routingControlContainer);
+        // mapDir.appendChild(routingControlContainer.childNodes[0]);
+      }
+    });
+  } else {
+    alert("Browser doesnot support geolocation");
+  }
+}
+
 // Map Eventlisteners:
 
 // Nearby Btn toggler:
@@ -387,7 +430,7 @@ function getRecommendations(cat) {
             <p>${d.description}</p>
           </div>
           <div class="rec-btns">
-            <button class="rec-btn">Directions</button>
+            <button class="rec-btn" onClick="createRecWaypoints('${cat}','${key}');">Directions</button>
             <button class="rec-btn" onClick="addRecommendationMarker('${cat}','${key}');">View</button>
           </div>
         </div>
