@@ -3,7 +3,7 @@ from django.shortcuts import render,redirect
 from django.http import JsonResponse
 from django.core.serializers import serialize
 from django.contrib import messages
-from .models import DummyLatLng,RegisteredBusiness,Tour,Restaurant,Hotel,RepairShop,TourReviews,Profile
+from .models import RegisteredBusiness,Tour,Business,TourReviews,Profile
 from haversine import haversine,Unit
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -96,6 +96,7 @@ def tourForm(request):
     context={}
     return render(request,"base/tourForm.html",context)
 
+@login_required
 def tourReview(request,id):
     tour=Tour.objects.get(id=id)
     if request.method=='POST':
@@ -116,6 +117,7 @@ def trips(request):
     context={}
     return render(request,"base/trips.html",context)
 
+@login_required
 def userProfile(request):
     if request.method == 'POST':
         u_form =UserUpdateForm(request.POST, instance=request.user)
@@ -136,7 +138,7 @@ def userProfile(request):
     }
     return render(request, "base/userProfile.html",context)
         
-
+@login_required
 def registerBusiness(request):
     if request.method=='POST':
         name=request.POST.get('name')
@@ -159,38 +161,6 @@ def registerBusiness(request):
 def getBusinessDetails(request,id):
     business=RegisteredBusiness.objects.get(id=id)
     return render(request,"base/businessDetails.html",{'business':business})
-
-def registerBusiness(request):
-    if request.method=='POST':
-        name=request.POST.get('name')
-        address=request.POST.get('address')
-        zipcode=request.POST.get('zipcode')
-        phone=request.POST.get('phone')
-        email=request.POST.get('email')
-        category=request.POST.get('category')
-        website=request.POST.get('website')
-        description=request.POST.get('description')
-        lat=request.POST.get('latitude')
-        lng=request.POST.get('longitude')
-        logo=request.FILES.get('logo')
-        banner=request.FILES.get('banner')
-        print(request.FILES)
-        print(banner)
-        business=RegisteredBusiness(name=name,address=address,zipcode=zipcode,phone=phone,email=email,category=category,description=description,lat=lat,lng=lng,logo=logo,banner=banner,website=website)
-        business.save()
-    return render(request,"base/registerBusiness.html")
-
-# view to get registered business details by id:
-def getBusinessDetails(request,id):
-    business=RegisteredBusiness.objects.get(id=id)
-    return render(request,"base/businessDetails.html",{'business':business})
-
-
-# Dummy data API:
-def getLatLngs(request):
-    latlng=DummyLatLng.objects.all()
-    data=serialize('json',latlng)
-    return JsonResponse(data,safe=False)
 
 # method to get nearby restaurants,hotels and repair shops:
 @csrf_exempt
@@ -202,12 +172,7 @@ def getNearby(request,cat):
     centerCoord=body['center']
     # Calculate radius of center:
     radius=haversine((centerCoord[0],centerCoord[1]),(tourCoords[0][0],tourCoords[0][1]))+50
-    if(cat=='hotel'):
-        query=Hotel.objects.all()
-    elif(cat=='restaurant'):
-        query=Restaurant.objects.all()
-    elif(cat=='repair'):
-        query=RepairShop.objects.all()
+    query=Business.objects.all().filter(category=cat)
 
     locFiltered=[loc for loc in query if haversine((loc.lat,loc.lng),(centerCoord[0],centerCoord[1]))<=radius]
     for item in locFiltered:
@@ -218,13 +183,26 @@ def getNearby(request,cat):
     data=serialize('json',nearby)
     return JsonResponse(data,safe=False)
 
+# method to get recommendations:
+@csrf_exempt
+def getRecommendations(request,cat):
+    body=json.loads(request.body.decode('utf-8'))
+    tourCoords=body['tourCoordinates']
+    centerCoord=body['center']
+    # Calculate radius of center:
+    radius=haversine((centerCoord[0],centerCoord[1]),(tourCoords[0][0],tourCoords[0][1]))+10
+    query=Business.objects.all().filter(category=cat)
+
+    reco=[loc for loc in query if haversine((loc.lat,loc.lng),(centerCoord[0],centerCoord[1]))<=radius]
+    data=serialize('json',reco)
+    return JsonResponse(data,safe=False)
+
 # method to get registered business by id
 def getBusiness(request,id):
     business=RegisteredBusiness.objects.get(id=id)
     data=serialize('json',[business])
     return JsonResponse(data,safe=False)
-
-
+    
 def logout(request):
     auth_logout(request)
     messages.info(request,'You logged out.')
