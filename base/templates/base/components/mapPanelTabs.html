@@ -1,0 +1,29 @@
+{% load static %}
+<div class="tab-content" id="pills-tabContent">
+  <!-- Tab Directions -->
+  <div
+    class="tab-pane fade"
+    id="pills-directions"
+    role="tabpanel"
+    aria-labelledby="pills-directions-tab"
+  ></div>
+  <!-- Tab Recommendations -->
+  <div
+    class="tab-pane fade"
+    id="pills-recm"
+    role="tabpanel"
+    aria-labelledby="pills-recm-tab"
+  >
+    {% include 'base/components/mapRecoPanel.html' %}
+  </div>
+  <!-- Tab Transport -->
+  <div
+    class="tab-pane fade"
+    id="pills-transport"
+    role="tabpanel"
+    aria-labelledby="pills-transport-tab"
+  >
+    <!-- Transport Navigation-->
+    {% include 'base/components/mapTranspPanel.html' %}
+  </div>
+</div>

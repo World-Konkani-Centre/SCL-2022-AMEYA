@@ -1,8 +1,10 @@
 // Global Variables:
+let tourId = 1;
 let curLatLang = [12.933969688632496, 77.61193685079267];
 let routeCoordinates = [];
 let tourCoordinates = [];
 let nearby = [];
+let recommendations = {};
 const baseURL = `${window.location.origin}/api/v1`;
 starIcon = `${window.location.origin}/static/icons/map/star.png`;
 
@@ -159,6 +161,7 @@ const food = [
 
 // Create Waypoints route:
 function createWaypoints(latLngArr, tourId) {
+  tourId = tourId;
   if ("geolocation" in navigator) {
     navigator.geolocation.getCurrentPosition(function (pos) {
       // Create an array of start and end points:
@@ -218,6 +221,19 @@ nearbyBtns.forEach((btn) => {
   btn.addEventListener("click", nearbyHandler);
 });
 
+// Recommendation Btn handler:
+document.querySelectorAll("#pills-reco .nav-link").forEach((btn) => {
+  btn.addEventListener("click", (e) => {
+    let cat;
+    if (e.target.tagName === "IMG") {
+      cat = e.target.parentElement.getAttribute("data-category");
+    } else {
+      cat = e.target.getAttribute("data-category");
+    }
+    getRecommendations(cat);
+  });
+});
+
 // MAP API:
 
 // Get tour data by id:
@@ -231,19 +247,6 @@ function getTour(id) {
     })
     .catch((err) => console.log(err));
 }
-
-// function getDummyLatLng() {
-//   const url = `${window.location.origin}/api/v1/restaurants/dummy`;
-//   fetch(url)
-//     .then((res) => res.json())
-//     .then((data) => {
-//       data = JSON.parse(data);
-//       data = data.map((e) => [e.fields.lat, e.fields.lng]);
-//       addMarkers(data, "restaurant");
-//       return data;
-//     })
-//     .catch((err) => console.log(err));
-// }
 
 // POST request to get nearby locations:
 function getNearBy(cat) {
@@ -275,8 +278,117 @@ function getNearBy(cat) {
     .then((data) => {
       data = JSON.parse(data);
       data = data.map((d) => d.fields);
-      console.log(data);
+      if (data.length === 0) return;
       nearby = addMarkersWithPopup(data, icon);
+    })
+    .catch((err) => console.log(err));
+}
+
+// POST request to get nearby recommendations:
+function getRecommendations(cat) {
+  tab = document.querySelector(`#pills-${cat}`);
+  // Category selector:
+  if (cat === "hotel") {
+    route = "hotel";
+    icon = "bed";
+  } else if (cat === "repair") {
+    route = "repair";
+    icon = "spanner";
+  } else {
+    route = "restaurant";
+    icon = "restaurant";
+  }
+  if (recommendations[cat]) return;
+  tab.innerHTML = `<div class="card">
+  <div class="header">
+    <div class="details">
+      <span class="name"></span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="img"></div>
+    <div class="description">
+      <div class="line line-1"></div>
+      <div class="line line-2"></div>
+      <div class="line line-3"></div>
+      <div class="line line-4"></div>
+    </div>
+  </div>
+</div>
+<div class="card">
+  <div class="header">
+    <div class="details">
+      <span class="name"></span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="img"></div>
+    <div class="description">
+      <div class="line line-1"></div>
+      <div class="line line-2"></div>
+      <div class="line line-3"></div>
+      <div class="line line-4"></div>
+    </div>
+  </div>
+</div>
+<div class="card">
+  <div class="header">
+    <div class="details">
+      <span class="name"></span>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="img"></div>
+    <div class="description">
+      <div class="line line-1"></div>
+      <div class="line line-2"></div>
+      <div class="line line-3"></div>
+      <div class="line line-4"></div>
+    </div>
+  </div>
+</div>
+`;
+  let data = {
+    tourCoordinates,
+    center: getCenter(tourCoordinates),
+  };
+  const url = `${baseURL}/recommendations/${cat}/`;
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      data = JSON.parse(data);
+      data = data.map((d) => d.fields);
+      recommendations[cat] = data;
+      tab.innerHTML = "";
+      if (data.length === 0) {
+        tab.innerHTML = `<div class="rec-not-found">
+        <img src="/static/icons/map/${cat}_rec.png" alt="Image-${cat}" />
+        <h5>No Recommendations</h5>
+      </div>`;
+      }
+      data.forEach((d) => {
+        tab.insertAdjacentHTML(
+          "beforeend",
+          `<div class="rec-card">
+        <div class="rec-header">
+          <h4>${d.name}</h4>
+        </div>
+        <div class="rec-card-body">
+          <img src="/media/${d.image}" alt="Image-${d.name}" class="rec-img">
+          <div class="rec-description">
+            <p>${d.description}</p>
+          </div>
+          <button class="rec-btn">View</button>
+        </div>
+      </div>`
+        );
+      });
     })
     .catch((err) => console.log(err));
 }

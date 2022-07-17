@@ -10,7 +10,7 @@
   margin-top: 60px;
 }
 .leaflet-routing-alt {
-  max-height: calc(100vh - 180px) !important;
+  /* max-height: calc(100vh - 180px) !important; */
   margin-top: 10px !important;
   border-bottom: none !important;
 }
@@ -24,29 +24,29 @@
   display: none;
 }
 /* Recommendations */
-.recommendations{
+.recommendations {
   height: calc(100vh - 150px);
 }
 .rec-icons {
-  width: 28px;
+  width: 24px;
   background-color: #1e1e1e;
   border-radius: 50%;
   padding: 3px;
   margin-right: 5px;
 }
-#pills-reco{
+#pills-reco {
   margin-bottom: 0 !important;
 }
 #pills-reco .nav-link {
   border: 1px solid #1e1e1e;
   border-radius: 20px;
   padding: 5px 8px;
-  font-size: 14px;
+  font-size: 12px;
 }
 #pills-reco .nav-item {
   margin: 5px 0;
 }
-#pills-recm .tab-content{
+#pills-recm .tab-content {
   overflow: scroll !important;
 }
 #pills-recm .tab-content::-webkit-scrollbar {
@@ -116,7 +116,7 @@
   background-color: #1e1e1e !important;
 }
 /* Recommendation Card */
-.rec-card{
+.rec-card {
   max-width: 350px;
   width: 100%;
   background: #e0e0e0;
@@ -128,11 +128,11 @@
   display: flex;
   align-items: center;
 }
-.rec-header h4{
+.rec-header h4 {
   font-size: 18px;
   font-weight: bold;
 }
-.rec-card-body{
+.rec-card-body {
   display: flex;
   flex-direction: column;
 }
@@ -141,11 +141,11 @@
   height: auto;
   border-radius: 10px;
 }
-.rec-card-body .rec-description{
+.rec-card-body .rec-description {
   font-size: 14px;
   margin: 10px 0;
 }
-.rec-card-body .rec-btn{
+.rec-card-body .rec-btn {
   border-radius: 25px;
   padding: 5px 15px;
   background-color: #1e1e1e;
@@ -153,8 +153,19 @@
   align-self: flex-end;
   transition: all 0.5s ease;
 }
-.rec-card-body .rec-btn:hover{
+.rec-card-body .rec-btn:hover {
   transform: scale(1.05);
+}
+.rec-not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px 0;
+}
+.rec-not-found img {
+  width: 100px;
+  height: 100px;
+  margin: 20px;
 }
 /* Media query  */
 @media (max-width: 1350px) {

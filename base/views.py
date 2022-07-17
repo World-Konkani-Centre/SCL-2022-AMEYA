@@ -183,6 +183,20 @@ def getNearby(request,cat):
     data=serialize('json',nearby)
     return JsonResponse(data,safe=False)
 
+# method to get recommendations:
+@csrf_exempt
+def getRecommendations(request,cat):
+    body=json.loads(request.body.decode('utf-8'))
+    tourCoords=body['tourCoordinates']
+    centerCoord=body['center']
+    # Calculate radius of center:
+    radius=haversine((centerCoord[0],centerCoord[1]),(tourCoords[0][0],tourCoords[0][1]))+10
+    query=Business.objects.all().filter(category=cat)
+
+    reco=[loc for loc in query if haversine((loc.lat,loc.lng),(centerCoord[0],centerCoord[1]))<=radius]
+    data=serialize('json',reco)
+    return JsonResponse(data,safe=False)
+
 # method to get registered business by id
 def getBusiness(request,id):
     business=RegisteredBusiness.objects.get(id=id)
