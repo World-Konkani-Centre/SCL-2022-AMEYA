@@ -52,12 +52,16 @@
 .description .line-3 {
   width: calc(100% - 40%);
 }
-.description .line-3 {
+.description .line-4,
+.description .line-5 {
   width: calc(100% - 60%);
   float: right;
   height: 45px;
   border-radius: 25px;
   margin: 30px 0 0 0;
+}
+.description .line-4 {
+  float: left;
 }
 
 .card-body .img::before,

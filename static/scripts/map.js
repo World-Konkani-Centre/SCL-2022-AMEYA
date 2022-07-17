@@ -1,5 +1,6 @@
 // Global Variables:
 let tourId = 1;
+let recMarker = null;
 let curLatLang = [12.933969688632496, 77.61193685079267];
 let routeCoordinates = [];
 let tourCoordinates = [];
@@ -8,7 +9,6 @@ let recommendations = {};
 const baseURL = `${window.location.origin}/api/v1`;
 starIcon = `${window.location.origin}/static/icons/map/star.png`;
 
-// s
 var map = L.map("map").setView(curLatLang, 13);
 L.tileLayer("https://tile.osm.ch/sswitzerland/{z}/{x}/{y}.png", {
   maxZoom: 19,
@@ -115,7 +115,7 @@ function addMarkersWithPopup(data, icon) {
       }),
     })
       .bindPopup(
-        `<h3>${e.name}</h3><p>Rating: ${e.rating} <img width="15px" src=${starIcon} alt="stars"/></p><img width="100%" height="auto" src="/media/${e.image}"/><p>${e.description}</p>`
+        `<div class="map-popup nearby-popup"><div class="map-popup-header"><h3>${e.name}</h3><p>Rating: ${e.rating} <img width="15px" src=${starIcon} alt="stars"/></p></div> <img class="map-popup-image" src="/media/${e.image}"/><p>${e.description}</p></div>`
       )
       .addTo(map);
     markers.push(m);
@@ -137,27 +137,37 @@ function addDestinationMarker(latlng, id) {
         }),
       })
         .bindPopup(
-          `<h3>${data.name}</h3><p>Rating: ${data.rating} <img width="18px" src=${starIcon} alt="stars"/></p><img width="100%" height="auto" src="/media/${data.image}"/><p>${data.description}</p>`
+          `<div class="map-popup dest-popup"><div class="map-popup-header"><h3>${data.name}</h3><p>Rating: ${data.rating} <img width="18px" src=${starIcon} alt="stars"/></p></div><img class="map-popup-image" src="/media/${data.image}"/><p>${data.description}</p></div>`
         )
         .addTo(map);
     })
     .catch((err) => console.log(err));
 }
+
+// Add Recommendations marker to map:
+function addRecommendationMarker(cat, id) {
+  data = recommendations[cat][id];
+  let latLng = [data.lat, data.lng];
+  if (recMarker) map.removeLayer(recMarker);
+  recMarker = new L.marker(latLng, {
+    icon: new LeafIcon({
+      iconUrl: `${window.location.origin}/static/icons/map/marker.png`,
+    }),
+  })
+    .bindPopup(
+      `<div class="map-popup rec-popup"><div class="map-popup-header"><h3>${data.name}</h3><p>Rating: ${data.rating} <img width="15px" src=${starIcon} alt="stars"/></p></div><img class="map-popup-image" src="/media/${data.image}"/><p>${data.description}</p></div>`
+    )
+    .addTo(map);
+  recMarker.openPopup();
+  map.panTo(latLng);
+}
+
 // Remove multiple markers from map:
 function removeMarkers(data) {
   data.forEach((e) => {
     map.removeLayer(e);
   });
 }
-// Dummy Data:
-const food = [
-  [12.947445452987786, 77.57142971731719],
-  [12.947167112379699, 77.57143991737327],
-  [12.947431221203333, 77.5739073344411],
-  [12.948810777194627, 77.57431052476369],
-  [12.947473932044836, 77.5743937923248],
-  [12.946132904449533, 77.5706748048954],
-];
 
 // Create Waypoints route:
 function createWaypoints(latLngArr, tourId) {
@@ -287,17 +297,6 @@ function getNearBy(cat) {
 // POST request to get nearby recommendations:
 function getRecommendations(cat) {
   tab = document.querySelector(`#pills-${cat}`);
-  // Category selector:
-  if (cat === "hotel") {
-    route = "hotel";
-    icon = "bed";
-  } else if (cat === "repair") {
-    route = "repair";
-    icon = "spanner";
-  } else {
-    route = "restaurant";
-    icon = "restaurant";
-  }
   if (recommendations[cat]) return;
   tab.innerHTML = `<div class="card">
   <div class="header">
@@ -312,6 +311,7 @@ function getRecommendations(cat) {
       <div class="line line-2"></div>
       <div class="line line-3"></div>
       <div class="line line-4"></div>
+      <div class="line line-5"></div>
     </div>
   </div>
 </div>
@@ -328,6 +328,7 @@ function getRecommendations(cat) {
       <div class="line line-2"></div>
       <div class="line line-3"></div>
       <div class="line line-4"></div>
+      <div class="line line-5"></div>
     </div>
   </div>
 </div>
@@ -344,6 +345,7 @@ function getRecommendations(cat) {
       <div class="line line-2"></div>
       <div class="line line-3"></div>
       <div class="line line-4"></div>
+      <div class="line line-5"></div>
     </div>
   </div>
 </div>
@@ -372,7 +374,7 @@ function getRecommendations(cat) {
         <h5>No Recommendations</h5>
       </div>`;
       }
-      data.forEach((d) => {
+      data.forEach((d, key) => {
         tab.insertAdjacentHTML(
           "beforeend",
           `<div class="rec-card">
@@ -384,9 +386,12 @@ function getRecommendations(cat) {
           <div class="rec-description">
             <p>${d.description}</p>
           </div>
-          <button class="rec-btn">View</button>
+          <div class="rec-btns">
+            <button class="rec-btn">Directions</button>
+            <button class="rec-btn" onClick="addRecommendationMarker('${cat}','${key}');">View</button>
+          </div>
         </div>
-      </div>`
+        </div>`
         );
       });
     })
