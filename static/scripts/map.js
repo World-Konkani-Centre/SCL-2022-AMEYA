@@ -8,7 +8,7 @@ starIcon = `${window.location.origin}/static/icons/map/star.png`;
 
 // s
 var map = L.map("map").setView(curLatLang, 13);
-L.tileLayer("https://tile.osm.ch/switzerland/{z}/{x}/{y}.png", {
+L.tileLayer("https://tile.osm.ch/sswitzerland/{z}/{x}/{y}.png", {
   maxZoom: 19,
   attribution:
     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -113,7 +113,7 @@ function addMarkersWithPopup(data, icon) {
       }),
     })
       .bindPopup(
-        `<h3>${e.name}</h3><p>Rating: ${e.rating} <img width="15px" src=${starIcon} alt="stars"/></p><p>${e.description}</p>`
+        `<h3>${e.name}</h3><p>Rating: ${e.rating} <img width="15px" src=${starIcon} alt="stars"/></p><img width="100%" height="auto" src="/media/${e.image}"/><p>${e.description}</p>`
       )
       .addTo(map);
     markers.push(m);

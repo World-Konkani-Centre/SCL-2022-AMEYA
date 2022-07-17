@@ -24,13 +24,21 @@
   display: none;
 }
 /* Recommendations */
+.recommendations{
+  height: calc(100vh - 150px);
+}
 .rec-icons {
   width: 28px;
-  background-color: rgb(101, 101, 101);
+  background-color: #1e1e1e;
   border-radius: 50%;
   padding: 3px;
+  margin-right: 5px;
+}
+#pills-reco{
+  margin-bottom: 0 !important;
 }
 #pills-reco .nav-link {
+  border: 1px solid #1e1e1e;
   border-radius: 20px;
   padding: 5px 8px;
   font-size: 14px;
@@ -38,6 +46,13 @@
 #pills-reco .nav-item {
   margin: 5px 0;
 }
+#pills-recm .tab-content{
+  overflow: scroll !important;
+}
+#pills-recm .tab-content::-webkit-scrollbar {
+  display: none;
+}
+
 /* Transport */
 #pills-transports,
 #pills-reco {
@@ -99,6 +114,47 @@
 #recommendation-panel .nav-pills .nav-link.active {
   color: #fff !important;
   background-color: #1e1e1e !important;
+}
+/* Recommendation Card */
+.rec-card{
+  max-width: 350px;
+  width: 100%;
+  background: #e0e0e0;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 10px;
+}
+.rec-card .rec-header {
+  display: flex;
+  align-items: center;
+}
+.rec-header h4{
+  font-size: 18px;
+  font-weight: bold;
+}
+.rec-card-body{
+  display: flex;
+  flex-direction: column;
+}
+.rec-card-body .rec-img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+.rec-card-body .rec-description{
+  font-size: 14px;
+  margin: 10px 0;
+}
+.rec-card-body .rec-btn{
+  border-radius: 25px;
+  padding: 5px 15px;
+  background-color: #1e1e1e;
+  color: #fff;
+  align-self: flex-end;
+  transition: all 0.5s ease;
+}
+.rec-card-body .rec-btn:hover{
+  transform: scale(1.05);
 }
 /* Media query  */
 @media (max-width: 1350px) {

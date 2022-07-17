@@ -1,5 +1,6 @@
 {% extends 'main.html' %} {% load static %} {% block styles %}
 <link rel="stylesheet" href="{% static 'styles/map.css' %}" />
+<link rel="stylesheet" href="{% static 'styles/skeleton.css' %}" />
 {% endblock %} {% block content %}
 <div class="container-fluid container-map">
   <div class="row">
@@ -18,7 +19,7 @@
       <button class="btn btn-primary btn-save-tour">Save Tour</button>
     </div>
     <div class="col-lg-3 col-md-4 col-sm-6" id="recommendation-panel">
-      <div class="col-12">
+      <div class="col-12 recm-options">
         <ul
           class="nav nav-pills nav-fill mb-3 panel-tabs"
           id="pills-tab"
@@ -48,6 +49,7 @@
               role="tab"
               aria-controls="pills-recm"
               aria-selected="false"
+              onclick="recSetHeight()"
             >
               Recommendations
             </button>
@@ -85,7 +87,7 @@
             <ul class="nav nav-pills mb-3" id="pills-reco" role="tablist">
               <li class="nav-item" role="presentation">
                 <button
-                  class="nav-link active"
+                  class="nav-link"
                   id="pills-food-tab"
                   data-bs-toggle="pill"
                   data-bs-target="#pills-food"
@@ -199,12 +201,17 @@
             </ul>
             <div class="tab-content" id="pills-transContent">
               <div
-                class="tab-pane fade show active"
+                class="tab-pane fade"
                 id="pills-food"
                 role="tabpanel"
                 aria-labelledby="pills-bus-tab"
               >
-                Food
+                {% include 'base/recCard.html' %} 
+                {% include 'base/recCard.html' %} 
+                {% include 'base/recCard.html' %} 
+                <!-- {% include 'base/skeletons/recCardSkl.html' %} 
+                {% include 'base/skeletons/recCardSkl.html' %} 
+                {% include 'base/skeletons/recCardSkl.html' %}           -->
               </div>
             </div>
           </div>
@@ -356,6 +363,17 @@
 </div>
 <script src="{% static 'scripts/map.js' %}"></script>
 <script>
+  const recSetHeight=()=>{
+    setTimeout(()=>{
+      const navHeight=document.querySelector(".main-navbar").offsetHeight;
+    const recNavHeight=document.querySelector(".recm-options").offsetHeight;
+    const recPillsHeight=document.querySelector("#pills-reco").offsetHeight;
+      const recTab=document.querySelector("#pills-recm .tab-content");
+    console.log(navHeight,recNavHeight,recPillsHeight);
+    recTab.style.height=(window.innerHeight-navHeight-recNavHeight-recPillsHeight-20)+"px";
+    },500)
+    
+  }
   getCurrLoc();
   createWaypoints(["{{tour.lat}}", "{{tour.lng}}"], "{{tour.id}}");
 </script>
