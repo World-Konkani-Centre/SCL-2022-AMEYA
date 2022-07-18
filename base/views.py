@@ -1,16 +1,17 @@
-import email
 from http.client import HTTPResponse
 from django.shortcuts import render,redirect
 from django.http import JsonResponse
 from django.core.serializers import serialize
 from django.contrib import messages
-from .models import DummyLatLng,RegisteredBusiness,Tour,Restaurant,Hotel,RepairShop,TourReviews,Profile
+from .models import RegisteredBusiness,Tour,Business,TourReviews,Profile
 from haversine import haversine,Unit
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login as auth_login, logout
-
+from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
+from .forms import UserUpdateForm, ProfileUpdateForm
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import make_password
 # Create your views here.
 def home(request):
     context={'name':"Kishor"}
@@ -27,36 +28,36 @@ def getTour(request,id):
     data=serialize('json',[tour])
     return JsonResponse(data,safe=False)
 
+def signup(request):
+    if request.method == 'POST': 
+        username=request.POST['username']
+        email=request.POST['email']
+        password=request.POST['password']
+        if User.objects.filter(username=username).exists(): 
+            return render(request,"base/signup.html")
+
+        elif User.objects.filter(email=email).exists():
+            return render(request,"base/signup.html")
+
+        else :
+            user = User.objects.create(email=email, username=username, password=make_password(password))
+            user.save() 
+            auth_login(request, user)    
+            return redirect('/')
+    else:
+        return render(request,"base/signup.html")
+
 def login(request):
     if request.method == 'POST': 
         login_username=request.POST['usernamel']
         login_password=request.POST['passwordl']
         user = authenticate(request, username = login_username, password = login_password)
-        print(user)
-        print(login_username)
-        print(login_password)
         if user is not None:
-            auth_login(request,user)
+            auth_login(request, user)
             return redirect('/')
         else:
             return render(request,"base/login.html")
     return render(request,"base/login.html")
-
-def signup(request):
-    if request.method == 'POST': 
-        username=request.POST['username']
-        gmail=request.POST['gmail']
-        password=request.POST['password']
-        if User.objects.filter(username=username).exists():
-            return render(request,"base/login.html")
-        elif User.objects.filter(email=gmail).exists():
-            return render(request,"base/login.html")
-        else :
-            user = User.objects.create(email=gmail,username=username,password=password)
-            user.save()       
-            return redirect('/login/')
-    else:
-        return render(request,"base/signup.html")
 
 def recommendations(request):
     if request.method=='POST':
@@ -95,6 +96,7 @@ def tourForm(request):
     context={}
     return render(request,"base/tourForm.html",context)
 
+@login_required
 def tourReview(request,id):
     tour=Tour.objects.get(id=id)
     if request.method=='POST':
@@ -115,26 +117,28 @@ def trips(request):
     context={}
     return render(request,"base/trips.html",context)
 
-# def userProfile(request):
-#     context={}
-#     return render(request,"base/userProfile.html",context)
-
+@login_required
 def userProfile(request):
-    if request.method == 'POST':       
-        firstname=request.POST['firstname']
-        lastname=request.POST['lastname']
-        phone=request.POST['phone']
-        email=request.POST['email']
-        password=request.POST['password']
-        country=request.POST['country']
-        state=request.POST['state']
-        user=Profile.objects.create(email=email,username=firstname,password=password,firstname=firstname,lastname=lastname,country=country,state=state,phone=phone)
-        user.save();       
-        return redirect('/')
+    if request.method == 'POST':
+        u_form =UserUpdateForm(request.POST, instance=request.user)
+        p_form = ProfileUpdateForm(request.POST,request.FILES, instance=request.user.profile)
+
+        if u_form.is_valid() and p_form.is_valid():
+            u_form.save()
+            p_form.save()
+            messages.success(request, f'Your account has been Updated')
+            return redirect('userProfile')
     else:
-        return render(request,"base/userProfile.html")
+        u_form =UserUpdateForm(instance=request.user)
+        p_form = ProfileUpdateForm(instance=request.user.profile)
 
-
+    context={
+        'u_form':u_form,
+        'p_form':p_form
+    }
+    return render(request, "base/userProfile.html",context)
+        
+@login_required
 def registerBusiness(request):
     if request.method=='POST':
         name=request.POST.get('name')
@@ -158,13 +162,6 @@ def getBusinessDetails(request,id):
     business=RegisteredBusiness.objects.get(id=id)
     return render(request,"base/businessDetails.html",{'business':business})
 
-
-# Dummy data API:
-def getLatLngs(request):
-    latlng=DummyLatLng.objects.all()
-    data=serialize('json',latlng)
-    return JsonResponse(data,safe=False)
-
 # method to get nearby restaurants,hotels and repair shops:
 @csrf_exempt
 def getNearby(request,cat):
@@ -175,12 +172,7 @@ def getNearby(request,cat):
     centerCoord=body['center']
     # Calculate radius of center:
     radius=haversine((centerCoord[0],centerCoord[1]),(tourCoords[0][0],tourCoords[0][1]))+50
-    if(cat=='hotel'):
-        query=Hotel.objects.all()
-    elif(cat=='restaurant'):
-        query=Restaurant.objects.all()
-    elif(cat=='repair'):
-        query=RepairShop.objects.all()
+    query=Business.objects.all().filter(category=cat)
 
     locFiltered=[loc for loc in query if haversine((loc.lat,loc.lng),(centerCoord[0],centerCoord[1]))<=radius]
     for item in locFiltered:
@@ -191,8 +183,29 @@ def getNearby(request,cat):
     data=serialize('json',nearby)
     return JsonResponse(data,safe=False)
 
+# method to get recommendations:
+@csrf_exempt
+def getRecommendations(request,cat):
+    body=json.loads(request.body.decode('utf-8'))
+    tourCoords=body['tourCoordinates']
+    centerCoord=body['center']
+    # Calculate radius of center:
+    radius=haversine((centerCoord[0],centerCoord[1]),(tourCoords[0][0],tourCoords[0][1]))+10
+    query=Business.objects.all().filter(category=cat)
+
+    reco=[loc for loc in query if haversine((loc.lat,loc.lng),(centerCoord[0],centerCoord[1]))<=radius]
+    data=serialize('json',reco)
+    return JsonResponse(data,safe=False)
+
 # method to get registered business by id
 def getBusiness(request,id):
     business=RegisteredBusiness.objects.get(id=id)
     data=serialize('json',[business])
     return JsonResponse(data,safe=False)
+    
+def logout(request):
+    auth_logout(request)
+    messages.info(request,'You logged out.')
+    return redirect('/')
+    
+
