@@ -29,9 +29,12 @@ def getTour(request,id):
 
 def login(request):
     if request.method == 'POST': 
-        login_username=request.POST.get('usernamel')
-        login_password=request.POST.get('passwordl')
+        login_username=request.POST['usernamel']
+        login_password=request.POST['passwordl']
         user = authenticate(request, username = login_username, password = login_password)
+        print(user)
+        print(login_username)
+        print(login_password)
         if user is not None:
             auth_login(request,user)
             return redirect('/')
