@@ -1,205 +1,45 @@
 {% extends 'main.html' %} {% load static %} {% block styles %}
 <link rel="stylesheet" href="{% static 'styles/map.css' %}" />
+<link rel="stylesheet" href="{% static 'styles/skeleton.css' %}" />
 {% endblock %} {% block content %}
-<style>
-  #map {
-    height: 100vh;
-  }
-</style>
-<div class="container-fluid">
+<div class="container-fluid container-map">
   <div class="row">
-    <div class="col-lg-9 col-md-8 col-sm-6" id="map"></div>
-    <div class="col-lg-3 col-md-4 col-sm-6">
-      <div class="col-12">
-        <ul class="nav nav-pills nav-fill mb-3" id="pills-tab" role="tablist">
-          <li class="nav-item" role="presentation">
-            <button
-              class="nav-link active"
-              id="pills-directions-tab"
-              data-bs-toggle="pill"
-              data-bs-target="#pills-directions"
-              type="button"
-              role="tab"
-              aria-controls="pills-directions"
-              aria-selected="true"
-            >
-              Directions
-            </button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button
-              class="nav-link"
-              id="pills-food-tab"
-              data-bs-toggle="pill"
-              data-bs-target="#pills-food"
-              type="button"
-              role="tab"
-              aria-controls="pills-food"
-              aria-selected="false"
-            >
-              Food
-            </button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button
-              class="nav-link"
-              id="pills-transport-tab"
-              data-bs-toggle="pill"
-              data-bs-target="#pills-transport"
-              type="button"
-              role="tab"
-              aria-controls="pills-transport"
-              aria-selected="false"
-            >
-              Transport
-            </button>
-          </li>
-        </ul>
+    {% include 'base/components/mapContainer.html' %}
+    <div class="col-lg-3 col-md-4 col-sm-6" id="recommendation-panel">
+      <div class="col-12 recm-options">
+        {% include 'base/components/mapPanelNav.html' %}
       </div>
-      <div class="col-12">
-        <div class="tab-content" id="pills-tabContent">
-          <div
-            class="tab-pane fade show active"
-            id="pills-directions"
-            role="tabpanel"
-            aria-labelledby="pills-directions-tab"
-          ></div>
-          <div
-            class="tab-pane fade"
-            id="pills-food"
-            role="tabpanel"
-            aria-labelledby="pills-food-tab"
-          >
-            content 2
-          </div>
-          <div
-            class="tab-pane fade"
-            id="pills-transport"
-            role="tabpanel"
-            aria-labelledby="pills-transport-tab"
-          >
-            <ul class="nav nav-pills mb-3" id="pills-transports" role="tablist">
-              <li class="nav-item" role="presentation">
-                <button
-                  class="nav-link active"
-                  id="pills-bus-tab"
-                  data-bs-toggle="pill"
-                  data-bs-target="#pills-bus"
-                  type="button"
-                  role="tab"
-                  aria-controls="pills-bus"
-                  aria-selected="true"
-                >
-                  <img src="{% static 'icons/transport/bus.png' %}" alt="bus" class="transp-icons">
-                </button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button
-                  class="nav-link"
-                  id="pills-train-tab"
-                  data-bs-toggle="pill"
-                  data-bs-target="#pills-train"
-                  type="button"
-                  role="tab"
-                  aria-controls="pills-train"
-                  aria-selected="false"
-                >
-                <img src="{% static 'icons/transport/train.png' %}" alt="bus" class="transp-icons">
-
-                </button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button
-                  class="nav-link"
-                  id="pills-taxi-tab"
-                  data-bs-toggle="pill"
-                  data-bs-target="#pills-taxi"
-                  type="button"
-                  role="tab"
-                  aria-controls="pills-taxi"
-                  aria-selected="false"
-                >
-                <img src="{% static 'icons/transport/taxi.png' %}" alt="bus" class="transp-icons">
-
-                </button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button
-                  class="nav-link"
-                  id="pills-auto-tab"
-                  data-bs-toggle="pill"
-                  data-bs-target="#pills-auto"
-                  type="button"
-                  role="tab"
-                  aria-controls="pills-auto"
-                  aria-selected="false"
-                >
-                <img src="{% static 'icons/transport/auto.png' %}" alt="bus" class="transp-icons">
-              </button>
-                <li class="nav-item" role="presentation">
-                  <button
-                    class="nav-link"
-                    id="pills-bike-tab"
-                    data-bs-toggle="pill"
-                    data-bs-target="#pills-bike"
-                    type="button"
-                    role="tab"
-                    aria-controls="pills-bike"
-                    aria-selected="false"
-                  >
-                  <img src="{% static 'icons/transport/bike.png' %}" alt="bus" class="transp-icons">
-
-                  </button>
-                </li>
-              </li>
-            </ul>
-            <div class="tab-content" id="pills-transContent">
-              <div
-                class="tab-pane fade show active"
-                id="pills-bus"
-                role="tabpanel"
-                aria-labelledby="pills-bus-tab"
-              >
-                Bus
-              </div>
-              <div
-                class="tab-pane fade"
-                id="pills-train"
-                role="tabpanel"
-                aria-labelledby="pills-train-tab"
-              >
-                Train
-              </div>
-              <div
-                class="tab-pane fade"
-                id="pills-taxi"
-                role="tabpanel"
-                aria-labelledby="pills-taxi-tab"
-              >
-                Taxi
-              </div>
-              <div
-                class="tab-pane fade"
-                id="pills-auto"
-                role="tabpanel"
-                aria-labelledby="pills-auto-tab"
-              >
-                Auto
-              </div>
-              <div
-                class="tab-pane fade"
-                id="pills-bike"
-                role="tabpanel"
-                aria-labelledby="pills-bike-tab"
-              >
-                Bike
-              </div>
-            </div>
-          </div>
-        </div>
+      <div class="col-12 recommendations">
+        {% include 'base/components/mapPanelTabs.html' %}
       </div>
     </div>
   </div>
 </div>
-<script src="{% static 'scripts/map.js' %}" defer></script>
+<script src="{% static 'scripts/map.js' %}"></script>
+<script>
+  const recSetHeight = () => {
+    setTimeout(() => {
+      const navHeight = document.querySelector(".main-navbar").offsetHeight;
+      const recNavHeight = document.querySelector(".recm-options").offsetHeight;
+      const recPillsHeight = document.querySelector("#pills-reco").offsetHeight;
+      const recTab = document.querySelector("#pills-recm .tab-content");
+      recTab.style.height =
+        window.innerHeight -
+        navHeight -
+        recNavHeight -
+        recPillsHeight -
+        20 +
+        "px";
+    }, 500);
+  };
+  const dirSetHeight = () => {
+    const navHeight = document.querySelector(".main-navbar").offsetHeight;
+    const recNavHeight = document.querySelector(".recm-options").offsetHeight;
+    const dirTab = document.querySelector(".leaflet-routing-alt");
+    dirTab.style.maxHeight =
+      window.innerHeight - navHeight - recNavHeight - 30 + "px";
+  };
+  getCurrLoc();
+  createWaypoints(["{{tour.lat}}", "{{tour.lng}}"], "{{tour.id}}");
+</script>
 {% endblock %}
