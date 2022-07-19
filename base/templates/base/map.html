@@ -36,7 +36,10 @@
     const navHeight = document.querySelector(".main-navbar").offsetHeight;
     const recNavHeight = document.querySelector(".recm-options").offsetHeight;
     const dirTab = document.querySelector(".leaflet-routing-alt");
+    const dirPill = document.querySelector("#pills-directions");
     dirTab.style.maxHeight =
+      window.innerHeight - navHeight - recNavHeight - 30 + "px";
+    dirPill.style.maxHeight =
       window.innerHeight - navHeight - recNavHeight - 30 + "px";
   };
   getCurrLoc();

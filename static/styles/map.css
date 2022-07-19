@@ -8,9 +8,9 @@
 .container-map {
   height: calc(100vh - 60px);
   margin-top: 60px;
+  position: fixed;
 }
 .leaflet-routing-alt {
-  /* max-height: calc(100vh - 180px) !important; */
   margin-top: 10px !important;
   border-bottom: none !important;
 }
@@ -50,6 +50,13 @@
   overflow: scroll !important;
 }
 #pills-recm .tab-content::-webkit-scrollbar {
+  display: none;
+}
+/* Directions */
+#pills-directions {
+  overflow: scroll !important;
+}
+#pills-directions::-webkit-scrollbar {
   display: none;
 }
 
