@@ -12,7 +12,9 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 from .forms import UserUpdateForm, ProfileUpdateForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
+
 # Create your views here.
+
 def home(request):
     context={'name':"Kishor"}
     return render(request,"base/home.html",context)
@@ -29,33 +31,42 @@ def getTour(request,id):
     return JsonResponse(data,safe=False)
 
 def signup(request):
+    if request.user.is_authenticated:
+        return redirect('/')
     if request.method == 'POST': 
         username=request.POST['username']
         email=request.POST['email']
         password=request.POST['password']
         if User.objects.filter(username=username).exists(): 
+            messages.add_message(request, messages.INFO, 'Username already exists.')
             return render(request,"base/signup.html")
 
         elif User.objects.filter(email=email).exists():
+            messages.add_message(request, messages.INFO, 'Email already exists.')
             return render(request,"base/signup.html")
 
         else :
             user = User.objects.create(email=email, username=username, password=make_password(password))
             user.save() 
             auth_login(request, user)    
+            messages.add_message(request, messages.INFO, 'You have successfully signed up.')
             return redirect('/')
     else:
         return render(request,"base/signup.html")
 
 def login(request):
+    if request.user.is_authenticated:
+        return redirect('/')
     if request.method == 'POST': 
         login_username=request.POST['usernamel']
         login_password=request.POST['passwordl']
         user = authenticate(request, username = login_username, password = login_password)
         if user is not None:
             auth_login(request, user)
+            messages.add_message(request, messages.INFO, 'You have successfully logged in.')
             return redirect('/')
         else:
+            messages.add_message(request, messages.INFO, 'Invalid username or password.')
             return render(request,"base/login.html")
     return render(request,"base/login.html")
 
@@ -126,8 +137,10 @@ def userProfile(request):
         if u_form.is_valid() and p_form.is_valid():
             u_form.save()
             p_form.save()
-            messages.success(request, f'Your account has been Updated')
-            return redirect('userProfile')
+            messages.add_message(request, messages.SUCCESS, 'Your account has been Updated')
+        else:
+            messages.add_message(request, messages.ERROR, 'Please correct the error below.')
+        return redirect('userProfile')
     else:
         u_form =UserUpdateForm(instance=request.user)
         p_form = ProfileUpdateForm(instance=request.user.profile)
@@ -155,6 +168,8 @@ def registerBusiness(request):
         banner=request.FILES.get('banner')
         business=RegisteredBusiness(name=name,address=address,zipcode=zipcode,phone=phone,email=email,category=category,description=description,lat=lat,lng=lng,logo=logo,banner=banner,website=website)
         business.save()
+        messages.add_message(request, messages.SUCCESS, 'Your Business has been registered successfully!')
+
     return render(request,"base/registerBusiness.html")
 
 # view to get registered business details by id:

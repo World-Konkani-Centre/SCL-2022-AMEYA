@@ -10,6 +10,7 @@ let recommendations = {};
 const baseURL = `${window.location.origin}/api/v1`;
 starIcon = `${window.location.origin}/static/icons/map/star.png`;
 
+// Map Initialization:
 var map = L.map("map").setView(curLatLang, 13);
 L.tileLayer("https://tile.osm.ch/switzerland/{z}/{x}/{y}.png", {
   maxZoom: 19,
@@ -242,7 +243,7 @@ function createRecWaypoints(cat, id) {
         var routingControlContainer = recRouting.getContainer();
         var controlContainerParent = routingControlContainer.parentNode;
         controlContainerParent.removeChild(routingControlContainer);
-        // mapDir.appendChild(routingControlContainer.childNodes[0]);
+        mapDir.appendChild(routingControlContainer.childNodes[0]);
       }
     });
   } else {
