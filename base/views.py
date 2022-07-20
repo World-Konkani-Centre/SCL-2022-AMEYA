@@ -12,6 +12,7 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 from .forms import UserUpdateForm, ProfileUpdateForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
+from django.core.mail import send_mail
 
 # Create your views here.
 
@@ -49,6 +50,13 @@ def signup(request):
             user = User.objects.create(email=email, username=username, password=make_password(password))
             user.save() 
             auth_login(request, user)    
+            send_mail(
+                'Welcome to Tourist Guide',
+                'Welcome to Tourist Guide',
+                'yatramitra.app@gmail.com',
+                [email],
+                fail_silently=False,
+            )
             messages.add_message(request, messages.INFO, 'You have successfully signed up.')
             return redirect('/')
     else:
@@ -168,6 +176,13 @@ def registerBusiness(request):
         banner=request.FILES.get('banner')
         business=RegisteredBusiness(name=name,address=address,zipcode=zipcode,phone=phone,email=email,category=category,description=description,lat=lat,lng=lng,logo=logo,banner=banner,website=website)
         business.save()
+        send_mail(
+            'Your business has been registered',
+            'Your business has been registered',
+            'yatramitra.app@gmail.com',
+            [email],
+            fail_silently=False,
+        )
         messages.add_message(request, messages.SUCCESS, 'Your Business has been registered successfully!')
 
     return render(request,"base/registerBusiness.html")

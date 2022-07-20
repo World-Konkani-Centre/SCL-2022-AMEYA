@@ -130,8 +130,18 @@ STATICFILES_DIRS=[
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
+# Email:
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER= 'yatramitra.app@gmail.com'
+EMAIL_HOST_PASSWORD = 'dxigbxwyzpldoefy'
+EMAIL_USE_TLS = True
+
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 django_heroku.settings(locals())
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
