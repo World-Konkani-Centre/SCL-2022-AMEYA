@@ -12,6 +12,10 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 from .forms import UserUpdateForm, ProfileUpdateForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.conf import settings
 
 # Create your views here.
 
@@ -49,6 +53,11 @@ def signup(request):
             user = User.objects.create(email=email, username=username, password=make_password(password))
             user.save() 
             auth_login(request, user)    
+            html_content = render_to_string('base/email/email.html',{'title':'Welcome to Tourist Guide','message':'Welcome to Tourist Guide. Thank you for signing up.'})
+            text_content = strip_tags(html_content)
+            email_content = EmailMultiAlternatives('Welcome to Tourist Guide', text_content, settings.EMAIL_HOST_USER, [email])
+            email_content.attach_alternative(html_content, "text/html")
+            email_content.send()
             messages.add_message(request, messages.INFO, 'You have successfully signed up.')
             return redirect('/')
     else:
@@ -168,6 +177,11 @@ def registerBusiness(request):
         banner=request.FILES.get('banner')
         business=RegisteredBusiness(name=name,address=address,zipcode=zipcode,phone=phone,email=email,category=category,description=description,lat=lat,lng=lng,logo=logo,banner=banner,website=website)
         business.save()
+        html_content = render_to_string('base/email/email.html',{'title':'Your Business has been regisered','message':'Your Business has been regisered. Thank you.'})
+        text_content = strip_tags(html_content)
+        email_content = EmailMultiAlternatives('Your Business has been registered successfully', text_content, settings.EMAIL_HOST_USER, [email])
+        email_content.attach_alternative(html_content, "text/html")
+        email_content.send()
         messages.add_message(request, messages.SUCCESS, 'Your Business has been registered successfully!')
 
     return render(request,"base/registerBusiness.html")
