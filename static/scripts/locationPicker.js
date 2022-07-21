@@ -1,6 +1,8 @@
 let curLatLng = [12.98524495891317, 77.58443296741585];
 let latlng;
 let m = undefined;
+let lat = document.getElementById("latitude").value;
+let lng = document.getElementById("longitude").value;
 var map = L.map("map").setView(curLatLng, 15);
 L.tileLayer("https://tile.osm.ch/switzerland/{z}/{x}/{y}.png", {
   attribution:
@@ -24,6 +26,11 @@ document
   .querySelector(".btn-picklocation")
   .addEventListener("click", function () {
     setTimeout(function () {
+      if (m) map.removeLayer(m);
+      if (lat && lng) {
+        curLatLng = [lat, lng];
+        m = L.marker(curLatLng).addTo(map);
+      }
       map.setView(curLatLng, 15);
       map.invalidateSize();
     }, 1000);
@@ -32,4 +39,8 @@ document
 document.querySelector(".btn-picksave").addEventListener("click", function () {
   document.getElementById("latitude").value = latlng.lat;
   document.getElementById("longitude").value = latlng.lng;
+});
+
+document.querySelector(".btn-pickclear").addEventListener("click", function () {
+  map.removeLayer(m);
 });

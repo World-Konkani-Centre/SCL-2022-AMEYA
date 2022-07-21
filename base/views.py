@@ -1,4 +1,5 @@
 from http.client import HTTPResponse
+from multiprocessing import context
 from unicodedata import name
 from django.shortcuts import render,redirect
 from django.http import JsonResponse
@@ -163,7 +164,13 @@ def userProfile(request):
         
 @login_required
 def registerBusiness(request):
-    if request.method=='POST':
+    id=request.GET.get('id')
+    if id!=None:
+        business=RegisteredBusiness.objects.get(id=id)
+        context={'business':business}
+    else:
+        context={'business':None}
+    if request.method=='POST' and id==None:
         name=request.POST.get('name')
         address=request.POST.get('address')
         zipcode=request.POST.get('zipcode')
@@ -184,8 +191,29 @@ def registerBusiness(request):
         email_content.attach_alternative(html_content, "text/html")
         email_content.send()
         messages.add_message(request, messages.SUCCESS, 'Your Business has been registered successfully!')
+        return redirect(f'/business/profile/?id={business.id}')
+    if request.method=='POST' and id!=None:
+        business=RegisteredBusiness.objects.get(id=id)
+        business.name=request.POST.get('name')
+        business.address=request.POST.get('address')
+        business.zipcode=request.POST.get('zipcode')
+        business.phone=request.POST.get('phone')
+        business.email=request.POST.get('email')
+        business.category=request.POST.get('category')
+        business.website=request.POST.get('website')
+        business.description=request.POST.get('description')
+        business.lat=request.POST.get('latitude')
+        business.lng=request.POST.get('longitude')
+        if request.FILES.get('logo')!=None:
+            business.logo=request.FILES.get('logo')
+        if request.FILES.get('banner')!=None:
+            business.banner=request.FILES.get('banner')
+        business.save()
+        context={'business':business}
+        messages.add_message(request, messages.SUCCESS, 'Your Business has been updated successfully!')
 
-    return render(request,"base/registerBusiness.html")
+    return render(request,"base/registerBusiness.html",context)
+
 
 # view to get registered business details by id:
 def getBusinessDetails(request,id):
