@@ -67,13 +67,14 @@
                 >
               </li>
               <li class="nav-item">
-                <a class="nav-link items" href="{% url 'trips' %}"
-                  ><button><span>Your trips</span></button></a
-                >
-              </li>
-              <li class="nav-item">
                 <a class="nav-link items" href="{% url 'aboutUs' %}"
                   ><button><span>About Us</span></button></a
+                >
+              </li>
+              {% if user.is_authenticated %}
+              <li class="nav-item">
+                <a class="nav-link items" href="{% url 'trips' %}"
+                  ><button><span>Your trips</span></button></a
                 >
               </li>
               <li class="nav-item">
@@ -86,6 +87,15 @@
                   ></span>
                 </a>
               </li>
+              {% else %}<li class="nav-item">
+                <a
+                  class="nav-link items"
+                  aria-current="page"
+                  href="{% url 'login' %}"
+                  ><button><span>Login/Signup</span></button></a
+                >
+              </li>
+              {% endif %}
             </ul>
           </div>
         </div>
