@@ -5,6 +5,10 @@
 #recommendation-panel {
   height: calc(100vh - 60px) !important;
 }
+#recommendation-panel .nav-link {
+  font-size: 12px;
+  border-radius: 20px;
+}
 .container-map {
   height: calc(100vh - 60px);
   margin-top: 60px;
@@ -105,6 +109,8 @@
 }
 .btn-save-tour {
   width: fit-content;
+  font-size: 12px;
+  border-radius: 15px;
   background-color: #1e1e1e !important;
   z-index: 999;
   position: absolute;

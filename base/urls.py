@@ -1,13 +1,10 @@
-from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from . import views
-from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('', views.home,name='home'),
-    path('index/', views.home,name='home'),
     path('map/',views.map,name='map'),
     path('aboutUs/',views.aboutUs,name='aboutUs'),
     path('contact/',views.contact,name='contact'),
@@ -26,7 +23,7 @@ urlpatterns = [
     path('api/v1/nearby/<str:cat>/',views.getNearby,name='getNearby'),
     path('api/v1/recommendations/<str:cat>/',views.getRecommendations,name='getRecommendations'),
     path('tourDetails/',views.tourDetails,name='tourDetails'),
-    path('password/',views.Change_Password ,name='password'),
+    path('updatePassword/',views.updatePassword ,name='updatePassword'),
 
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

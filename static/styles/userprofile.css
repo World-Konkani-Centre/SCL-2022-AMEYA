@@ -2,15 +2,22 @@
   background-color: #ffffff;
 }
 
-.container{
-  margin: auto ;
-
+.container {
+  margin: auto;
+  border-radius: 15px !important;
 }
 .card {
   width: 70%;
-  margin-left: 15%;
+  margin: 0 auto;
 }
-
+.profile-card img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+}
+.profile-card .card {
+  border: none !important;
+}
 .profile-button {
   background: #1e1e1e;
   box-shadow: none;
@@ -20,11 +27,25 @@
 
 .form-control:focus {
   box-shadow: none;
-  border-color: #BA68C8;
+  border-color: #ba68c8;
   transition: 0.5s ease-in;
 }
 
 .profile-button:hover {
   background: #1e1e1e;
   transform: scale(1.05);
+}
+.profile-container .custom-file-input {
+  display: block;
+  width: 100%;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  appearance: none;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
