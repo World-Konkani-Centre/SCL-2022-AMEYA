@@ -1,6 +1,3 @@
-from http.client import HTTPResponse
-from multiprocessing import context
-from unicodedata import name
 from django.shortcuts import render,redirect
 from django.http import JsonResponse
 from django.core.serializers import serialize
@@ -147,6 +144,7 @@ def userProfile(request):
         p_form = ProfileUpdateForm(request.POST,request.FILES, instance=request.user.profile)
 
         if u_form.is_valid() and p_form.is_valid():
+            print(p_form.cleaned_data)
             u_form.save()
             p_form.save()
             messages.add_message(request, messages.SUCCESS, 'Your account has been Updated')
@@ -164,13 +162,14 @@ def userProfile(request):
     return render(request, "base/userProfile.html",context)
 
 @login_required
-def Change_Password(request):
+def updatePassword(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
             pass_form= PasswordChangingForm(user=request.user,data=request.POST)
             if pass_form.is_valid():
                 pass_form.save()
                 update_session_auth_hash(request , pass_form.user)
+                messages.add_message(request, messages.SUCCESS, 'Your password has been updated successfully!')
                 return redirect('userProfile')
         else:
             pass_form= PasswordChangingForm(user=request.user)
@@ -178,7 +177,7 @@ def Change_Password(request):
         context={
             'pass_form':pass_form
         }    
-        return render(request,"base/change_password.html",context)
+        return render(request,"base/updatePassword.html",context)
     else:
         return redirect('login')
        
@@ -286,4 +285,6 @@ def logout(request):
     messages.info(request,'You logged out.')
     return redirect('/')
     
-
+# Error page:
+def error_404(request,exception):
+    return render(request,'base/errorPages/404.html')
