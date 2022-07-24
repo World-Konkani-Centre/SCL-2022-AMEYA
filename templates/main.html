@@ -79,12 +79,18 @@
               </li>
               <li class="nav-item">
                 <a href="{% url 'userProfile' %}">
-                  <span
+                  {% if user.profile.image %}
+                  <span class="iconify-inline navbar-toggler-icon mx-4 my-2 fa-lg">
+                  <img class="rounded-circle" width="40" height="40" src="{{user.profile.image.url}}" />
+                  </span>
+                  {% else %}
+                    <span
                     class="iconify-inline navbar-toggler-icon mx-4 my-2 fa-lg"
                     data-icon="carbon:user-avatar-filled"
                     data-width="60"
                     data-height="60"
                   ></span>
+                  {% endif %}
                 </a>
               </li>
               {% else %}<li class="nav-item">
