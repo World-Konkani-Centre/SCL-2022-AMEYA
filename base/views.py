@@ -10,14 +10,15 @@ from haversine import haversine,Unit
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
-from .forms import UserUpdateForm, ProfileUpdateForm
+from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout,update_session_auth_hash
+from .forms import UserUpdateForm, ProfileUpdateForm , PasswordChangingForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.conf import settings
+
 
 # Create your views here.
 
@@ -161,7 +162,26 @@ def userProfile(request):
         'p_form':p_form
     }
     return render(request, "base/userProfile.html",context)
-        
+
+@login_required
+def Change_Password(request):
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            pass_form= PasswordChangingForm(user=request.user,data=request.POST)
+            if pass_form.is_valid():
+                pass_form.save()
+                update_session_auth_hash(request , pass_form.user)
+                return redirect('userProfile')
+        else:
+            pass_form= PasswordChangingForm(user=request.user)
+
+        context={
+            'pass_form':pass_form
+        }    
+        return render(request,"base/change_password.html",context)
+    else:
+        return redirect('login')
+       
 @login_required
 def registerBusiness(request):
     id=request.GET.get('id')

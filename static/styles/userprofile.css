@@ -2,6 +2,10 @@
   background-color: #ffffff;
 }
 
+.container{
+  margin: auto ;
+
+}
 .card {
   width: 70%;
   margin-left: 15%;
@@ -16,8 +20,8 @@
 
 .form-control:focus {
   box-shadow: none;
-  border-color: #ba68c8;
-  transform: scale(1.05);
+  border-color: #BA68C8;
+  transition: 0.5s ease-in;
 }
 
 .profile-button:hover {
