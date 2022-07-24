@@ -171,6 +171,7 @@ def Change_Password(request):
             if pass_form.is_valid():
                 pass_form.save()
                 update_session_auth_hash(request , pass_form.user)
+                messages.add_message(request, messages.SUCCESS, 'Your password has been Updated')
                 return redirect('userProfile')
         else:
             pass_form= PasswordChangingForm(user=request.user)
