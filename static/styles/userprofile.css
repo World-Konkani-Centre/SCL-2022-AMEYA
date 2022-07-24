@@ -1,8 +1,11 @@
-.container {
+.profile-container {
   background-color: #ffffff;
-  margin-top: 100px;
 }
 
+.container{
+  margin: auto ;
+
+}
 .card {
   width: 70%;
   margin-left: 15%;
@@ -12,18 +15,16 @@
   background: #1e1e1e;
   box-shadow: none;
   border: none;
+  transition: 0.5s ease-in;
 }
 
 .form-control:focus {
   box-shadow: none;
-  border-color: #ba68c8;
+  border-color: #BA68C8;
   transition: 0.5s ease-in;
 }
 
 .profile-button:hover {
   background: #1e1e1e;
-  transition: 0.5s ease;
-  padding: 9px;
- 
+  transform: scale(1.05);
 }
-

@@ -3,6 +3,7 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from . import views
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('', views.home,name='home'),
@@ -11,6 +12,7 @@ urlpatterns = [
     path('aboutUs/',views.aboutUs,name='aboutUs'),
     path('contact/',views.contact,name='contact'),
     path('login/',views.login,name='login'),
+    path('logout/',views.logout,name='logout'),
     path('signup/',views.signup,name='signup'),
     path('recommendations/',views.recommendations,name='recommendations'),
     path('trip/',views.trip,name='trip'),
@@ -19,10 +21,14 @@ urlpatterns = [
     path('tourForm/',views.tourForm,name='tourForm'),
     path('tourReview/<int:id>/',views.tourReview,name='tourReview'),
     path('registerBusiness/',views.registerBusiness,name='registerBusiness'),
+    path('business/profile/',views.registerBusiness,name='businessProfile'),
     path('api/v1/tour/<int:id>',views.getTour,name='getTour'),
     path('api/v1/nearby/<str:cat>/',views.getNearby,name='getNearby'),
     path('api/v1/recommendations/<str:cat>/',views.getRecommendations,name='getRecommendations'),
-    path('tourDetails/',views.tourDetails,name='tourDetails')
+    path('tourDetails/',views.tourDetails,name='tourDetails'),
+    path('password/',views.Change_Password ,name='password'),
+
+
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

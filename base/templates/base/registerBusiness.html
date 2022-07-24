@@ -3,12 +3,31 @@
 <link rel="stylesheet" href="{% static 'styles/registerBusiness.css' %}" />
 {% endblock %} {% block content %}
 <!-- Add code from body here -->
+
 <div class="container req-biz-form">
+  {% include 'base/alertMessages/messages.html' %} {% if business %}
+  <h3>Business Profile</h3>
+  {% else %}
   <h3>Register your Business with us</h3>
+  {% endif %}
   <div class="row">
     <div class="col-md-12">
       <div class="card">
         <div class="card-body">
+          {% if business.banner %}
+          <img
+            src="/media/{{business.banner}}"
+            class="img-fluid"
+            style="width: 100%; height: 300px; object-fit: cover"
+            alt="banner"
+          />
+          {% endif %} {% if business.logo %}
+          <img
+            src="/media/{{business.logo}}"
+            alt="logo"
+            class="rounded-circle biz-logo"
+          />
+          {% endif %}
           <form action="" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-group">
@@ -19,6 +38,7 @@
                 id="name"
                 placeholder="Enter Business Name"
                 name="name"
+                value="{{ business.name }}"
                 required
               />
             </div>
@@ -30,6 +50,7 @@
                 id="email"
                 placeholder="Enter email"
                 name="email"
+                value="{{ business.email }}"
                 required
               />
             </div>
@@ -41,6 +62,7 @@
                 id="address"
                 placeholder="Enter Address"
                 name="address"
+                value="{{ business.address }}"
                 required
               />
             </div>
@@ -52,6 +74,9 @@
                 id="phone"
                 placeholder="Enter Phone"
                 name="phone"
+                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                value="{{ business.phone }}"
+                maxlength="10"
               />
             </div>
             <div class="form-group">
@@ -61,6 +86,7 @@
                 class="form-control"
                 id="website"
                 placeholder="Enter Website"
+                value="{{ business.website }}"
                 name="website"
               />
             </div>
@@ -72,24 +98,26 @@
                 rows="3"
                 name="description"
                 required
-              ></textarea>
+              >
+{{ business.description }}</textarea
+              >
             </div>
             <div class="form-group">
               <label for="category">Category</label>
               <select
-                class="form-control"
+                class="form-select"
                 id="category"
                 name="category"
+                value="{{ business.category }}"
                 required
               >
-                >
-                <option value="1" selected>Restaurant</option>
-                <option value="2">Hotel</option>
-                <option value="3">Clinic</option>
-                <option value="4">Hosptial</option>
-                <option value="5">Pharmacy</option>
-                <option value="6">Repair Shop</option>
-                <option value="7">Travel</option>
+                <option value="restaurant" {% if business.category == 'restaurant' %} selected {% endif %}>Restaurant</option>
+                <option value="hotel" {% if business.category == 'hotel' %} selected {% endif %}>Hotel</option>
+                <!-- <option value="clinic">Clinic</option>
+                <option value="hospital">Hosptial</option>
+                <option value="pharmacy">Pharmacy</option>
+                <option value="repair">Repair Shop</option>
+                <option value="travel">Travel</option> -->
               </select>
             </div>
             <div class="form-group">
@@ -100,6 +128,9 @@
                 id="zipcode"
                 placeholder="Enter Zipcode"
                 name="zipcode"
+                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                maxlength="6"
+                value="{{ business.zipcode }}"
                 required
               />
             </div>
@@ -113,6 +144,7 @@
                     id="latitude"
                     placeholder="Enter Latitude"
                     name="latitude"
+                    value="{{ business.lat }}"
                     required
                   />
                 </div>
@@ -126,6 +158,7 @@
                     id="longitude"
                     placeholder="Enter Longitude"
                     name="longitude"
+                    value="{{ business.lng }}"
                     required
                   />
                 </div>
@@ -136,33 +169,51 @@
                     class="btn btn-primary btn-picklocation"
                     data-bs-toggle="modal"
                     data-bs-target="#exampleModal"
+                    type="button"
                   >
-                    Pick Location
+                    {% if business %} Update Location {% else %} Pick Location
+                    {% endif %}
                   </button>
                 </div>
               </div>
             </div>
             <div class="form-group">
               <label for="logo">Logo</label>
+              {% if business.logo %}
+              <a href="/media/{{ business.logo }}" target="_blank"
+                >{{ business.logo }}</a
+              >
+              {% endif %}
               <input
                 type="file"
                 class="form-control"
                 id="logo"
                 placeholder="Enter Logo"
                 name="logo"
+                value="{{ business.logo }}"
               />
             </div>
             <div class="form-group">
               <label for="banner">Banner</label>
+              {% if business.banner %}
+              <a href="/media/{{ business.banner}}" target="_blank"
+                >{{ business.banner }}</a
+              >
+              {% endif %}
               <input
                 type="file"
                 class="form-control"
                 id="banner"
                 placeholder="Enter Banner"
                 name="banner"
+                value="/media/{{ business.banner }}"
               />
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            {% if business %}
+            <button type="submit" class="btn btn-primary">Update</button>
+            {% else %}
+            <button type="submit" class="btn btn-primary">Register</button>
+            {% endif %}
           </form>
         </div>
       </div>
@@ -181,7 +232,8 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">
-          Pick Your Business Location
+          {% if business %} Update Your Business Location {% else %} Pick Your Business Location
+          {% endif %}
         </h5>
         <button
           type="button"
@@ -194,7 +246,7 @@
         <div id="map"></div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        <button type="button" class="btn btn-secondary btn-pickclear" data-bs-dismiss="modal">
           Close
         </button>
         <button
@@ -208,5 +260,7 @@
     </div>
   </div>
 </div>
+{% include 'base/alertMessages/msgTimeOut.html' %}
+
 <script src="{% static 'scripts/locationPicker.js' %}"></script>
 {% endblock %}

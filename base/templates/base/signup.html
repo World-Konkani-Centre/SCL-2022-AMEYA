@@ -3,6 +3,7 @@
 <link rel="stylesheet" href="{% static 'styles/signup.css' %}" />
 {% endblock %} {% block content %}
 <div class="container">
+  {% include 'base/alertMessages/messages.html' %}
   <form action="{% url 'signup' %}" method="POST" class="form-container">
     {% csrf_token %}
     <h2>Sign Up</h2>
@@ -55,4 +56,6 @@
     </div>
   </form>
 </div>
+{% include 'base/alertMessages/msgTimeOut.html' %}
+<!--  -->
 {% endblock %}

@@ -22,6 +22,16 @@
 .req-biz-form button[type="submit"] {
   float: right;
 }
+.biz-logo {
+  width: 100px;
+  height: 100px;
+  position: relative;
+  object-fit: cover;
+  border: none;
+  top: -50px;
+  left: 10px;
+  z-index: 999;
+}
 .modal-body {
   height: 350px;
   width: 100%;

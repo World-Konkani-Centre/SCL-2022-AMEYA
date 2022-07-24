@@ -1,4 +1,6 @@
 from http.client import HTTPResponse
+from multiprocessing import context
+from unicodedata import name
 from django.shortcuts import render,redirect
 from django.http import JsonResponse
 from django.core.serializers import serialize
@@ -8,11 +10,18 @@ from haversine import haversine,Unit
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
-from .forms import UserUpdateForm, ProfileUpdateForm
+from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout,update_session_auth_hash
+from .forms import UserUpdateForm, ProfileUpdateForm , PasswordChangingForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.conf import settings
+
+
 # Create your views here.
+
 def home(request):
     context={'name':"Kishor"}
     return render(request,"base/home.html",context)
@@ -29,33 +38,47 @@ def getTour(request,id):
     return JsonResponse(data,safe=False)
 
 def signup(request):
+    if request.user.is_authenticated:
+        return redirect('/')
     if request.method == 'POST': 
         username=request.POST['username']
         email=request.POST['email']
         password=request.POST['password']
         if User.objects.filter(username=username).exists(): 
+            messages.add_message(request, messages.INFO, 'Username already exists.')
             return render(request,"base/signup.html")
 
         elif User.objects.filter(email=email).exists():
+            messages.add_message(request, messages.INFO, 'Email already exists.')
             return render(request,"base/signup.html")
 
         else :
             user = User.objects.create(email=email, username=username, password=make_password(password))
             user.save() 
             auth_login(request, user)    
+            html_content = render_to_string('base/email/email.html',{'title':'Welcome to Tourist Guide','message':'Welcome to Tourist Guide. Thank you for signing up.'})
+            text_content = strip_tags(html_content)
+            email_content = EmailMultiAlternatives('Welcome to Tourist Guide', text_content, settings.EMAIL_HOST_USER, [email])
+            email_content.attach_alternative(html_content, "text/html")
+            email_content.send()
+            messages.add_message(request, messages.INFO, 'You have successfully signed up.')
             return redirect('/')
     else:
         return render(request,"base/signup.html")
 
 def login(request):
+    if request.user.is_authenticated:
+        return redirect('/')
     if request.method == 'POST': 
         login_username=request.POST['usernamel']
         login_password=request.POST['passwordl']
         user = authenticate(request, username = login_username, password = login_password)
         if user is not None:
             auth_login(request, user)
+            messages.add_message(request, messages.INFO, 'You have successfully logged in.')
             return redirect('/')
         else:
+            messages.add_message(request, messages.INFO, 'Invalid username or password.')
             return render(request,"base/login.html")
     return render(request,"base/login.html")
 
@@ -126,8 +149,10 @@ def userProfile(request):
         if u_form.is_valid() and p_form.is_valid():
             u_form.save()
             p_form.save()
-            messages.success(request, f'Your account has been Updated')
-            return redirect('userProfile')
+            messages.add_message(request, messages.SUCCESS, 'Your account has been Updated')
+        else:
+            messages.add_message(request, messages.ERROR, 'Please correct the error below.')
+        return redirect('userProfile')
     else:
         u_form =UserUpdateForm(instance=request.user)
         p_form = ProfileUpdateForm(instance=request.user.profile)
@@ -137,10 +162,35 @@ def userProfile(request):
         'p_form':p_form
     }
     return render(request, "base/userProfile.html",context)
-        
+
+@login_required
+def Change_Password(request):
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            pass_form= PasswordChangingForm(user=request.user,data=request.POST)
+            if pass_form.is_valid():
+                pass_form.save()
+                update_session_auth_hash(request , pass_form.user)
+                return redirect('userProfile')
+        else:
+            pass_form= PasswordChangingForm(user=request.user)
+
+        context={
+            'pass_form':pass_form
+        }    
+        return render(request,"base/change_password.html",context)
+    else:
+        return redirect('login')
+       
 @login_required
 def registerBusiness(request):
-    if request.method=='POST':
+    id=request.GET.get('id')
+    if id!=None:
+        business=RegisteredBusiness.objects.get(id=id)
+        context={'business':business}
+    else:
+        context={'business':None}
+    if request.method=='POST' and id==None:
         name=request.POST.get('name')
         address=request.POST.get('address')
         zipcode=request.POST.get('zipcode')
@@ -155,7 +205,35 @@ def registerBusiness(request):
         banner=request.FILES.get('banner')
         business=RegisteredBusiness(name=name,address=address,zipcode=zipcode,phone=phone,email=email,category=category,description=description,lat=lat,lng=lng,logo=logo,banner=banner,website=website)
         business.save()
-    return render(request,"base/registerBusiness.html")
+        html_content = render_to_string('base/email/email.html',{'title':'Your Business has been regisered','message':'Your Business has been regisered. Thank you.'})
+        text_content = strip_tags(html_content)
+        email_content = EmailMultiAlternatives('Your Business has been registered successfully', text_content, settings.EMAIL_HOST_USER, [email])
+        email_content.attach_alternative(html_content, "text/html")
+        email_content.send()
+        messages.add_message(request, messages.SUCCESS, 'Your Business has been registered successfully!')
+        return redirect(f'/business/profile/?id={business.id}')
+    if request.method=='POST' and id!=None:
+        business=RegisteredBusiness.objects.get(id=id)
+        business.name=request.POST.get('name')
+        business.address=request.POST.get('address')
+        business.zipcode=request.POST.get('zipcode')
+        business.phone=request.POST.get('phone')
+        business.email=request.POST.get('email')
+        business.category=request.POST.get('category')
+        business.website=request.POST.get('website')
+        business.description=request.POST.get('description')
+        business.lat=request.POST.get('latitude')
+        business.lng=request.POST.get('longitude')
+        if request.FILES.get('logo')!=None:
+            business.logo=request.FILES.get('logo')
+        if request.FILES.get('banner')!=None:
+            business.banner=request.FILES.get('banner')
+        business.save()
+        context={'business':business}
+        messages.add_message(request, messages.SUCCESS, 'Your Business has been updated successfully!')
+
+    return render(request,"base/registerBusiness.html",context)
+
 
 # view to get registered business details by id:
 def getBusinessDetails(request,id):
