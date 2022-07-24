@@ -5,3 +5,4 @@ base/__pycache__
 base/migrations/__pycache__
 YatraMitra/__pycache__
 media/
+staticfiles/

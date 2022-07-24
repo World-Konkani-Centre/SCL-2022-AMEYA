@@ -65,12 +65,12 @@ nav{
   background-color: transparent;
 }
 
-.main-navbar .nav-item button:hover,
+/* .main-navbar .nav-item button:hover,
 .main-navbar .project-name:hover {
   background-color: #cecccc7c;
   border-radius: 5px;
   color: #ffffff;
-}
+} */
 .main-navbar .project-name,
 .main-navbar .items span {
   color: #ffffff;

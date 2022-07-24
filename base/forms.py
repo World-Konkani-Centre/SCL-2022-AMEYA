@@ -29,9 +29,9 @@ class ProfileUpdateForm(forms.ModelForm):
         fields = ['phone','DOB','gender','image']
 
 class PasswordChangingForm(PasswordChangeForm,forms.ModelForm):
-    old_password =forms.CharField(label='Old password', max_length=30, widget=forms.PasswordInput(attrs={ 'class' : 'form-control my-3', 'placeholder':'Old Password','type':'password'})) 
+    old_password =forms.CharField(label='Current password', max_length=30, widget=forms.PasswordInput(attrs={ 'class' : 'form-control my-3', 'placeholder':'Current Password','type':'password'})) 
     new_password1 =forms.CharField(max_length=100, label='New password', widget=forms.PasswordInput(attrs={ 'class' : 'form-control my-3', 'placeholder':'New Password','type':'password'}))
-    new_password2 =forms.CharField(max_length=100, label='Confirm password', widget=forms.PasswordInput(attrs={ 'class' : 'form-control my-3', 'placeholder':'ConfirmPassword','type':'password'}))
+    new_password2 =forms.CharField(max_length=100, label='Confirm password', widget=forms.PasswordInput(attrs={ 'class' : 'form-control my-3', 'placeholder':'Confirm Password','type':'password'}))
 
     class Meta:
         model = User
