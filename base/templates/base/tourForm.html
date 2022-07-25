@@ -3,7 +3,10 @@
 {% block styles %}
 <!-- Replace {name} with the respective css file -->
 <link rel="stylesheet" href="{% static 'styles/tourForm.css' %}" />
+
 {% endblock %}
+
+
 
 {% block content %} 
 <!-- Add code from body here -->
@@ -79,25 +82,32 @@
           <div class="p-2 py-3">
             <div class="container rounded-end">
               <div class="mb-4">
-                <label for="destination" class="form-label">Enter your Destination</label>
-                <input type="text" class="form-control" id="destination" name="name" placeholder="Destination" />
+                <label for="place" class="form-label">Enter your Destination</label>
+                <!-- <input type="text" class="form-control" id="destination" name="name" placeholder="Destination" /> -->
+                <input class="form-control" list="datalistOptions1" id="place" name="place" placeholder="ex: Bangalore" required />
+                <datalist id="datalistOptions1">
+                  <option type="submit" name="choice1" value="Bangalore"></option>
+                  <option type="submit" name="choice2" value="Dakshina Kannada"></option>
+                  <option type="submit" name="choice3" value="Udupi"></option>   
+                  <option type="submit" name="choice4" value="Uttara Kannada"></option>       
+                </datalist>
               </div>
               <div class="mb-4">
                 <label for="category" class="form-label">Select Category</label>
-                <input class="form-control" list="datalistOptions" id="category" name="category" placeholder="ex: adventure" />
-                <datalist id="datalistOptions">
+                <input class="form-control" list="datalistOptions2" id="category" name="category" placeholder="ex: adventure" required />
+                <datalist id="datalistOptions2">
                   <option type="submit" name="choice1" value="Hiking"></option>
                   <option type="submit" name="choice2" value="Trekking"></option>
                   <option type="submit" name="choice3" value="Adventure"></option>        
                 </datalist>
               </div>
-              <div class="mb-4">
-                <label for="startdate" class="form-label">Start Date</label>
-                <input type="date" class="form-control" id="startdate" name="startdate" />
+              <div class="mb-4"> 
+                <label for="startdate" class="form-label">Start Date</label> 
+                <input type="date" onchange="my_function1()" class="form-control" id="startdate"  name="startdate" required />
               </div>
               <div class="mb-4">
                 <label for="enddate" class="form-label">End Date</label>
-                <input type="date" class="form-control" id="enddate" name="enddate" />
+                <input type="date" onchange="my_function2()" class="form-control" id="enddate" name="enddate" required />
               </div>
             </div>
             <div class="row">
@@ -108,7 +118,6 @@
               </div>
               <div class="col text-end mx-2">
                 <button class="m-3 btn btn-primary profile-button" type="submit">
-                  <!-- <a href="profile.html">Submit</a> -->
                   Submit
                 </button>
               </div>
@@ -119,5 +128,41 @@
       </div>
     </div>
   </div>
+
+{% block js %}
+<script>
+
+var date=new Date();
+var tdate=date.getDate();
+if(tdate<10){
+  tdate='0'+tdate;
+}
+var month=date.getMonth()+1;
+if(month<10){
+  month='0'+month;
+}
+var year=date.getFullYear();
+var minDate=year + "-" + month + "-" + tdate;
+
+document.getElementById("startdate").setAttribute('min',minDate);
+document.getElementById("enddate").setAttribute('min',minDate);
+
+function my_function1(){
+  var minDaterev=document.getElementById("startdate").value;
+  document.getElementById("enddate").min=minDaterev;
+}
+
+function my_function2(){
+  var maxDaterev=document.getElementById("enddate").value;
+  document.getElementById("startdate").max = maxDaterev;
+}
+ 
+</script>
 {% endblock %}
+{% endblock %}
+
+
+
+
+
 

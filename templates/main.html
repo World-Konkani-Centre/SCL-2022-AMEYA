@@ -21,6 +21,13 @@
     <script src="{% static 'leaflet/leaflet.js' %}"></script>
     <script src="{% static 'leaflet-routing/dist/leaflet-routing-machine.js' %}"></script>
 
+    <!-- Jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <!-- Jquery UI -->
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+
     <!-- Font-awesome -->
     <link
       rel="stylesheet"
@@ -87,6 +94,10 @@
         </div>
       </nav>
     </div>
-    {% block content %} {% endblock %}
+    {% block content %} 
+
+    {% block js %}
+    {% endblock %}
+    {% endblock %}
   </body>
 </html>

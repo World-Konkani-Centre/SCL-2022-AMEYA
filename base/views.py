@@ -1,3 +1,4 @@
+from distutils.command.clean import clean
 from http.client import HTTPResponse
 from turtle import title
 from unicodedata import category, name
@@ -5,10 +6,13 @@ from unittest.util import sorted_list_difference
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.core.serializers import serialize
+from numpy import place
 from .models import DummyLatLng, Tour,Restaurant,Hotel,RepairShop
 from haversine import haversine,Unit
 from django.views.decorators.csrf import csrf_exempt
+from django import forms
 import json
+
 
 # Create your views here.
 def home(request):
@@ -38,15 +42,45 @@ def recommendations(request):
     if request.method=='POST':
         contents=Tour.objects.all()
         category1= request.POST['category']  #Retrieves the category entered by the user
-        if(category1=='Adventure'):
-            category=1
-            tourData = Tour.objects.all().filter(category=category).order_by('-rating').values()
-        elif(category1=='Trekking'):
-            category=2
-            tourData = Tour.objects.all().filter(category=category).order_by('-rating').values()
-        elif(category1=='Hiking'):
+        category2=request.POST['place']
+        if(category1=='Adventure' and category2=='Bangalore'):
             category=3
-            tourData = Tour.objects.all().filter(category=category).order_by('-rating').values() #Filter by highest rating
+            place=1
+        elif(category1=='Adventure' and category2=='Dakshina Kannada'):
+            category=3
+            place=2
+        elif(category1=='Adventure' and category2=='Udupi'):
+            category=3
+            place=3
+        elif(category1=='Adventure' and category2=='Uttara Kannada'):
+            category=3
+            place=4
+        elif(category1=='Trekking' and category2=='Bangalore'):
+            category=2
+            place=1
+        elif(category1=='Trekking' and category2=='Dakshina Kannada'):
+            category=2
+            place=2
+        elif(category1=='Trekking' and category2=='Udupi'):
+            category=2
+            place=3
+        elif(category1=='Trekking' and category2=='Uttara Kannada'):
+            category=2
+            place=4
+        elif(category1=='Hiking' and category2=='Bangalore'):
+            category=1
+            place=1
+        elif(category1=='Hiking' and category2=='Dakshina Kannada'):
+            category=1
+            place=2
+        elif(category1=='Hiking' and category2=='Udupi'):
+            category=1
+            place=3
+        elif(category1=='Hiking' and category2=='Uttara Kannada'):
+            category=1  
+            place=4
+        tourData = Tour.objects.all().filter(category=category,place=place).order_by('-rating').values()
+            #Filter by highest rating
         context={
             'tourData':tourData
         }
@@ -55,6 +89,9 @@ def recommendations(request):
        tourData=Tour.objects.all().order_by('-rating').values()
        context={'tourData':tourData}
        return render(request,"base/recommendations.html",context)
+
+
+
 
 def aboutUs(request):
     context={}

@@ -16,17 +16,30 @@
     <section class="card hover01">
             <div class="row no-gutters">
               <div class="col-md-4">
-                <img src='/media/{{data.image}}' class="card-img" alt="{{data.name}}">
+                <img src='/media/{{data.image}}' class="card-img" style="height:250px;" alt="{{data.name}}">
               </div>
               <div class="col-md-8">
                 <div class="card-body">
                   <h5 class="card-title">{{data.name}}</h5>
                   <section>
-                    <span class="hidden-text">{{data.rating}}</span>&nbsp;
-                    <span class="fa fa-star checked"></span>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <span class="info-1">Must See Temple</span>
+                    <span class="hidden-text">{{data.rating}}</span>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span class="rating-star">
+                      <!-- By default the star is full else it is empty otherwise it is half -->
+                          <i class="fa fa-star{% if data.rating < 0.5%}-o{% elif data.rating >= 0.5 and data.rating < 1 %}-half-o{% endif %}" style="color:#f1d554;" aria-hidden="true"></i>
+                          <i class="fa fa-star{% if data.rating < 1.5%}-o{% elif data.rating >= 1.5 and data.rating < 2 %}-half-o{% endif %}" style="color:#f1d554;" aria-hidden="true"></i>
+                          <i class="fa fa-star{% if data.rating < 2.5%}-o{% elif data.rating >= 2.5 and data.rating < 3 %}-half-o{% endif %}" style="color:#f1d554;" aria-hidden="true"></i>
+                          <i class="fa fa-star{% if data.rating < 3.5%}-o{% elif data.rating >= 3.5 and data.rating < 4 %}-half-o{% endif %}" style="color:#f1d554;" aria-hidden="true"></i>
+                          <i class="fa fa-star{% if data.rating < 4.5%}-o{% elif data.rating >= 4.5 and data.rating < 5 %}-half-o{% endif %}" style="color:#f1d554;" aria-hidden="true"></i>
+                    </span>
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    {% if data.rating > 3.9 %}
+                    <span class="info-1">{{data.subtext}}</span>
+                    {% else %}
+                    <span class="info-1">People also visited</span>
+                    {% endif %}
                   </section>
                   <p class="card-text py-4">
                     {{data.description}}
@@ -40,3 +53,5 @@
 {% endfor %}
 
 {% endblock %}
+
+

@@ -131,3 +131,7 @@ a:active { text-decoration: none; }
 .container{
   padding: 1%;
 }
+
+.fa-star{
+  color:#f1d554;
+}
