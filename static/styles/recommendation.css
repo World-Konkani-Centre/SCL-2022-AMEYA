@@ -1,133 +1,67 @@
 /* Common CSS properties for the page */
-*{
-    overflow-x: hidden;
-    overflow-y: auto;
+body {
+  background-color: #e2e2e291;
 }
 
-/* ===== Scrollbar CSS ===== */
-  /* Firefox */
-  * {
-    scrollbar-width: auto;
-    scrollbar-color: #bbb8bc #ffffff;
-  }
-
-  /* Chrome, Edge, and Safari */
-  *::-webkit-scrollbar {
-    width: 12px;
-  }
-
-  *::-webkit-scrollbar-track {
-    background: #ffffff;
-  }
-
-  *::-webkit-scrollbar-thumb {
-    background-color: #bbb8bc;
-    border-radius: 12px;
-    border: 3px solid #ffffff;
-  }
-
-  body{
-     background-color: #e2e2e291;
-  }
-
-  /* Nav bar */
-nav{
-    padding: 20px;
-    color: #ffffff;
+.card {
+  margin: 0 auto; /* Added */
+  float: none; /* Added */
+  margin-bottom: 10px; /* Added */
 }
 
-
-.navbar{
-    position: relative;
-    background-color: #1e1e1e;
-    color: #ffffff;
+.hidden-text,
+.info-1 {
+  color: #9f9d9d;
 }
 
-.navbar-toggler-icon,.navbar-toggler{
-    color: #ffffff;
+.checked {
+  color: rgb(255, 234, 3);
 }
 
-a{
-    text-decoration: none;
-    color: #ffffff;
-}
-.nav-item button, .project-name{
-    margin: 0 10px 0 10px;
-    padding: 10px;
-    border: none;
-    background-color: transparent;
+.hover01 {
+  -webkit-transform: scale(1);
+  transform: scale(1);
+  -webkit-transition: 0.3s ease-in-out;
+  transition: 0.3s ease-in-out;
 }
 
-.nav-item button:hover,.project-name:hover{
-    background-color: #cecccc7c;
-    border-radius: 5px;
-    color: #ffffff;
-}
-.project-name, .items span{
-    color: #ffffff;
-}
-@media (min-width:992px){
-    .navbar-nav{
-        position: absolute;
-        right: 2px;
-    }
+.hover01:hover {
+  -webkit-transform: scale(1.02);
+  transform: scale(1.02);
 }
 
-  .card {
-    margin: 0 auto; /* Added */
-    float: none; /* Added */
-    margin-bottom: 10px; /* Added */
+.text-muted:visited,
+.text-muted {
+  color: #9f9d9d;
 }
 
-
-.hidden-text,.info-1{
-    color: #9f9d9d;
+a:link {
+  text-decoration: none;
 }
 
-.checked{
-    color:rgb(255, 234, 3);
+a:visited {
+  text-decoration: none;
 }
-
-
-.hover01{
-	-webkit-transform: scale(1);
-	transform: scale(1);
-	-webkit-transition: .3s ease-in-out;
-	transition: .3s ease-in-out;
-}
-
-.hover01:hover{
-	-webkit-transform: scale(1.02);
-	transform: scale(1.02);
-}
-
-.text-muted:visited,.text-muted{
-    color: #9f9d9d;
-}
-
-a:link { text-decoration: none; }
-
-
-a:visited { text-decoration: none; }
-
 
 a:hover {
-    text-decoration: none;
-    color: rgb(27, 37, 88);
+  text-decoration: none;
+  color: rgb(27, 37, 88);
 }
 
-.card-img{
-  height:100%;
+.card-img {
+  height: 100%;
 }
 
-a:active { text-decoration: none; }
-
-.card-title{
-    font-family:Georgia, 'Times New Roman', Times, serif;
-    font-size: 28px;
-    padding-top: 2%;
+a:active {
+  text-decoration: none;
 }
 
-.container{
+.card-title {
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: 28px;
+  padding-top: 2%;
+}
+
+.container {
   padding: 1%;
 }
