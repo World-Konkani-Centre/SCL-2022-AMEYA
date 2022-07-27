@@ -1,5 +1,6 @@
 // Global Variables:
-let tourId = 1;
+let tourId;
+let tourData;
 let recMarker = null;
 let recRouting = null;
 let curLatLang = [12.933969688632496, 77.61193685079267];
@@ -54,7 +55,7 @@ function getCurrLoc() {
       });
     }, 5000);
   } else {
-    alert("Browser doesnot support geolocation");
+    mapAlert("Geolocation is not supported by this browser.", "danger");
   }
 }
 // Add a marker to user location:
@@ -77,6 +78,9 @@ function fitMarkers(markers) {
 }
 // Get center of start and end coordinates:
 function getCenter(data) {
+  if (data.length === 0) {
+    return [parseFloat(tourData.lat), parseFloat(tourData.lng)];
+  }
   lat = (parseFloat(data[0][0]) + parseFloat(data[1][0])) / 2;
   lng = (parseFloat(data[0][1]) + parseFloat(data[1][1])) / 2;
   return [lat, lng];
@@ -133,6 +137,7 @@ function addDestinationMarker(latlng, id) {
     .then((data) => {
       data = JSON.parse(data);
       data = data[0].fields;
+      tourData = data;
       m = new L.marker(latlng, {
         icon: new LeafIcon({
           iconUrl: `${window.location.origin}/static/icons/map/marker.png`,
@@ -142,8 +147,17 @@ function addDestinationMarker(latlng, id) {
           `<div class="map-popup dest-popup"><div class="map-popup-header"><h3>${data.name}</h3><p>Rating: ${data.rating} <img width="18px" src=${starIcon} alt="stars"/></p></div><img class="map-popup-image" src="/media/${data.image}"/><p>${data.description}</p></div>`
         )
         .addTo(map);
+      navigator.permissions &&
+        navigator.permissions
+          .query({ name: "geolocation" })
+          .then(function (PermissionStatus) {
+            if (PermissionStatus.state !== "granted") {
+              m.openPopup();
+              map.panTo(latlng);
+            }
+          });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => mapAlert("Failed to load tour details", "danger"));
 }
 
 // Add Recommendations marker to map:
@@ -172,12 +186,12 @@ function removeMarkers(data) {
 }
 
 // Create Waypoints route:
-function createWaypoints(latLngArr, tourId) {
-  tourId = tourId;
+function createWaypoints(latLngArr, id) {
+  tourId = id;
+  m = addDestinationMarker(latLngArr, tourId);
   if ("geolocation" in navigator) {
     navigator.geolocation.getCurrentPosition(function (pos) {
       // Create an array of start and end points:
-      addDestinationMarker(latLngArr, tourId);
       curLatLang = [pos.coords.latitude, pos.coords.longitude];
       latLngArr = [curLatLang, [...latLngArr]];
       tourCoordinates = latLngArr;
@@ -206,7 +220,7 @@ function createWaypoints(latLngArr, tourId) {
       }
     });
   } else {
-    alert("Browser doesnot support geolocation");
+    mapAlert("Geolocation is not supported by this browser.", "danger");
   }
 }
 
@@ -247,11 +261,21 @@ function createRecWaypoints(cat, id) {
       }
     });
   } else {
-    alert("Browser doesnot support geolocation");
+    mapAlert("Geolocation is not supported by this browser.", "danger");
   }
 }
 
 // Map Eventlisteners:
+
+// Map alert handler:
+function mapAlert(msg, type) {
+  document
+    .getElementById("map")
+    .insertAdjacentHTML(
+      "afterbegin",
+      `<div class="alert alert-${type} map-alert alert-message" role="alert">${msg}</div>`
+    );
+}
 
 // Nearby Btn toggler:
 function nearbyHandler(e) {
@@ -275,6 +299,12 @@ nearbyBtns.forEach((btn) => {
   btn.addEventListener("click", nearbyHandler);
 });
 
+const addToWishlistBtn = document
+  .querySelector(".btn-wishlist")
+  .addEventListener("click", (e) => {
+    option = e.target.getAttribute("data-wishlist");
+    addToWishlist(option);
+  });
 // Recommendation Btn handler:
 document.querySelectorAll("#pills-reco .nav-link").forEach((btn) => {
   btn.addEventListener("click", (e) => {
@@ -291,16 +321,16 @@ document.querySelectorAll("#pills-reco .nav-link").forEach((btn) => {
 // MAP API:
 
 // Get tour data by id:
-function getTour(id) {
-  const url = `${baseURL}/tour/${+id}`;
-  fetch(url)
-    .then((res) => res.json())
-    .then((data) => {
-      data = JSON.parse(data);
-      return data;
-    })
-    .catch((err) => console.log(err));
-}
+// function getTour(id) {
+//   const url = `${baseURL}/tour/${+id}`;
+//   fetch(url)
+//     .then((res) => res.json())
+//     .then((data) => {
+//       data = JSON.parse(data);
+//       return data;
+//     })
+//     .catch((err) => console.log(err));
+// }
 
 // POST request to get nearby locations:
 function getNearBy(cat) {
@@ -332,10 +362,10 @@ function getNearBy(cat) {
     .then((data) => {
       data = JSON.parse(data);
       data = data.map((d) => d.fields);
-      if (data.length === 0) return;
+      if (data.length === 0) throw new Error("No nearby locations found");
       nearby = addMarkersWithPopup(data, icon);
     })
-    .catch((err) => console.log(err));
+    .catch((err) => mapAlert(err.message, "warning"));
 }
 
 // POST request to get nearby recommendations:
@@ -439,5 +469,36 @@ function getRecommendations(cat) {
         );
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => mapAlert(err.message, "danger"));
+}
+
+// POST request to add tour to wishlist:
+function addToWishlist(option) {
+  const url = `${baseURL}/tour/addToWishlist/`;
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ tourId, option }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.status === "success") {
+        document
+          .querySelector(".btn-wishlist")
+          .setAttribute("data-wishlist", "remove");
+        document.querySelector(
+          ".btn-wishlist"
+        ).innerHTML = `<img src="/static/icons/map/wishlist_added.png" alt="wishlist" class="btn-wishlist" data-wishlist="remove"/>`;
+      } else {
+        document
+          .querySelector(".btn-wishlist")
+          .setAttribute("data-wishlist", "add");
+        document.querySelector(
+          ".btn-wishlist"
+        ).innerHTML = `<img src="/static/icons/map/wishlist_add.png" alt="wishlist" class="btn-wishlist" data-wishlist="add"/>`;
+      }
+    })
+    .catch((err) => mapAlert(err.message, "danger"));
 }

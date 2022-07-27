@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from django.http import JsonResponse
 from django.core.serializers import serialize
 from django.contrib import messages
-from .models import RegisteredBusiness,Tour,Business,TourReviews,Profile
+from .models import RegisteredBusiness,Tour,Business,TourReviews,Wishlist,Profile
 from haversine import haversine,Unit
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -26,6 +26,13 @@ def map(request):
     id=request.GET.get('id',1)
     tour=Tour.objects.get(id=id)
     context={'tour':tour}
+    if request.user.is_authenticated:
+        user=request.user
+        if Wishlist.objects.filter(user=user,tour=tour).exists():
+            wishlist=True
+        else:
+            wishlist=False
+        context['wishlist']=wishlist
     return render(request,"base/map.html",context)
 
 def getTour(request,id):
@@ -121,8 +128,9 @@ def tourReview(request,id):
     if request.method=='POST':
         rating=request.POST.get('rating')
         review=request.POST.get('review')
+        user=request.user
         if(rating==None): rating=1
-        rev=TourReviews(rating=float(rating),review=review,tour=tour)
+        rev=TourReviews(rating=float(rating),review=review,tour=tour,user=user)
         rev.save()
         messages.add_message(request, messages.SUCCESS, 'Your Review has been submitted successfully!')
     context={'tour':tour}
@@ -159,6 +167,16 @@ def userProfile(request):
         'p_form':p_form
     }
     return render(request, "base/userProfile.html",context)
+
+# wishlist view function:
+@login_required
+def userWishlist(request):
+    user=request.user
+    wishlist=Wishlist.objects.filter(user=user)
+    context={
+        'wishlist':wishlist
+    }
+    return render(request,"base/userWishlist.html",context)
 
 @login_required
 def updatePassword(request):
@@ -247,15 +265,20 @@ def getNearby(request,cat):
     tourCoords=body['tourCoordinates']
     centerCoord=body['center']
     # Calculate radius of center:
-    radius=haversine((centerCoord[0],centerCoord[1]),(tourCoords[0][0],tourCoords[0][1]))+50
+    radius=10
+    if len(tourCoords)>0:
+        radius=haversine((centerCoord[0],centerCoord[1]),(tourCoords[0][0],tourCoords[0][1]))+50
     query=Business.objects.all().filter(category=cat)
 
     locFiltered=[loc for loc in query if haversine((loc.lat,loc.lng),(centerCoord[0],centerCoord[1]))<=radius]
-    for item in locFiltered:
-        for route in routeCoords:
-            if haversine((item.lat,item.lng),(route["lat"],route["lng"]),unit=Unit.KILOMETERS)<=3:
-                nearby.append(item)
-                break
+    if len(routeCoords)>0:
+        for item in locFiltered:
+            for route in routeCoords:
+                if haversine((item.lat,item.lng),(route["lat"],route["lng"]),unit=Unit.KILOMETERS)<=3:
+                    nearby.append(item)
+                    break
+    else:
+        nearby=locFiltered
     data=serialize('json',nearby)
     return JsonResponse(data,safe=False)
 
@@ -266,7 +289,9 @@ def getRecommendations(request,cat):
     tourCoords=body['tourCoordinates']
     centerCoord=body['center']
     # Calculate radius of center:
-    radius=haversine((centerCoord[0],centerCoord[1]),(tourCoords[0][0],tourCoords[0][1]))+10
+    radius=10
+    if len(tourCoords)>0:
+        radius=haversine((centerCoord[0],centerCoord[1]),(tourCoords[0][0],tourCoords[0][1]))+10
     query=Business.objects.all().filter(category=cat)
 
     reco=[loc for loc in query if haversine((loc.lat,loc.lng),(centerCoord[0],centerCoord[1]))<=radius]
@@ -279,6 +304,27 @@ def getBusiness(request,id):
     data=serialize('json',[business])
     return JsonResponse(data,safe=False)
     
+# method to handle a tour to wishlist:
+@csrf_exempt
+@login_required
+def handleWishlist(request):
+    body=json.loads(request.body.decode('utf-8'))
+    tourId=body['tourId']
+    option=body['option']
+    tour=Tour.objects.get(id=tourId)
+    user=request.user
+    if option=='add':
+        if Wishlist.objects.filter(user=user,tour=tour).exists():
+            return JsonResponse({'status':'exists'})
+        wishlist=Wishlist(user=user,tour=tour)
+        wishlist.save()
+        return JsonResponse({'status':'success'})
+    if option=='remove':
+        wishlist=Wishlist.objects.get(user=user,tour=tour)
+        if wishlist:
+            wishlist.delete()
+        return JsonResponse({'status':'deleted'})
+
 def logout(request):
     auth_logout(request)
     messages.info(request,'You logged out.')
