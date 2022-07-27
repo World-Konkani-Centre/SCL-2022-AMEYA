@@ -1,7 +1,10 @@
 {% extends 'main.html' %} {% load static %} {% block styles %}
 <!-- Replace {name} with the respective css file -->
 <link rel="stylesheet" href="{% static 'styles/tourForm.css' %}" />
-{% endblock %} {% block content %}
+
+{% endblock %}
+
+{% block content %} 
 <!-- Add code from body here -->
 <!--Destination-->
 <div class="py-5">
@@ -113,60 +116,51 @@
         </div>
       </div>
 
-      <!--Destination profile-->
-      <form
-        class="col-md-6 border-right"
-        name="form"
-        method="POST"
-        action="{% url 'recommendations' %}"
-      >
-        {% csrf_token %}
-        <div class="p-2 py-3">
-          <div class="container rounded-end">
-            <div class="mb-4">
-              <label for="destination" class="form-label"
-                >Enter your Destination</label
-              >
-              <input
-                type="text"
-                class="form-control"
-                id="destination"
-                name="name"
-                placeholder="Destination"
-              />
+      <form class="col-md-6 border-right" name = "form" method="POST" action="{% url 'recommendations' %}">
+          {% csrf_token %}
+          <div class="p-2 py-3">
+            <div class="container rounded-end">
+              <div class="mb-4">
+                <label for="place" class="form-label">Enter your Destination</label>
+                <select name="place" id="place" class="form-select form-control" aria-label="Default select example" required>
+                  <option value="" disabled selected hidden><p class="light-text">ex: Bangalore</p></option>
+                  <option type="submit" name="choice1" value="1"><p class="light-text"> Bangalore </p></option>
+                  <option type="submit" name="choice2" value="2"><p class="light-text"> Dakshina Kannada </p></option>
+                  <option type="submit" name="choice3" value="3"><p class="light-text">Udupi </p></option>
+                  <option type="submit" name="choice3" value="4"><p class="light-text">Uttara Kannada</p></option>
+                </select>
+                
+              </div>
+              <div class="mb-4">
+                <label for="category" class="form-label">Select Category</label>
+                <select name="category" id="category" class="form-select form-control" aria-label="Default select example" required>
+                  <option value="" disabled selected hidden>ex: adventure</option>
+                  <option type="submit" name="choice1" value="1">Adventure</option>
+                  <option type="submit" name="choice2" value="2">Trekking</option>
+                  <option type="submit" name="choice3" value="3">Hiking</option>
+                </select>
+              </div>
+              <div class="mb-4"> 
+                <label for="startdate" class="form-label">Start Date</label> 
+                <input type="date" onchange="my_function1()" class="form-control" id="startdate"  name="startdate" required />
+              </div>
+              <div class="mb-4">
+                <label for="enddate" class="form-label">End Date</label>
+                <input type="date" onchange="my_function2()" class="form-control" id="enddate" name="enddate" required />
+              </div>
             </div>
-            <div class="mb-4">
-              <label for="category" class="form-label">Select Category</label>
-              <input
-                class="form-control"
-                list="datalistOptions"
-                id="category"
-                name="category"
-                placeholder="ex: adventure"
-              />
-              <datalist id="datalistOptions">
-                <option type="submit" name="choice1" value="Hiking"></option>
-                <option type="submit" name="choice2" value="Trekking"></option>
-                <option type="submit" name="choice3" value="Adventure"></option>
-              </datalist>
-            </div>
-            <div class="mb-4">
-              <label for="startdate" class="form-label">Start Date</label>
-              <input
-                type="date"
-                class="form-control"
-                id="startdate"
-                name="startdate"
-              />
-            </div>
-            <div class="mb-4">
-              <label for="enddate" class="form-label">End Date</label>
-              <input
-                type="date"
-                class="form-control"
-                id="enddate"
-                name="enddate"
-              />
+            <div class="row">
+              <div class="col">
+                <button class="m-3 btn btn-primary profile-button mx-4" type="button">
+                  <a href="{{request.META.HTTP_REFERER}}">Back</a>
+                </button>
+              </div>
+              <div class="col text-end mx-2">
+                <button class="m-3 btn btn-primary profile-button" type="submit">
+                  Submit
+                </button>
+              </div>
+              <div class="py-2"></div>
             </div>
           </div>
           <div class="row">
@@ -191,4 +185,38 @@
     </div>
   </div>
 </div>
+
+
+  
+
+{% block js %}
+<script>
+
+var date=new Date();
+var tdate=date.getDate();
+if(tdate<10){
+  tdate='0'+tdate;
+}
+var month=date.getMonth()+1;
+if(month<10){
+  month='0'+month;
+}
+var year=date.getFullYear();
+var minDate=year + "-" + month + "-" + tdate;
+
+document.getElementById("startdate").setAttribute('min',minDate);
+document.getElementById("enddate").setAttribute('min',minDate);
+
+function my_function1(){
+  var minDaterev=document.getElementById("startdate").value;
+  document.getElementById("enddate").min=minDaterev;
+}
+
+function my_function2(){
+  var maxDaterev=document.getElementById("enddate").value;
+  document.getElementById("startdate").max = maxDaterev;
+}
+ 
+</script>
+{% endblock %}
 {% endblock %}
