@@ -265,15 +265,20 @@ def getNearby(request,cat):
     tourCoords=body['tourCoordinates']
     centerCoord=body['center']
     # Calculate radius of center:
-    radius=haversine((centerCoord[0],centerCoord[1]),(tourCoords[0][0],tourCoords[0][1]))+50
+    radius=10
+    if len(tourCoords)>0:
+        radius=haversine((centerCoord[0],centerCoord[1]),(tourCoords[0][0],tourCoords[0][1]))+50
     query=Business.objects.all().filter(category=cat)
 
     locFiltered=[loc for loc in query if haversine((loc.lat,loc.lng),(centerCoord[0],centerCoord[1]))<=radius]
-    for item in locFiltered:
-        for route in routeCoords:
-            if haversine((item.lat,item.lng),(route["lat"],route["lng"]),unit=Unit.KILOMETERS)<=3:
-                nearby.append(item)
-                break
+    if len(routeCoords)>0:
+        for item in locFiltered:
+            for route in routeCoords:
+                if haversine((item.lat,item.lng),(route["lat"],route["lng"]),unit=Unit.KILOMETERS)<=3:
+                    nearby.append(item)
+                    break
+    else:
+        nearby=locFiltered
     data=serialize('json',nearby)
     return JsonResponse(data,safe=False)
 
@@ -284,7 +289,9 @@ def getRecommendations(request,cat):
     tourCoords=body['tourCoordinates']
     centerCoord=body['center']
     # Calculate radius of center:
-    radius=haversine((centerCoord[0],centerCoord[1]),(tourCoords[0][0],tourCoords[0][1]))+10
+    radius=10
+    if len(tourCoords)>0:
+        radius=haversine((centerCoord[0],centerCoord[1]),(tourCoords[0][0],tourCoords[0][1]))+10
     query=Business.objects.all().filter(category=cat)
 
     reco=[loc for loc in query if haversine((loc.lat,loc.lng),(centerCoord[0],centerCoord[1]))<=radius]
