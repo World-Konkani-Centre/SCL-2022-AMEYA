@@ -13,7 +13,7 @@ starIcon = `${window.location.origin}/static/icons/map/star.png`;
 
 // Map Initialization:
 var map = L.map("map").setView(curLatLang, 13);
-L.tileLayer("https://tile.osm.ch/sswitzerland/{z}/{x}/{y}.png", {
+L.tileLayer("https://tile.osm.ch/switzerland/{z}/{x}/{y}.png", {
   maxZoom: 19,
   attribution:
     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -350,7 +350,6 @@ function getNearBy(cat) {
     tourCoordinates,
     center: getCenter(tourCoordinates),
   };
-  console.log(data);
   const url = `${baseURL}/nearby/${route}/`;
   fetch(url, {
     method: "POST",
