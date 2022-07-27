@@ -304,7 +304,6 @@ def handleWishlist(request):
     body=json.loads(request.body.decode('utf-8'))
     tourId=body['tourId']
     option=body['option']
-    print(tourId,option)
     tour=Tour.objects.get(id=tourId)
     user=request.user
     if option=='add':
