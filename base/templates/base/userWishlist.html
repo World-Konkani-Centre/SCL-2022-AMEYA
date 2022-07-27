@@ -1,0 +1,14 @@
+{% extends 'main.html' %}
+{% load static %} 
+{% block styles %}
+<!-- Replace {name} with the respective css file -->
+<!-- <link rel="stylesheet" href="{% static 'styles/{name}' %}" /> -->
+{% endblock %}
+
+{% block content %} 
+<!-- Add code from body here -->
+{% for tour in wishlist %}
+    <h1>{{tour.tour}}</h1>
+    <p>{{tour.tour.description}}</p>
+{% endfor %}
+{% endblock %}
