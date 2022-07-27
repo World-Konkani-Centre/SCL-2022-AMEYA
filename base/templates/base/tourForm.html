@@ -1,123 +1,194 @@
-{% extends 'main.html' %}
-{% load static %} 
-{% block styles %}
+{% extends 'main.html' %} {% load static %} {% block styles %}
 <!-- Replace {name} with the respective css file -->
 <link rel="stylesheet" href="{% static 'styles/tourForm.css' %}" />
-{% endblock %}
-
-{% block content %} 
+{% endblock %} {% block content %}
 <!-- Add code from body here -->
-  <!--Destination-->
-  <div class="py-5">
-    <div class="container rounded">
-      <div class="row align-content-center">
-        <!--Carousal slides-->
+<!--Destination-->
+<div class="py-5">
+  <div class="container rounded">
+    <div class="row align-content-center">
+      <!--Carousal slides-->
 
-        <div class="col mx-1 py-4 border-right">
-          <div class="col align-self-center">
-            <div id="carouselExampleCaptions" class="carousel slide carousel-fade" data-bs-ride="carousel">
-              <div class="carousel-indicators">
-                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"
-                  aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"
-                  aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"
-                  aria-label="Slide 3"></button>
-              </div>
+      <div class="col mx-1 py-4 border-right">
+        <div class="col align-self-center">
+          <div
+            id="carouselExampleCaptions"
+            class="carousel slide carousel-fade"
+            data-bs-ride="carousel"
+          >
+            <div class="carousel-indicators">
+              <button
+                type="button"
+                data-bs-target="#carouselExampleCaptions"
+                data-bs-slide-to="0"
+                class="active"
+                aria-current="true"
+                aria-label="Slide 1"
+              ></button>
+              <button
+                type="button"
+                data-bs-target="#carouselExampleCaptions"
+                data-bs-slide-to="1"
+                aria-label="Slide 2"
+              ></button>
+              <button
+                type="button"
+                data-bs-target="#carouselExampleCaptions"
+                data-bs-slide-to="2"
+                aria-label="Slide 3"
+              ></button>
+            </div>
 
-              <div class="container">
-                <div class="carousel-inner">
-                  <div class="carousel-item active">
-                    <img src="{% static 'images/tourForm/travel1.jpg' %}" class="img-fluid" alt="..." />
-                    <div class="carousel-caption d-none d-md-block">
-                      <h5>First slide label</h5>
-                      <p>
-                        Some representative placeholder content for the first
-                        slide.
-                      </p>
-                    </div>
-                  </div>
-                  <div class="carousel-item">
-                    <img src="{% static 'images/tourForm/travel2.jpg' %}" class="img-fluid" alt="..." />
-                    <div class="carousel-caption d-none d-md-block">
-                      <h5>Second slide label</h5>
-                      <p>
-                        Some representative placeholder content for the second
-                        slide.
-                      </p>
-                    </div>
-                  </div>
-                  <div class="carousel-item">
-                    <img src="{% static 'images/tourForm/travel3.jpg' %}" class="img-fluid" alt="..." />
-                    <div class="carousel-caption d-none d-md-block">
-                      <h5>Third slide label</h5>
-                      <p>
-                        Some representative placeholder content for the third
-                        slide.
-                      </p>
-                    </div>
+            <div class="container">
+              <div class="carousel-inner">
+                <div class="carousel-item active">
+                  <img
+                    src="{% static 'images/tourForm/travel1.jpg' %}"
+                    class="img-fluid"
+                    alt="..."
+                  />
+                  <div class="carousel-caption d-none d-md-block">
+                    <h5>First slide label</h5>
+                    <p>
+                      Some representative placeholder content for the first
+                      slide.
+                    </p>
                   </div>
                 </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
-                  data-bs-slide="prev">
-                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                  <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
-                  data-bs-slide="next">
-                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                  <span class="visually-hidden">Next</span>
-                </button>
+                <div class="carousel-item">
+                  <img
+                    src="{% static 'images/tourForm/travel2.jpg' %}"
+                    class="img-fluid"
+                    alt="..."
+                  />
+                  <div class="carousel-caption d-none d-md-block">
+                    <h5>Second slide label</h5>
+                    <p>
+                      Some representative placeholder content for the second
+                      slide.
+                    </p>
+                  </div>
+                </div>
+                <div class="carousel-item">
+                  <img
+                    src="{% static 'images/tourForm/travel3.jpg' %}"
+                    class="img-fluid"
+                    alt="..."
+                  />
+                  <div class="carousel-caption d-none d-md-block">
+                    <h5>Third slide label</h5>
+                    <p>
+                      Some representative placeholder content for the third
+                      slide.
+                    </p>
+                  </div>
+                </div>
               </div>
+              <button
+                class="carousel-control-prev"
+                type="button"
+                data-bs-target="#carouselExampleCaptions"
+                data-bs-slide="prev"
+              >
+                <span
+                  class="carousel-control-prev-icon"
+                  aria-hidden="true"
+                ></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button
+                class="carousel-control-next"
+                type="button"
+                data-bs-target="#carouselExampleCaptions"
+                data-bs-slide="next"
+              >
+                <span
+                  class="carousel-control-next-icon"
+                  aria-hidden="true"
+                ></span>
+                <span class="visually-hidden">Next</span>
+              </button>
             </div>
           </div>
         </div>
+      </div>
 
-        <!--Destination profile-->
-        <form class="col-md-6 border-right" name = "form" method="POST" action="{% url 'recommendations' %}">
-          {% csrf_token %}
-          <div class="p-2 py-3">
-            <div class="container rounded-end">
-              <div class="mb-4">
-                <label for="destination" class="form-label">Enter your Destination</label>
-                <input type="text" class="form-control" id="destination" name="name" placeholder="Destination" />
-              </div>
-              <div class="mb-4">
-                <label for="category" class="form-label">Select Category</label>
-                <input class="form-control" list="datalistOptions" id="category" name="category" placeholder="ex: adventure" />
-                <datalist id="datalistOptions">
-                  <option type="submit" name="choice1" value="Hiking"></option>
-                  <option type="submit" name="choice2" value="Trekking"></option>
-                  <option type="submit" name="choice3" value="Adventure"></option>        
-                </datalist>
-              </div>
-              <div class="mb-4">
-                <label for="startdate" class="form-label">Start Date</label>
-                <input type="date" class="form-control" id="startdate" name="startdate" />
-              </div>
-              <div class="mb-4">
-                <label for="enddate" class="form-label">End Date</label>
-                <input type="date" class="form-control" id="enddate" name="enddate" />
-              </div>
+      <!--Destination profile-->
+      <form
+        class="col-md-6 border-right"
+        name="form"
+        method="POST"
+        action="{% url 'recommendations' %}"
+      >
+        {% csrf_token %}
+        <div class="p-2 py-3">
+          <div class="container rounded-end">
+            <div class="mb-4">
+              <label for="destination" class="form-label"
+                >Enter your Destination</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="destination"
+                name="name"
+                placeholder="Destination"
+              />
             </div>
-            <div class="row">
-              <div class="col">
-                <button class="m-3 btn btn-primary profile-button mx-4" type="button">
-                  <a href="{{request.META.HTTP_REFERER}}">Back</a>
-                </button>
-              </div>
-              <div class="col text-end mx-2">
-                <button class="m-3 btn btn-primary profile-button" type="submit">
-                  <!-- <a href="profile.html">Submit</a> -->
-                  Submit
-                </button>
-              </div>
-              <div class="py-2"></div>
+            <div class="mb-4">
+              <label for="category" class="form-label">Select Category</label>
+              <input
+                class="form-control"
+                list="datalistOptions"
+                id="category"
+                name="category"
+                placeholder="ex: adventure"
+              />
+              <datalist id="datalistOptions">
+                <option type="submit" name="choice1" value="Hiking"></option>
+                <option type="submit" name="choice2" value="Trekking"></option>
+                <option type="submit" name="choice3" value="Adventure"></option>
+              </datalist>
+            </div>
+            <div class="mb-4">
+              <label for="startdate" class="form-label">Start Date</label>
+              <input
+                type="date"
+                class="form-control"
+                id="startdate"
+                name="startdate"
+              />
+            </div>
+            <div class="mb-4">
+              <label for="enddate" class="form-label">End Date</label>
+              <input
+                type="date"
+                class="form-control"
+                id="enddate"
+                name="enddate"
+              />
             </div>
           </div>
-        </form>
-      </div>
+          <div class="row">
+            <div class="col">
+              <button
+                class="m-3 btn btn-primary profile-button mx-4"
+                type="button"
+              >
+                <a href="{{request.META.HTTP_REFERER}}">Back</a>
+              </button>
+            </div>
+            <div class="col text-end mx-2">
+              <button class="m-3 btn btn-primary profile-button" type="submit">
+                <!-- <a href="profile.html">Submit</a> -->
+                Submit
+              </button>
+            </div>
+            <div class="py-2"></div>
+          </div>
+        </div>
+      </form>
     </div>
   </div>
+</div>
 {% endblock %}
-
