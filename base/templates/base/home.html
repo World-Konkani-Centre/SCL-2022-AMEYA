@@ -1,12 +1,126 @@
 {% extends 'main.html' %} {% load static %} {% block styles %}
 <!-- Replace {name} with the respective css file -->
-<link rel="stylesheet" href="{% static 'styles/{name}' %}" />
+<link rel="stylesheet" href="{% static 'styles/home.css' %}" />
 {% endblock %} {% block content %}
 <!--  -->
 {% include 'base/alertMessages/messages.html' %}
 
-<!-- Add code from body here -->
-<h1>jdhfs</h1>
-{% include 'base/alertMessages/msgTimeOut.html' %}
-<!--  -->
-{% endblock %}
+<body class="main-layout">
+  <section>
+    <div class="banner-main">
+      <img src="{% static 'images/home/banner.jpg' %}" alt="#" width="100%" />
+      <div class="container">
+        <div class="text-bg">
+          <h1>Yatra Mitra<br /><strong class="white">Amazing Tour</strong></h1>
+          <div class="button_section">
+            <a class="main_bt" href="#">Read More</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- traveling -->
+  <div id="travel" class="traveling">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+          <div class="traveling-box">
+            <i
+              ><img src="{% static 'images/home/travel-icon.png' %}" alt="icon"
+            /></i>
+            <h3>Different Countrys</h3>
+            <p>going to use a passage of Lorem Ipsum, you need to be</p>
+          </div>
+        </div>
+        <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+          <div class="traveling-box">
+            <i
+              ><img
+                src="{% static 'images/home/travel-icon2.png' %}"
+                alt="icon"
+            /></i>
+            <h3>Mountains Tours</h3>
+            <p>going to use a passage of Lorem Ipsum, you need to be</p>
+          </div>
+        </div>
+        <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+          <div class="traveling-box">
+            <i
+              ><img
+                src="{% static 'images/home/travel-icon3.png' %}"
+                alt="icon"
+            /></i>
+            <h3>Bus Tours</h3>
+            <p>going to use a passage of Lorem Ipsum, you need to be</p>
+          </div>
+        </div>
+        <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+          <div class="traveling-box">
+            <i
+              ><img
+                src="{% static 'images/home/travel-icon4.png' %}"
+                alt="icon"
+            /></i>
+            <h3>Summer Rest</h3>
+            <p>going to use a passage of Lorem Ipsum, you need to be</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end traveling -->
+
+  <!-- footer -->
+  <footer>
+    <div id="contact" class="footer">
+      <div class="container">
+        <div class="row pdn-top-30">
+          <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
+            <div class="Follow">
+              <h3>ADDITIONAL LINKS</h3>
+              <ul class="link">
+                <li><a href="#">About us</a></li>
+                <li><a href="#">Terms and conditions</a></li>
+                <li><a href="#"> Privacy policy</a></li>
+                <li><a href="#">News</a></li>
+                <li><a href="#"> Contact us</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12">
+            <div class="Follow">
+              <h3>Contact</h3>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                  <input class="Newsletter" placeholder="Name" type="text" />
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                  <input class="Newsletter" placeholder="Email" type="text" />
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                  <textarea class="textarea" placeholder="comment" type="text">
+Comment</textarea
+                  >
+                </div>
+              </div>
+              <button class="Subscribe">Submit</button>
+            </div>
+          </div>
+        </div>
+        <div class="copyright">
+          <div class="container">
+            <p>
+              Copyright 2019 All Right Reserved By
+              <a href="https://html.design/">Free html Templates</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!-- end footer -->
+  {% include 'base/alertMessages/msgTimeOut.html' %}
+  <!--  -->
+  {% endblock %}
+</body>
