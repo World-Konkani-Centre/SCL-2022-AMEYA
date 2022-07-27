@@ -1,3 +1,4 @@
+from unicodedata import category
 from django.shortcuts import render,redirect
 from django.http import JsonResponse
 from django.core.serializers import serialize
@@ -88,15 +89,11 @@ def login(request):
 def recommendations(request):
     if request.method=='POST':
         contents=Tour.objects.all()
-        category1= request.POST['category'] #Retrieves the category entered by the user
-        category=1  
-        if(category1=='Adventure'):
-            category=1
-        elif(category1=='Trekking'):
-            category=2
-        elif(category1=='Hiking'):
-            category=3
-        tourData = Tour.objects.all().filter(category=category).order_by('-rating').values() #Filter by highest rating
+        category1= request.POST['category']  #Retrieves the category entered by the user
+        category2=request.POST['place']
+        
+        tourData = Tour.objects.all().filter(category=category1,place=category2).order_by('-rating').values()
+            #Filter by highest rating
         context={
             'tourData':tourData
         }
