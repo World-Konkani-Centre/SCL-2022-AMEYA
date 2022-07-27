@@ -15,49 +15,112 @@
       rel="stylesheet"
       href="{% static 'leaflet-routing/dist/leaflet-routing-machine.css' %}"
     />
-    <link rel="stylesheet" href="{% static 'styles/styles.css' %}" />
-    <!-- Scripts -->
+    <link
+      rel="stylesheet"
+      href="{% static 'leaflet-geocoding/leaflet-geocoding.css' %}"
+    />
     <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'leaflet/leaflet.js' %}"></script>
     <script src="{% static 'leaflet-routing/dist/leaflet-routing-machine.js' %}"></script>
-
+    <script src="{% static 'leaflet-geocoding/leaflet-geocoding.js' %}"></script>
     <!-- Font-awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
 
     <!-- Iconify -->
     <script src="https://code.iconify.design/2/2.2.1/iconify.min.js"></script>
+    <link rel="stylesheet" href="{% static 'styles/styles.css' %}" />
+    <!-- Scripts -->
     {% block styles %} {% endblock %}
 
     <title>Yatra Mitra</title>
   </head>
   <body>
-      <!--Navigation bar-->
-  <div>
-    <nav class="navbar navbar-expand-lg">
-      <div class="container-fluid">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-          <i class="fa fa-bars fa-x" id="navicon" aria-hidden="true"></i>
-        </button>
-        <a class="navbar-brand" href="#"><button class="project-name">Yatra Mitra</button></a>
-        <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link items" aria-current="page" href="userProfile.html"><button><span>Profile</span></button></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link items" href="trips.html"><button><span>Your trips</span></button></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link items" href="contact.html"><button><span >Contact-us</span></button></a>
-            </li>
-            <li class="nav-item">
-            <a href="https://www.google.com/"> <span class="iconify-inline navbar-toggler-icon mx-4 my-2 fa-lg" data-icon="carbon:user-avatar-filled" data-width="60" data-height="60"></span> </a>
-          </li>
-          </ul>
+    <!--Navigation bar-->
+    <div>
+      <nav class="navbar navbar-expand-lg main-navbar">
+        <div class="container-fluid">
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarTogglerDemo03"
+            aria-controls="navbarTogglerDemo03"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <i class="fa fa-bars fa-x" id="navicon" aria-hidden="true"></i>
+          </button>
+          <a class="navbar-brand" href="/"
+            ><button class="project-name">Yatra Mitra</button></a
+          >
+          <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a
+                  class="nav-link items"
+                  aria-current="page"
+                  href="{% url 'recommendations' %}"
+                  ><button><span>Recommendations</span></button></a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link items" href="{% url 'aboutUs' %}"
+                  ><button><span>About Us</span></button></a
+                >
+              </li>
+              {% if user.is_authenticated %}
+              <li class="nav-item">
+                <a class="nav-link items" href="{% url 'trips' %}"
+                  ><button><span>Your trips</span></button></a
+                >
+              </li>
+              <li class="nav-item nav-profile">
+                <a href="{% url 'userProfile' %}">
+                  {% if user.profile.image %}
+                  <span
+                    class="iconify-inline navbar-toggler-icon mx-4 my-2 fa-lg"
+                  >
+                    <img
+                      class="rounded-circle"
+                      width="35"
+                      height="35"
+                      style="object-fit: cover"
+                      src="{{user.profile.image.url}}"
+                    />
+                  </span>
+                  {% else %}
+                  <span
+                    class="iconify-inline navbar-toggler-icon mx-4 my-2 fa-lg"
+                  >
+                    <img
+                      class="rounded-circle"
+                      width="35"
+                      height="35"
+                      style="object-fit: cover"
+                      src="{% static 'images/user/default.jpg'%}"
+                    />
+                  </span>
+                  {% endif %}
+                </a>
+              </li>
+              {% else %}
+              <li class="nav-item">
+                <a
+                  class="nav-link items"
+                  aria-current="page"
+                  href="{% url 'login' %}"
+                  ><button><span>Login/Signup</span></button></a
+                >
+              </li>
+              {% endif %}
+            </ul>
+          </div>
         </div>
-      </div>
-    </nav>
-  </div>
+      </nav>
+    </div>
     {% block content %} {% endblock %}
   </body>
 </html>

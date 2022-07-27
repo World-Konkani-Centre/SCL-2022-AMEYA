@@ -1,42 +1,90 @@
-{% extends 'main.html' %}
-{% load static %} 
-{% block styles %}
+{% extends 'main.html' %} {% load static %} {% block styles %}
+
 <!-- Replace {name} with the respective css file -->
 <link rel="stylesheet" href="{% static 'styles/userprofile.css' %}" />
-{% endblock %}
-
-{% block content %} 
-<div class="container rounded">
-    <div class="row">
-        <div class="col border-right">
-            <div class="card mt-5 p-5 ">
-                <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle" width="150px" src="{% static 'images/userProfile/Vinayaya_n_shenoy.jpg - Copy.jpg' %}">
-                    <span class="font-weight-bold">Vinayak</span>
-                    <span class="text-black-50">nshenoyv@gmail.com</span>
-                </div>
+{% endblock %} {% load crispy_forms_tags %} {% block content %}
+<div class="container" style="margin-top: 70px; margin-bottom: 15px">
+  {% include 'base/alertMessages/messages.html' %}
+  <div class="profile-container container rounded">
+    <form
+      method="POST"
+      action="{% url 'userProfile' %}"
+      enctype="multipart/form-data"
+    >
+      {% csrf_token %}
+      <div class="row">
+        <div class="col-lg border-right py-2 profile-card">
+          <div class="p-2 py-5">
+            <div class="card py-5 border-right">
+              <div
+                class="d-flex flex-column align-items-center text-center py-5"
+              >
+                {% if user.profile.image %}
+                <img
+                  class="rounded-circle"
+                  width="50%"
+                  src="{{user.profile.image.url}}"
+                />
+                {% else %}
+                <img
+                  class="rounded-circle"
+                  width="50%"
+                  src="{% static 'images/user/default.jpg'%}"
+                />
+                {% endif %}
+              </div>
+              <div class="d-flex flex-column text-center">
+                <span class="font-weight-bold">{{user.username}}</span>
+              </div>
+              <div class="d-flex flex-column text-center">
+                <span class="text-black-50">{{user.email}}</span>
+              </div>
+              <div class="my-4 text-center">
+                <a
+                  class="btn btn-primary profile-button"
+                  type="button"
+                  href="{% url 'logout' %}"
+                >
+                  Logout
+                </a>
+              </div>
             </div>
+          </div>
         </div>
-        <div class="col-md-7 border-right">
+        <div class="col-lg border-right">
+          <fieldset class="form-group">
             <div class="p-2 py-4">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h4 class="text-right">Profile Settings</h4>
-                </div>
-                <div class="row">
-                    <div class="col-md-6"><label class="labels">Name</label><input type="text" class="form-control" placeholder="First Name" value=""></div>
-                    <div class="col-md-6"><label class="labels"></label><input type="text" class="form-control" value="" placeholder="Last Name"></div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-md-12"><label class="labels">Mobile Number</label><input type="text" class="form-control" placeholder="Enter Phone number" value=""></div>
-                    <div class="col-md-12"><label class="labels">Email ID</label><input type="text" class="form-control" placeholder="Enter Email id" value=""></div>
-                    <div class="col-md-12"><label class="labels">Password</label><input type="password" class="form-control" value=""></div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-md-6"><label class="labels">Country</label><input type="text" class="form-control" placeholder="Country" value=""></div>
-                    <div class="col-md-6"><label class="labels">State/Region</label><input type="text" class="form-control" value="" placeholder="State"></div>
-                </div>
-                <div class="mt-3 text-center"><button class="btn btn-primary profile-button" type="button">Save Profile</button></div>
+              <legend
+                class="d-flex justify-content-between align-items-center text-center"
+              >
+                <h3 class="text-right">Profile Settings</h3>
+              </legend>
+              {{ u_form | crispy }} {{ p_form | crispy }}
+
+              <div class="mt-4 my-2">
+                <a
+                  class="btn btn-primary profile-button"
+                  style="float: left"
+                  type="button"
+                  href="{% url 'updatePassword' %}"
+                >
+                  Update Password
+                </a>
+                <button
+                  class="btn btn-primary profile-button"
+                  style="float: right"
+                  type="submit"
+                >
+                  Update Profile
+                </button>
+              </div>
             </div>
+            <div class="my-5"></div>
+          </fieldset>
         </div>
-    </div>
+      </div>
+    </form>
+  </div>
 </div>
-{% endblock %}
+
+{% include 'base/alertMessages/msgTimeOut.html' %} {% endblock %}

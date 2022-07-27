@@ -1,8 +1,7 @@
-{% extends 'main.html' %}
-{% load static %} 
-{% block styles %}
+{% extends 'main.html' %} {% load static %} {% block styles %}
 <!-- Replace {name} with the respective css file -->
 <link rel="stylesheet" href="{% static 'styles/aboutus.css' %}" />
+<<<<<<< HEAD
 {% endblock %}
 
 {% block content %} 
@@ -50,4 +49,51 @@
     </ul>
     <p>&copy;2021 Company,Inc. All Rights Reserved</p>
   </footer>
+=======
+{% endblock %} {% block content %}
+<!-- Add code from body here -->
+<div class="section">
+  <div class="main-container">
+    <div class="title">
+      <h1>About us</h1>
+    </div>
+    <div class="container">
+      <div class="content-section">
+        <div class="content">
+          <p>
+            A platform that helps helps the users to travel any places within
+            state or within country. The user can select the destination of his
+            choice. If the the user select places within state then we will ask
+            for his preference. If he wishes to travel within country we will
+            suggest them best places that he can travel depending on the monsoon
+            during his/her period of travel.<br /><br />
+            Various questions will be asked based on his preferences and based
+            on his answer we will provide them the required details.It also asks
+            user the mode of travel he wants to take(bus/flight/rail) and also
+            approximate charge that will cost for the entire trip depending on
+            their mode of travel, type of hotels they want to stay etc.Roadmap
+            and GPS is used to search for in and around places which the user
+            selects.
+          </p>
+        </div>
+      </div>
+      <div class="image-section">
+        <img
+          src=" https://static0.hotcarsimages.com/wordpress/wp-content/uploads/2020/05/feature-image-cheap-turbo-cars.jpg"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+<footer class="footer">
+  <ul class="menu">
+    <li class="menu__item"><a class="menu__link" href="#">Home</a></li>
+    <li class="menu__item"><a class="menu__link" href="#">About</a></li>
+    <li class="menu__item"><a class="menu__link" href="#">Services</a></li>
+    <li class="menu__item"><a class="menu__link" href="#">Team</a></li>
+    <li class="menu__item"><a class="menu__link" href="#">Contact</a></li>
+  </ul>
+  <p>&copy;2021 Company,Inc. All Rights Reserved</p>
+</footer>
+>>>>>>> 41236539906a709baa5424cfd8abb6015c0b3849
 {% endblock %}

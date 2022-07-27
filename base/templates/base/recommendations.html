@@ -1,102 +1,55 @@
 {% extends 'main.html' %}
-{% load static %} 
+
+{% load static %}
+
 {% block styles %}
 <!-- Replace {name} with the respective css file -->
 <link rel="stylesheet" href="{% static 'styles/recommendation.css' %}" />
 {% endblock %}
 
-{% block content %} 
-<!-- Add code from body here -->
+{% block content %}
+
 <br><br><br>
-
-<!-- Card-1 -->
-<div  class="container">
-<section class="card hover01">
-        <div class="row no-gutters">
-          <div class="col-md-4">
-            <img src="{%static 'icons/recommendation/Lalbagh.jpg' %}" class="card-img" alt="Lalbagh">
+{% for data in tourData %}
+<br><br>
+<div  class="container shadow p-3 mb-5 bg-white rounded">
+    <section class="card hover01">
+            <div class="row no-gutters">
+              <div class="col-md-4">
+                <img src='/media/{{data.image}}' class="card-img" style="height:250px;" alt="{{data.name}}">
+              </div>
+              <div class="col-md-8">
+                <div class="card-body">
+                  <h5 class="card-title">{{data.name}}</h5>
+                  <section>
+                    <span class="hidden-text">{{data.rating}}</span>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span class="rating-star">
+                      <!-- By default the star is full else it is empty otherwise it is half -->
+                          <i class="fa fa-star{% if data.rating < 0.5%}-o{% elif data.rating >= 0.5 and data.rating < 1 %}-half-o{% endif %}" style="color:#f1d554;" aria-hidden="true"></i>
+                          <i class="fa fa-star{% if data.rating < 1.5%}-o{% elif data.rating >= 1.5 and data.rating < 2 %}-half-o{% endif %}" style="color:#f1d554;" aria-hidden="true"></i>
+                          <i class="fa fa-star{% if data.rating < 2.5%}-o{% elif data.rating >= 2.5 and data.rating < 3 %}-half-o{% endif %}" style="color:#f1d554;" aria-hidden="true"></i>
+                          <i class="fa fa-star{% if data.rating < 3.5%}-o{% elif data.rating >= 3.5 and data.rating < 4 %}-half-o{% endif %}" style="color:#f1d554;" aria-hidden="true"></i>
+                          <i class="fa fa-star{% if data.rating < 4.5%}-o{% elif data.rating >= 4.5 and data.rating < 5 %}-half-o{% endif %}" style="color:#f1d554;" aria-hidden="true"></i>
+                    </span>
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    {% if data.rating > 3.9 %}
+                    <span class="info-1">{{data.subtext}}</span>
+                    {% else %}
+                    <span class="info-1">People also visited</span>
+                    {% endif %}
+                  </section>
+                  <p class="card-text py-4">
+                    {{data.description}}
+                  <p class="card-text"><a href="www.google.com"><small class="text-muted">See more..</small></a></p>
+                </div>
+              </div>
           </div>
-          <div class="col-md-8">
-            <div class="card-body">
-              <h5 class="card-title">Lalbagh  Bangalore</h5>
-              <section>
-              <span class="fa fa-star checked"></span>
-              <span class="fa fa-star checked"></span>
-              <span class="fa fa-star checked"></span>
-              <span class="fa fa-star checked"></span>
-              <span class="fa fa-star checked"></span>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <span class="hidden-text">5.0</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <span class="info-1">Must See Temple</span>
-              </section>
-              <p class="card-text py-4">
-                Lalbagh Botanical Garden is located in Bangalore and is nationally and internationally renowned centre for botanical artwork, scientific study of plants and also conservation of plants. A haven for all nature lovers, Lal Bagh covers an area 240 acres in the heart of...
-              <p class="card-text"><a href="www.google.com"><small class="text-muted">See more..</small></a></p>
-            </div>
-          </div>
-      </div>
-</section>
+    </section>
     </div>
-      <br><br><br><br>
 
-<!-- Card-2 -->
-<div  class="container">
-  <section class="card hover01">
-          <div class="row no-gutters">
-            <div class="col-md-4">
-              <img src="{%static 'icons/recommendation/BangalorePalace.jpg' %}" class="card-img" alt="Palace">
-            </div>
-            <div class="col-md-8">
-              <div class="card-body">
-                <h5 class="card-title">Bangalore Palace</h5>
-                <section>
-                <span class="fa fa-star checked"></span>
-                <span class="fa fa-star checked"></span>
-                <span class="fa fa-star checked"></span>
-                <span class="fa fa-star checked"></span>
-                <span class="fa fa-star"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  <span class="hidden-text">4.0</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  <span class="info-1">Must See Palace</span>
-                </section>
-                <p class="card-text py-4">
-                  Bangalore Palace is a royal palace located in Bangalore, Karnataka, India, in an area that was owned by Rev. J. Garrett, the first principal of the Central High School in Bangalore, now famous as Central College. The commencement of the construction of the palace...
-                </p>
-                <p class="card-text"><a href="www.google.com"><small class="text-muted">See more..</small></a></p>
-              </div>
-            </div>
-        </div>
-  </section>
-      </div>
-      <br><br><br><br>
-
-<!-- Card-3 -->
-<div  class="container">
-  <section class="card hover01">
-          <div class="row no-gutters">
-            <div class="col-md-4">
-              <img src="{%static 'icons/recommendation/Iskcon.jpg' %}" class="card-img" alt="Lalbagh">
-            </div>
-            <div class="col-md-8">
-              <div class="card-body">
-                <h5 class="card-title">Iskcon &nbsp;Bangalore</h5>
-                <section>
-                <span class="fa fa-star checked"></span>
-                <span class="fa fa-star checked"></span>
-                <span class="fa fa-star checked"></span>
-                <span class="fa fa-star checked"></span>
-                <span class="fa fa-star"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  <span class="hidden-text">4.0</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  <span class="info-1">Must See Temple</span>
-                </section>
-                <p class="card-text py-4">
-                  ISKCON Sri Radha Krishna Temple is recognized as one of the famous places to visit in Bangalore and best mentained ISKCON temple in the world.It is one largest temple for Lord Krishna in the world. The temple has got 6 shrines and the presiding deity is Prahlada Narasimha...
-                </p>
-                <p class="card-text"><a href="www.google.com"><small class="text-muted">See more..</small></a></p>
-              </div>
-            </div>
-        </div>
-  </section>
-      </div>
-</section>
+{% endfor %}
 
 {% endblock %}
