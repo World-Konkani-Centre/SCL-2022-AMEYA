@@ -1,7 +1,10 @@
 <script>
-  setTimeout(function () {
+  setInterval(function () {
     document.querySelectorAll(".alert-message").forEach(function (el) {
-      el.remove();
+      el.classList.add("alert-animation");
+      setTimeout(function () {
+        el.remove();
+      }, 2000);
     });
-  }, 5000);
+  }, 4000);
 </script>

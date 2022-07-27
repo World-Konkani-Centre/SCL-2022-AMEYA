@@ -1,11 +1,8 @@
-from http.client import HTTPResponse
-from multiprocessing import context
-from unicodedata import name
 from django.shortcuts import render,redirect
 from django.http import JsonResponse
 from django.core.serializers import serialize
 from django.contrib import messages
-from .models import RegisteredBusiness,Tour,Business,TourReviews,Profile
+from .models import RegisteredBusiness,Tour,Business,TourReviews,Wishlist,Profile
 from haversine import haversine,Unit
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -19,7 +16,6 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.conf import settings
 
-
 # Create your views here.
 
 def home(request):
@@ -30,6 +26,13 @@ def map(request):
     id=request.GET.get('id',1)
     tour=Tour.objects.get(id=id)
     context={'tour':tour}
+    if request.user.is_authenticated:
+        user=request.user
+        if Wishlist.objects.filter(user=user,tour=tour).exists():
+            wishlist=True
+        else:
+            wishlist=False
+        context['wishlist']=wishlist
     return render(request,"base/map.html",context)
 
 def getTour(request,id):
@@ -56,7 +59,7 @@ def signup(request):
             user = User.objects.create(email=email, username=username, password=make_password(password))
             user.save() 
             auth_login(request, user)    
-            html_content = render_to_string('base/email/email.html',{'title':'Welcome to Tourist Guide','message':'Welcome to Tourist Guide. Thank you for signing up.'})
+            html_content = render_to_string('base/email/email.html',{'title':'Welcome to Tourist Guide','message':'Welcome to Tourist Guide. Thank you for signing up.','name':username})
             text_content = strip_tags(html_content)
             email_content = EmailMultiAlternatives('Welcome to Tourist Guide', text_content, settings.EMAIL_HOST_USER, [email])
             email_content.attach_alternative(html_content, "text/html")
@@ -125,8 +128,9 @@ def tourReview(request,id):
     if request.method=='POST':
         rating=request.POST.get('rating')
         review=request.POST.get('review')
+        user=request.user
         if(rating==None): rating=1
-        rev=TourReviews(rating=float(rating),review=review,tour=tour)
+        rev=TourReviews(rating=float(rating),review=review,tour=tour,user=user)
         rev.save()
         messages.add_message(request, messages.SUCCESS, 'Your Review has been submitted successfully!')
     context={'tour':tour}
@@ -147,6 +151,7 @@ def userProfile(request):
         p_form = ProfileUpdateForm(request.POST,request.FILES, instance=request.user.profile)
 
         if u_form.is_valid() and p_form.is_valid():
+            print(p_form.cleaned_data)
             u_form.save()
             p_form.save()
             messages.add_message(request, messages.SUCCESS, 'Your account has been Updated')
@@ -163,14 +168,25 @@ def userProfile(request):
     }
     return render(request, "base/userProfile.html",context)
 
+# wishlist view function:
 @login_required
-def Change_Password(request):
+def userWishlist(request):
+    user=request.user
+    wishlist=Wishlist.objects.filter(user=user)
+    context={
+        'wishlist':wishlist
+    }
+    return render(request,"base/userWishlist.html",context)
+
+@login_required
+def updatePassword(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
             pass_form= PasswordChangingForm(user=request.user,data=request.POST)
             if pass_form.is_valid():
                 pass_form.save()
                 update_session_auth_hash(request , pass_form.user)
+                messages.add_message(request, messages.SUCCESS, 'Your password has been updated successfully!')
                 return redirect('userProfile')
         else:
             pass_form= PasswordChangingForm(user=request.user)
@@ -178,7 +194,7 @@ def Change_Password(request):
         context={
             'pass_form':pass_form
         }    
-        return render(request,"base/change_password.html",context)
+        return render(request,"base/updatePassword.html",context)
     else:
         return redirect('login')
        
@@ -205,7 +221,7 @@ def registerBusiness(request):
         banner=request.FILES.get('banner')
         business=RegisteredBusiness(name=name,address=address,zipcode=zipcode,phone=phone,email=email,category=category,description=description,lat=lat,lng=lng,logo=logo,banner=banner,website=website)
         business.save()
-        html_content = render_to_string('base/email/email.html',{'title':'Your Business has been regisered','message':'Your Business has been regisered. Thank you.'})
+        html_content = render_to_string('base/email/email.html',{'title':'Your Business has been regisered','message':'Your Business has been regisered. Thank you.','name':name})
         text_content = strip_tags(html_content)
         email_content = EmailMultiAlternatives('Your Business has been registered successfully', text_content, settings.EMAIL_HOST_USER, [email])
         email_content.attach_alternative(html_content, "text/html")
@@ -249,15 +265,20 @@ def getNearby(request,cat):
     tourCoords=body['tourCoordinates']
     centerCoord=body['center']
     # Calculate radius of center:
-    radius=haversine((centerCoord[0],centerCoord[1]),(tourCoords[0][0],tourCoords[0][1]))+50
+    radius=10
+    if len(tourCoords)>0:
+        radius=haversine((centerCoord[0],centerCoord[1]),(tourCoords[0][0],tourCoords[0][1]))+50
     query=Business.objects.all().filter(category=cat)
 
     locFiltered=[loc for loc in query if haversine((loc.lat,loc.lng),(centerCoord[0],centerCoord[1]))<=radius]
-    for item in locFiltered:
-        for route in routeCoords:
-            if haversine((item.lat,item.lng),(route["lat"],route["lng"]),unit=Unit.KILOMETERS)<=3:
-                nearby.append(item)
-                break
+    if len(routeCoords)>0:
+        for item in locFiltered:
+            for route in routeCoords:
+                if haversine((item.lat,item.lng),(route["lat"],route["lng"]),unit=Unit.KILOMETERS)<=3:
+                    nearby.append(item)
+                    break
+    else:
+        nearby=locFiltered
     data=serialize('json',nearby)
     return JsonResponse(data,safe=False)
 
@@ -268,7 +289,9 @@ def getRecommendations(request,cat):
     tourCoords=body['tourCoordinates']
     centerCoord=body['center']
     # Calculate radius of center:
-    radius=haversine((centerCoord[0],centerCoord[1]),(tourCoords[0][0],tourCoords[0][1]))+10
+    radius=10
+    if len(tourCoords)>0:
+        radius=haversine((centerCoord[0],centerCoord[1]),(tourCoords[0][0],tourCoords[0][1]))+10
     query=Business.objects.all().filter(category=cat)
 
     reco=[loc for loc in query if haversine((loc.lat,loc.lng),(centerCoord[0],centerCoord[1]))<=radius]
@@ -281,9 +304,32 @@ def getBusiness(request,id):
     data=serialize('json',[business])
     return JsonResponse(data,safe=False)
     
+# method to handle a tour to wishlist:
+@csrf_exempt
+@login_required
+def handleWishlist(request):
+    body=json.loads(request.body.decode('utf-8'))
+    tourId=body['tourId']
+    option=body['option']
+    tour=Tour.objects.get(id=tourId)
+    user=request.user
+    if option=='add':
+        if Wishlist.objects.filter(user=user,tour=tour).exists():
+            return JsonResponse({'status':'exists'})
+        wishlist=Wishlist(user=user,tour=tour)
+        wishlist.save()
+        return JsonResponse({'status':'success'})
+    if option=='remove':
+        wishlist=Wishlist.objects.get(user=user,tour=tour)
+        if wishlist:
+            wishlist.delete()
+        return JsonResponse({'status':'deleted'})
+
 def logout(request):
     auth_logout(request)
     messages.info(request,'You logged out.')
     return redirect('/')
     
-
+# Error page:
+def error_404(request,exception):
+    return render(request,'base/errorPages/404.html')
