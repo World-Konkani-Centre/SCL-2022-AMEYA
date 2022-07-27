@@ -1,5 +1,5 @@
 // Global Variables:
-let tourId = 1;
+let tourId;
 let recMarker = null;
 let recRouting = null;
 let curLatLang = [12.933969688632496, 77.61193685079267];
@@ -12,7 +12,7 @@ starIcon = `${window.location.origin}/static/icons/map/star.png`;
 
 // Map Initialization:
 var map = L.map("map").setView(curLatLang, 13);
-L.tileLayer("https://tile.osm.ch/switzerland/{z}/{x}/{y}.png", {
+L.tileLayer("https://tile.osm.ch/sswitzerland/{z}/{x}/{y}.png", {
   maxZoom: 19,
   attribution:
     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -172,8 +172,8 @@ function removeMarkers(data) {
 }
 
 // Create Waypoints route:
-function createWaypoints(latLngArr, tourId) {
-  tourId = tourId;
+function createWaypoints(latLngArr, id) {
+  tourId = id;
   if ("geolocation" in navigator) {
     navigator.geolocation.getCurrentPosition(function (pos) {
       // Create an array of start and end points:
@@ -275,6 +275,12 @@ nearbyBtns.forEach((btn) => {
   btn.addEventListener("click", nearbyHandler);
 });
 
+const addToWishlistBtn = document
+  .querySelector(".btn-wishlist")
+  .addEventListener("click", (e) => {
+    option=e.target.getAttribute("data-wishlist");
+    addToWishlist(option);
+  });
 // Recommendation Btn handler:
 document.querySelectorAll("#pills-reco .nav-link").forEach((btn) => {
   btn.addEventListener("click", (e) => {
@@ -438,6 +444,29 @@ function getRecommendations(cat) {
         </div>`
         );
       });
+    })
+    .catch((err) => console.log(err));
+}
+
+// POST request to add tour to wishlist:
+function addToWishlist(option) {
+  const url = `${baseURL}/tour/addToWishlist/`;
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ tourId,option }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.status === "success") {
+        document.querySelector(".btn-wishlist").setAttribute("data-wishlist", "remove");
+        document.querySelector(".btn-wishlist").innerHTML = `<img src="/static/icons/map/wishlist_added.png" alt="wishlist" class="btn-wishlist" data-wishlist="remove"/>`;
+      } else {
+        document.querySelector(".btn-wishlist").setAttribute("data-wishlist", "add");
+        document.querySelector(".btn-wishlist").innerHTML = `<img src="/static/icons/map/wishlist_add.png" alt="wishlist" class="btn-wishlist" data-wishlist="add"/>`;
+      }
     })
     .catch((err) => console.log(err));
 }

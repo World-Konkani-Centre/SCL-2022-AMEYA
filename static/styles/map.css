@@ -1,18 +1,18 @@
+.container-map {
+  height: calc(100vh - 50px);
+  margin-top: 50px;
+  position: fixed;
+}
 #map {
-  height: calc(100vh - 60px);
+  height: calc(100vh - 50px);
   position: relative;
 }
 #recommendation-panel {
-  height: calc(100vh - 60px) !important;
+  height: calc(100vh - 50px) !important;
 }
 #recommendation-panel .nav-link {
   font-size: 12px;
   border-radius: 20px;
-}
-.container-map {
-  height: calc(100vh - 60px);
-  margin-top: 60px;
-  position: fixed;
 }
 .leaflet-routing-alt {
   margin-top: 10px !important;
@@ -107,15 +107,26 @@
 .active-btn {
   background-color: #65b5ff !important;
 }
-.btn-save-tour {
-  width: fit-content;
-  font-size: 12px;
-  border-radius: 15px;
-  background-color: #1e1e1e !important;
+.map-nav {
+  min-width: fit-content;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   z-index: 999;
   position: absolute;
   top: 10px;
   right: 20px;
+}
+.map-nav .btn {
+  width: fit-content;
+  font-size: 12px;
+  border-radius: 15px;
+  background-color: #1e1e1e !important;
+  margin: 0 5px;
+  outline: none !important;
+}
+.map-nav .btn-wishlist img{
+  width: 20px;
 }
 /* Recommendations Panel */
 #recommendation-panel .panel-tabs {

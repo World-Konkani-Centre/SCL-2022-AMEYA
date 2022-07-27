@@ -55,11 +55,22 @@ class Profile(models.Model):
 class TourReviews(models.Model):
     id=models.BigAutoField(primary_key=True)
     tour=models.ForeignKey(Tour,on_delete=models.CASCADE)
-    # user_id=models.ForeignKey(User,on_delete=models.CASCADE)
+    # user=models.ForeignKey(User,on_delete=models.CASCADE)
     rating=models.IntegerField(default=5,validators=[MinValueValidator(1),MaxValueValidator(5)])
     review=models.CharField(max_length=500)
     createadAt=models.DateTimeField(auto_now_add=True)
     updateAt=models.DateTimeField(auto_now=True)
+
+# Tour Wishlist model:
+class Wishlist(models.Model):
+    id=models.BigAutoField(primary_key=True)
+    tour=models.ForeignKey(Tour,on_delete=models.CASCADE)
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    createadAt=models.DateTimeField(auto_now_add=True)
+    updateAt=models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return str(self.id)
         
 # Businesses model:
 class Business(models.Model):

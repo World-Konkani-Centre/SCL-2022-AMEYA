@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Tour,RegisteredBusiness,Profile,TourReviews,Business
+from .models import Tour,RegisteredBusiness,Profile,TourReviews,Business,Wishlist
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin
 
@@ -9,6 +9,7 @@ admin.site.register(TourReviews)
 admin.site.register(RegisteredBusiness)
 admin.site.register(Profile)
 admin.site.register(Business)
+admin.site.register(Wishlist)
 
 class ProfileInline(admin.StackedInline):
     model=Profile
