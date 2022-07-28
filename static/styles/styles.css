@@ -90,6 +90,7 @@ nav {
 /* Alerts */
 .alert-message {
   animation: fadeIn 0.5s;
+  text-align: center;
 }
 .alert-animation {
   animation: fadeOut 2s steps(90) forwards;
