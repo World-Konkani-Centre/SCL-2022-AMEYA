@@ -5,8 +5,10 @@ from PIL import Image
 # Tour model:
 class Tour(models.Model):
     category_choices=[('1','Adventure'),('2','Trekking'),('3','Hiking')]
+    category_choices1=[('1','Bangalore'),('2','Dakshina Kannada'),('3','Udupi'),('4','Uttara Kannada')]
     id=models.BigAutoField(primary_key=True)
     name=models.CharField(max_length=100)
+    place=models.CharField(max_length=1,choices=category_choices1,default='1')
     description=models.CharField(max_length=500)
     website=models.CharField(max_length=50,blank=True,default='')
     category=models.CharField(max_length=1,choices=category_choices,default='1')
@@ -23,6 +25,7 @@ class Tour(models.Model):
     createadAt=models.DateTimeField(auto_now_add=True)
     updateAt=models.DateTimeField(auto_now=True)
     image=models.ImageField(upload_to='images/recommendation',null=True,blank=True)
+    subtext=models.CharField(max_length=200,default='')
 
     def __str__(self):
         return self.name
@@ -55,11 +58,22 @@ class Profile(models.Model):
 class TourReviews(models.Model):
     id=models.BigAutoField(primary_key=True)
     tour=models.ForeignKey(Tour,on_delete=models.CASCADE)
-    # user_id=models.ForeignKey(User,on_delete=models.CASCADE)
+    # user=models.ForeignKey(User,on_delete=models.CASCADE)
     rating=models.IntegerField(default=5,validators=[MinValueValidator(1),MaxValueValidator(5)])
     review=models.CharField(max_length=500)
     createadAt=models.DateTimeField(auto_now_add=True)
     updateAt=models.DateTimeField(auto_now=True)
+
+# Tour Wishlist model:
+class Wishlist(models.Model):
+    id=models.BigAutoField(primary_key=True)
+    tour=models.ForeignKey(Tour,on_delete=models.CASCADE)
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    createadAt=models.DateTimeField(auto_now_add=True)
+    updateAt=models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return str(self.id)
         
 # Businesses model:
 class Business(models.Model):

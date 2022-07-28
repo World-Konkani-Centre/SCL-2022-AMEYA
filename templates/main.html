@@ -19,8 +19,6 @@
       rel="stylesheet"
       href="{% static 'leaflet-geocoding/leaflet-geocoding.css' %}"
     />
-    <link rel="stylesheet" href="{% static 'styles/styles.css' %}" />
-    <!-- Scripts -->
     <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'leaflet/leaflet.js' %}"></script>
     <script src="{% static 'leaflet-routing/dist/leaflet-routing-machine.js' %}"></script>
@@ -33,7 +31,6 @@
 
     <!-- Iconify -->
     <script src="https://code.iconify.design/2/2.2.1/iconify.min.js"></script>
-
     <link rel="stylesheet" href="{% static 'styles/styles.css' %}" />
     <!-- Scripts -->
     {% block styles %} {% endblock %}
@@ -70,25 +67,55 @@
                 >
               </li>
               <li class="nav-item">
-                <a class="nav-link items" href="{% url 'trips' %}"
-                  ><button><span>Your trips</span></button></a
-                >
-              </li>
-              <li class="nav-item">
                 <a class="nav-link items" href="{% url 'aboutUs' %}"
                   ><button><span>About Us</span></button></a
                 >
               </li>
+              {% if user.is_authenticated %}
               <li class="nav-item">
+                <a class="nav-link items" href="{% url 'trips' %}"
+                  ><button><span>Your trips</span></button></a
+                >
+              </li>
+              <li class="nav-item nav-profile">
                 <a href="{% url 'userProfile' %}">
+                  {% if user.profile.image %}
                   <span
                     class="iconify-inline navbar-toggler-icon mx-4 my-2 fa-lg"
-                    data-icon="carbon:user-avatar-filled"
-                    data-width="60"
-                    data-height="60"
-                  ></span>
+                  >
+                    <img
+                      class="rounded-circle"
+                      width="35"
+                      height="35"
+                      style="object-fit: cover"
+                      src="{{user.profile.image.url}}"
+                    />
+                  </span>
+                  {% else %}
+                  <span
+                    class="iconify-inline navbar-toggler-icon mx-4 my-2 fa-lg"
+                  >
+                    <img
+                      class="rounded-circle"
+                      width="35"
+                      height="35"
+                      style="object-fit: cover"
+                      src="{% static 'images/user/default.jpg'%}"
+                    />
+                  </span>
+                  {% endif %}
                 </a>
               </li>
+              {% else %}
+              <li class="nav-item">
+                <a
+                  class="nav-link items"
+                  aria-current="page"
+                  href="{% url 'login' %}"
+                  ><button><span>Login/Signup</span></button></a
+                >
+              </li>
+              {% endif %}
             </ul>
           </div>
         </div>

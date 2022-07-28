@@ -1,20 +1,19 @@
-@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');
-*{
+@import url("https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap");
+* {
   margin: 0;
   padding: 0;
   user-select: none;
   box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
-body{
+body {
   background-color: #e2e2e291;
 }
 
-
 /* Standard styling for navbar*/
-nav{
-    padding: 20px;
-    color: #ffffff;
+nav {
+  padding: 20px;
+  color: #ffffff;
   font-family: "Poppins", sans-serif;
 }
 /* Scroll bar */
@@ -49,9 +48,9 @@ nav{
   color: #ffffff;
 }
 
-.navbar a{
-    text-decoration: none;
-    color: #ffffff;
+.navbar a {
+  text-decoration: none;
+  color: #ffffff;
 }
 .main-navbar a {
   text-decoration: none;
@@ -59,21 +58,59 @@ nav{
 }
 .main-navbar .nav-item button,
 .main-navbar .project-name {
-  margin: 0 10px 0 10px;
-  padding: 10px;
+  padding: 5px 0;
   border: none;
   background-color: transparent;
 }
 
-.main-navbar .nav-item button:hover,
-.main-navbar .project-name:hover {
-  background-color: #cecccc7c;
-  border-radius: 5px;
-  color: #ffffff;
+/* .main-navbar .nav-item button:hover {
+  border-bottom: 1px solid #ffffff;
+} */
+.main-navbar .nav-item {
+  margin: 10px !important;
 }
 .main-navbar .project-name,
 .main-navbar .items span {
   color: #ffffff;
+}
+.main-navbar ul li > a:after {
+  content: "";
+  display: block;
+  width: 0;
+  height: 2px;
+  background: #fff;
+  transition: width 0.3s;
+}
+.main-navbar ul li > a:hover::after {
+  width: 100%;
+}
+.main-navbar ul li.nav-profile > a::after {
+  display: none;
+}
+/* Alerts */
+.alert-message {
+  animation: fadeIn 0.5s;
+}
+.alert-animation {
+  animation: fadeOut 2s steps(90) forwards;
+  -webkit-animation: fadeOut 2s steps(90) forwards;
+  -moz-animation: fadeOut 2s steps(90) forwards;
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
 @media (min-width: 992px) {
   .main-navbar .navbar-nav {

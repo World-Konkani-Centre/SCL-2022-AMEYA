@@ -100,3 +100,7 @@ a{
     box-shadow: none;
     border: none
 }
+
+.light-text{
+    color:#ACACAC;
+}
