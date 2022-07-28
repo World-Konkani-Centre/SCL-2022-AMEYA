@@ -86,6 +86,11 @@ def login(request):
             return render(request,"base/login.html")
     return render(request,"base/login.html")
 
+def logout(request):
+    auth_logout(request)
+    messages.info(request,'You logged out.')
+    return redirect('/')
+
 def recommendations(request):
     if request.method=='POST':
         contents=Tour.objects.all()
@@ -321,11 +326,6 @@ def handleWishlist(request):
         if wishlist:
             wishlist.delete()
         return JsonResponse({'status':'deleted'})
-
-def logout(request):
-    auth_logout(request)
-    messages.info(request,'You logged out.')
-    return redirect('/')
     
 # Error page:
 def error_404(request,exception):
