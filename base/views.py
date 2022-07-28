@@ -1,4 +1,3 @@
-from unicodedata import category
 from django.shortcuts import render,redirect
 from django.http import JsonResponse
 from django.core.serializers import serialize
