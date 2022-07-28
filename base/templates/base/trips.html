@@ -2,9 +2,204 @@
 {% load static %} 
 {% block styles %}
 <!-- Replace {name} with the respective css file -->
-<link rel="stylesheet" href="{% static 'styles/{name}' %}" />
+<link rel="stylesheet" href="{% static 'styles/trips.css' %}" />
 {% endblock %}
 
-{% block content %} 
-<!-- Add code from body here -->
+{% block content %}
+{% comment %} {% for data in yourtrips%}  {% endcomment %}
+<div class="container mt-5 p-5">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="col">
+            <div class="card h-100">
+                <img src="{% static 'images/user/nature.jpg'%}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <section class="stars">
+                        <span class="hidden-text">{{data.rating}}</span>&nbsp;
+                        <span class="fa fa-star checked"></span>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </section>
+                    {% comment %} <h5 class="card-title">{{data.name}}</h5> {% endcomment %}
+                    <p class="card-text">{{data.category}}Category will be displayed</p>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted"></small>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100">
+                <img src="{% static 'images/user/nature.jpg'%}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <section class="stars">
+                        <span class="hidden-text">{{data.rating}}</span>&nbsp;
+                        <span class="fa fa-star checked"></span>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </section>
+                    {% comment %} <h5 class="card-title">{{data.name}}</h5> {% endcomment %}
+                    <p class="card-text">{{data.category}}Category will be displayed</p>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted"></small>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100">
+                <img src="{% static 'images/user/nature.jpg'%}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <section class="stars">
+                        <span class="hidden-text">{{data.rating}}</span>&nbsp;
+                        <span class="fa fa-star checked"></span>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </section>
+                    {% comment %} <h5 class="card-title">{{data.name}}</h5> {% endcomment %}
+                    <p class="card-text">{{data.category}}Category will be displayed</p>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted"></small>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100">
+                <img src="{% static 'images/user/nature.jpg'%}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <section class="stars">
+                        <span class="hidden-text">{{data.rating}}</span>&nbsp;
+                        <span class="fa fa-star checked"></span>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </section>
+                    {% comment %} <h5 class="card-title">{{data.name}}</h5> {% endcomment %}
+                    <p class="card-text">{{data.category}}Category will be displayed</p>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted"></small>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100">
+                <img src="{% static 'images/user/nature.jpg'%}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <section class="stars">
+                        <span class="hidden-text">{{data.rating}}</span>&nbsp;
+                        <span class="fa fa-star checked"></span>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </section>
+                    {% comment %} <h5 class="card-title">{{data.name}}</h5> {% endcomment %}
+                    <p class="card-text">{{data.category}}Category will be displayed</p>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted"></small>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100">
+                <img src="{% static 'images/user/nature.jpg'%}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <section class="stars">
+                        <span class="hidden-text">{{data.rating}}</span>&nbsp;
+                        <span class="fa fa-star checked"></span>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </section>
+                    {% comment %} <h5 class="card-title">{{data.name}}</h5> {% endcomment %}
+                    <p class="card-text">{{data.category}}Category will be displayed</p>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted"></small>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100">
+                <img src="{% static 'images/user/nature.jpg'%}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <section class="stars">
+                        <span class="hidden-text">{{data.rating}}</span>&nbsp;
+                        <span class="fa fa-star checked"></span>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </section>
+                    {% comment %} <h5 class="card-title">{{data.name}}</h5> {% endcomment %}
+                    <p class="card-text">{{data.category}}Category will be displayed</p>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted"></small>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100">
+                <img src="{% static 'images/user/nature.jpg'%}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <section class="stars">
+                        <span class="hidden-text">{{data.rating}}</span>&nbsp;
+                        <span class="fa fa-star checked"></span>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </section>
+                    {% comment %} <h5 class="card-title">{{data.name}}</h5> {% endcomment %}
+                    <p class="card-text">{{data.category}}Category will be displayed</p>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted"></small>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100">
+                <img src="{% static 'images/user/nature.jpg'%}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <section class="stars">
+                        <span class="hidden-text">{{data.rating}}</span>&nbsp;
+                        <span class="fa fa-star checked"></span>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </section>
+                    {% comment %} <h5 class="card-title">{{data.name}}</h5> {% endcomment %}
+                    <p class="card-text">{{data.category}}Category will be displayed</p>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted"></small>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100">
+                <img src="{% static 'images/user/nature.jpg'%}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <section class="stars">
+                        <span class="hidden-text">{{data.rating}}</span>&nbsp;
+                        <span class="fa fa-star checked"></span>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </section>
+                    {% comment %} <h5 class="card-title">{{data.name}}</h5> {% endcomment %}
+                    <p class="card-text">{{data.category}}Category will be displayed</p>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted"></small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% comment %} {% endfor %} {% endcomment %}
 {% endblock %}
