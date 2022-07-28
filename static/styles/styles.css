@@ -90,11 +90,20 @@ nav {
 /* Alerts */
 .alert-message {
   animation: fadeIn 0.5s;
+  text-align: center;
 }
 .alert-animation {
   animation: fadeOut 2s steps(90) forwards;
   -webkit-animation: fadeOut 2s steps(90) forwards;
   -moz-animation: fadeOut 2s steps(90) forwards;
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 @keyframes fadeIn {
   0% {
