@@ -172,9 +172,16 @@ def userProfile(request):
     return render(request, "base/userProfile.html",context)
 
 # wishlist view function:
+@csrf_exempt
 @login_required
 def userWishlist(request):
     user=request.user
+    if request.method=='POST':
+        body=json.loads(request.body.decode('utf-8'))
+        id=body['id']
+        wishlistDel=Wishlist.objects.get(id=id)
+        wishlistDel.delete()
+        messages.add_message(request, messages.SUCCESS, 'Tour removed from wishlist.')
     wishlist=Wishlist.objects.filter(user=user)
     context={
         'wishlist':wishlist
