@@ -2,28 +2,59 @@
 <div class="col-lg-9 col-md-8 col-sm-6" id="map">
   {% include 'base/alertMessages/messages.html' %}
   <div class="map-buttons">
-    <button id="btn-nearby-food" data-a="food" class="nearby-btn">
+    <button
+      id="btn-nearby-food"
+      data-a="food"
+      class="nearby-btn"
+      title="Nearby Restaurants"
+    >
       <img src="{% static 'icons/map/food.png' %}" alt="Food" />
     </button>
-    <button id="btn-nearby-hotel" data-a="hotel" class="nearby-btn">
+    <button
+      id="btn-nearby-hotel"
+      data-a="hotel"
+      class="nearby-btn"
+      title="Nearby Hotel"
+    >
       <img src="{% static 'icons/map/hotel.png' %}" alt="Hotel" />
     </button>
-    <button id="btn-nearby-repair" data-a="repair" class="nearby-btn">
+    <button
+      id="btn-nearby-repair"
+      data-a="repair"
+      class="nearby-btn"
+      title="Nearby Repair Shops"
+    >
       <img src="{% static 'icons/map/repair.png' %}" alt="Repair" />
     </button>
   </div>
   <div class="map-nav">
     <button class="btn btn-primary btn-save-tour">Save Tour</button>
-    {% if user.is_authenticated %}
-    {% if wishlist %}
-    <button class="btn btn-primary btn-wishlist" data-wishlist="remove">
-      <img src="{% static 'icons/map/wishlist_added.png' %}" alt="wishlist" class="btn-wishlist" data-wishlist="remove"/>
+    {% if user.is_authenticated %} {% if wishlist %}
+    <button
+      class="btn btn-primary btn-wishlist"
+      data-wishlist="remove"
+      title="Wishlist"
+    >
+      <img
+        src="{% static 'icons/map/wishlist_added.png' %}"
+        alt="wishlist"
+        class="btn-wishlist"
+        data-wishlist="remove"
+      />
     </button>
-      {% else %}
-      <button class="btn btn-primary btn-wishlist" data-wishlist="add">
-        <img src="{% static 'icons/map/wishlist_add.png' %}" alt="wishlist" class="btn-wishlist" data-wishlist="add"/>
-      </button>
-      {% endif %}
-    {% endif %}
+    {% else %}
+    <button
+      class="btn btn-primary btn-wishlist"
+      data-wishlist="add"
+      title="Wishlist"
+    >
+      <img
+        src="{% static 'icons/map/wishlist_add.png' %}"
+        alt="wishlist"
+        class="btn-wishlist"
+        data-wishlist="add"
+      />
+    </button>
+    {% endif %} {% endif %}
   </div>
 </div>

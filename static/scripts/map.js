@@ -1,5 +1,6 @@
 // Global Variables:
 let tourId;
+let tourData;
 let recMarker = null;
 let recRouting = null;
 let curLatLang = [12.933969688632496, 77.61193685079267];
@@ -54,7 +55,7 @@ function getCurrLoc() {
       });
     }, 5000);
   } else {
-    alert("Browser doesnot support geolocation");
+    mapAlert("Geolocation is not supported by this browser.", "danger");
   }
 }
 // Add a marker to user location:
@@ -77,6 +78,9 @@ function fitMarkers(markers) {
 }
 // Get center of start and end coordinates:
 function getCenter(data) {
+  if (data.length === 0) {
+    return [parseFloat(tourData.lat), parseFloat(tourData.lng)];
+  }
   lat = (parseFloat(data[0][0]) + parseFloat(data[1][0])) / 2;
   lng = (parseFloat(data[0][1]) + parseFloat(data[1][1])) / 2;
   return [lat, lng];
@@ -117,7 +121,19 @@ function addMarkersWithPopup(data, icon) {
       }),
     })
       .bindPopup(
-        `<div class="map-popup nearby-popup"><div class="map-popup-header"><h3>${e.name}</h3><p>Rating: ${e.rating} <img width="15px" src=${starIcon} alt="stars"/></p></div> <img class="map-popup-image" src="/media/${e.image}"/><p>${e.description}</p></div>`
+        `<div class="map-popup nearby-popup"><div class="map-popup-header"><h3>${
+          e.name
+        }
+        ${
+          e.type
+            ? '<p class="verified-biz"><img src="/static/icons/map/verified.png" alt="Verified" />verified</p>'
+            : ""
+        }</h3>
+        <p>Rating: ${
+          e.rating
+        } <img width="15px" src=${starIcon} alt="stars"/></p></div> <img class="map-popup-image" src="${
+          e.type ? e.banner : e.image
+        }"/><p>${e.description}</p></div>`
       )
       .addTo(map);
     markers.push(m);
@@ -133,6 +149,7 @@ function addDestinationMarker(latlng, id) {
     .then((data) => {
       data = JSON.parse(data);
       data = data[0].fields;
+      tourData = data;
       m = new L.marker(latlng, {
         icon: new LeafIcon({
           iconUrl: `${window.location.origin}/static/icons/map/marker.png`,
@@ -142,8 +159,17 @@ function addDestinationMarker(latlng, id) {
           `<div class="map-popup dest-popup"><div class="map-popup-header"><h3>${data.name}</h3><p>Rating: ${data.rating} <img width="18px" src=${starIcon} alt="stars"/></p></div><img class="map-popup-image" src="/media/${data.image}"/><p>${data.description}</p></div>`
         )
         .addTo(map);
+      navigator.permissions &&
+        navigator.permissions
+          .query({ name: "geolocation" })
+          .then(function (PermissionStatus) {
+            if (PermissionStatus.state !== "granted") {
+              m.openPopup();
+              map.panTo(latlng);
+            }
+          });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => mapAlert("Failed to load tour details", "danger"));
 }
 
 // Add Recommendations marker to map:
@@ -157,7 +183,19 @@ function addRecommendationMarker(cat, id) {
     }),
   })
     .bindPopup(
-      `<div class="map-popup rec-popup"><div class="map-popup-header"><h3>${data.name}</h3><p>Rating: ${data.rating} <img width="15px" src=${starIcon} alt="stars"/></p></div><img class="map-popup-image" src="/media/${data.image}"/><p>${data.description}</p></div>`
+      `<div class="map-popup rec-popup"><div class="map-popup-header"><h3>${
+        data.name
+      }
+      ${
+        data.type
+          ? '<p class="verified-biz"><img src="/static/icons/map/verified.png" alt="Verified" />verified</p>'
+          : ""
+      }</h3>
+      <p>Rating: ${
+        data.rating
+      } <img width="15px" src=${starIcon} alt="stars"/></p></div> <img class="map-popup-image" src="${
+        data.type ? data.banner : data.image
+      }"/><p>${data.description}</p></div>`
     )
     .addTo(map);
   recMarker.openPopup();
@@ -174,10 +212,10 @@ function removeMarkers(data) {
 // Create Waypoints route:
 function createWaypoints(latLngArr, id) {
   tourId = id;
+  m = addDestinationMarker(latLngArr, tourId);
   if ("geolocation" in navigator) {
     navigator.geolocation.getCurrentPosition(function (pos) {
       // Create an array of start and end points:
-      addDestinationMarker(latLngArr, tourId);
       curLatLang = [pos.coords.latitude, pos.coords.longitude];
       latLngArr = [curLatLang, [...latLngArr]];
       tourCoordinates = latLngArr;
@@ -206,7 +244,7 @@ function createWaypoints(latLngArr, id) {
       }
     });
   } else {
-    alert("Browser doesnot support geolocation");
+    mapAlert("Geolocation is not supported by this browser.", "danger");
   }
 }
 
@@ -247,11 +285,21 @@ function createRecWaypoints(cat, id) {
       }
     });
   } else {
-    alert("Browser doesnot support geolocation");
+    mapAlert("Geolocation is not supported by this browser.", "danger");
   }
 }
 
 // Map Eventlisteners:
+
+// Map alert handler:
+function mapAlert(msg, type) {
+  document
+    .getElementById("map")
+    .insertAdjacentHTML(
+      "afterbegin",
+      `<div class="alert alert-${type} map-alert alert-message" role="alert">${msg}</div>`
+    );
+}
 
 // Nearby Btn toggler:
 function nearbyHandler(e) {
@@ -278,7 +326,7 @@ nearbyBtns.forEach((btn) => {
 const addToWishlistBtn = document
   .querySelector(".btn-wishlist")
   .addEventListener("click", (e) => {
-    option=e.target.getAttribute("data-wishlist");
+    option = e.target.getAttribute("data-wishlist");
     addToWishlist(option);
   });
 // Recommendation Btn handler:
@@ -297,16 +345,16 @@ document.querySelectorAll("#pills-reco .nav-link").forEach((btn) => {
 // MAP API:
 
 // Get tour data by id:
-function getTour(id) {
-  const url = `${baseURL}/tour/${+id}`;
-  fetch(url)
-    .then((res) => res.json())
-    .then((data) => {
-      data = JSON.parse(data);
-      return data;
-    })
-    .catch((err) => console.log(err));
-}
+// function getTour(id) {
+//   const url = `${baseURL}/tour/${+id}`;
+//   fetch(url)
+//     .then((res) => res.json())
+//     .then((data) => {
+//       data = JSON.parse(data);
+//       return data;
+//     })
+//     .catch((err) => console.log(err));
+// }
 
 // POST request to get nearby locations:
 function getNearBy(cat) {
@@ -336,12 +384,11 @@ function getNearBy(cat) {
   })
     .then((res) => res.json())
     .then((data) => {
-      data = JSON.parse(data);
-      data = data.map((d) => d.fields);
-      if (data.length === 0) return;
+      console.log(data);
+      if (data.length === 0) throw new Error("No nearby locations found");
       nearby = addMarkersWithPopup(data, icon);
     })
-    .catch((err) => console.log(err));
+    .catch((err) => mapAlert(err.message, "warning"));
 }
 
 // POST request to get nearby recommendations:
@@ -352,6 +399,7 @@ function getRecommendations(cat) {
   <div class="header">
     <div class="details">
       <span class="name"></span>
+      <span class="rating"></span>
     </div>
   </div>
   <div class="card-body">
@@ -360,46 +408,15 @@ function getRecommendations(cat) {
       <div class="line line-1"></div>
       <div class="line line-2"></div>
       <div class="line line-3"></div>
-      <div class="line line-4"></div>
-      <div class="line line-5"></div>
+    </div>
+    <div class="card-btns description">
+    <div class="line line-4"></div>
+    <div class="line line-5"></div>
+    <div class="line line-6"></div>
     </div>
   </div>
 </div>
-<div class="card">
-  <div class="header">
-    <div class="details">
-      <span class="name"></span>
-    </div>
-  </div>
-  <div class="card-body">
-    <div class="img"></div>
-    <div class="description">
-      <div class="line line-1"></div>
-      <div class="line line-2"></div>
-      <div class="line line-3"></div>
-      <div class="line line-4"></div>
-      <div class="line line-5"></div>
-    </div>
-  </div>
-</div>
-<div class="card">
-  <div class="header">
-    <div class="details">
-      <span class="name"></span>
-    </div>
-  </div>
-  <div class="card-body">
-    <div class="img"></div>
-    <div class="description">
-      <div class="line line-1"></div>
-      <div class="line line-2"></div>
-      <div class="line line-3"></div>
-      <div class="line line-4"></div>
-      <div class="line line-5"></div>
-    </div>
-  </div>
-</div>
-`;
+`.repeat(3);
   let data = {
     tourCoordinates,
     center: getCenter(tourCoordinates),
@@ -414,8 +431,6 @@ function getRecommendations(cat) {
   })
     .then((res) => res.json())
     .then((data) => {
-      data = JSON.parse(data);
-      data = data.map((d) => d.fields);
       recommendations[cat] = data;
       tab.innerHTML = "";
       if (data.length === 0) {
@@ -430,22 +445,33 @@ function getRecommendations(cat) {
           `<div class="rec-card">
         <div class="rec-header">
           <h4>${d.name}</h4>
+          ${
+            d.type
+              ? '<p class="verified-biz"><img src="/static/icons/map/verified.png" alt="Verified" />verified</p>'
+              : ""
+          }
+          <p class="rec-card-rating">${
+            d.rating
+          } <img width="15px" src=${starIcon} alt="stars"/></p>
         </div>
         <div class="rec-card-body">
-          <img src="/media/${d.image}" alt="Image-${d.name}" class="rec-img">
+          <img src="${d.type ? d.banner : d.image}" alt="Image-${
+            d.name
+          }" class="rec-img">
           <div class="rec-description">
             <p>${d.description}</p>
           </div>
           <div class="rec-btns">
             <button class="rec-btn" onClick="createRecWaypoints('${cat}','${key}');">Directions</button>
             <button class="rec-btn" onClick="addRecommendationMarker('${cat}','${key}');">View</button>
+            <button class="rec-btn" onClick="createRecWaypoints('${cat}','${key}');">Add to tour</button>
           </div>
         </div>
         </div>`
         );
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => mapAlert(err.message, "danger"));
 }
 
 // POST request to add tour to wishlist:
@@ -456,16 +482,57 @@ function addToWishlist(option) {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ tourId,option }),
+    body: JSON.stringify({ tourId, option }),
   })
     .then((res) => res.json())
     .then((data) => {
       if (data.status === "success") {
-        document.querySelector(".btn-wishlist").setAttribute("data-wishlist", "remove");
-        document.querySelector(".btn-wishlist").innerHTML = `<img src="/static/icons/map/wishlist_added.png" alt="wishlist" class="btn-wishlist" data-wishlist="remove"/>`;
+        document
+          .querySelector(".btn-wishlist")
+          .setAttribute("data-wishlist", "remove");
+        document.querySelector(
+          ".btn-wishlist"
+        ).innerHTML = `<img src="/static/icons/map/wishlist_added.png" alt="wishlist" class="btn-wishlist" data-wishlist="remove"/>`;
+        mapAlert("Tour added to wishlist", "success");
       } else {
-        document.querySelector(".btn-wishlist").setAttribute("data-wishlist", "add");
-        document.querySelector(".btn-wishlist").innerHTML = `<img src="/static/icons/map/wishlist_add.png" alt="wishlist" class="btn-wishlist" data-wishlist="add"/>`;
+        document
+          .querySelector(".btn-wishlist")
+          .setAttribute("data-wishlist", "add");
+        document.querySelector(
+          ".btn-wishlist"
+        ).innerHTML = `<img src="/static/icons/map/wishlist_add.png" alt="wishlist" class="btn-wishlist" data-wishlist="add"/>`;
+        mapAlert("Tour removed from wishlist", "success");
+      }
+    })
+    .catch((err) => mapAlert(err.message, "danger"));
+}
+
+// POST request to add tour to wishlist:
+function addToWishlist(option) {
+  const url = `${baseURL}/tour/addToWishlist/`;
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ tourId, option }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.status === "success") {
+        document
+          .querySelector(".btn-wishlist")
+          .setAttribute("data-wishlist", "remove");
+        document.querySelector(
+          ".btn-wishlist"
+        ).innerHTML = `<img src="/static/icons/map/wishlist_added.png" alt="wishlist" class="btn-wishlist" data-wishlist="remove"/>`;
+      } else {
+        document
+          .querySelector(".btn-wishlist")
+          .setAttribute("data-wishlist", "add");
+        document.querySelector(
+          ".btn-wishlist"
+        ).innerHTML = `<img src="/static/icons/map/wishlist_add.png" alt="wishlist" class="btn-wishlist" data-wishlist="add"/>`;
       }
     })
     .catch((err) => console.log(err));
