@@ -16,6 +16,8 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.conf import settings
+from .serializers import BusinessSerializer,RegisteredBusinessSerializer
+from rest_framework.response import Response
 
 # Create your views here.
 
@@ -85,6 +87,11 @@ def login(request):
             messages.add_message(request, messages.INFO, 'Invalid username or password.')
             return render(request,"base/login.html")
     return render(request,"base/login.html")
+
+def logout(request):
+    auth_logout(request)
+    messages.info(request,'You logged out.')
+    return redirect('/')
 
 def recommendations(request):
     if request.method=='POST':
@@ -255,7 +262,8 @@ def getBusinessDetails(request,id):
 # method to get nearby restaurants,hotels and repair shops:
 @csrf_exempt
 def getNearby(request,cat):
-    nearby=[]
+    nearbyVerified=[]
+    nearbyUnverified=[]
     body=json.loads(request.body.decode('utf-8'))
     routeCoords=body['routeCoordinates']
     tourCoords=body['tourCoordinates']
@@ -264,18 +272,29 @@ def getNearby(request,cat):
     radius=10
     if len(tourCoords)>0:
         radius=haversine((centerCoord[0],centerCoord[1]),(tourCoords[0][0],tourCoords[0][1]))+50
-    query=Business.objects.all().filter(category=cat)
+    query1=RegisteredBusiness.objects.all().filter(category=cat)
+    query2=Business.objects.all().filter(category=cat)
 
-    locFiltered=[loc for loc in query if haversine((loc.lat,loc.lng),(centerCoord[0],centerCoord[1]))<=radius]
+    locFiltered1=[loc for loc in query1 if haversine((loc.lat,loc.lng),(centerCoord[0],centerCoord[1]))<=radius]
+    locFiltered2=[loc for loc in query2 if haversine((loc.lat,loc.lng),(centerCoord[0],centerCoord[1]))<=radius]
     if len(routeCoords)>0:
-        for item in locFiltered:
+        for item in locFiltered1:
             for route in routeCoords:
                 if haversine((item.lat,item.lng),(route["lat"],route["lng"]),unit=Unit.KILOMETERS)<=3:
-                    nearby.append(item)
+                    nearbyVerified.append(item)
+                    break
+        for item in locFiltered2:
+            for route in routeCoords:
+                if haversine((item.lat,item.lng),(route["lat"],route["lng"]),unit=Unit.KILOMETERS)<=3:
+                    nearbyUnverified.append(item)
                     break
     else:
-        nearby=locFiltered
-    data=serialize('json',nearby)
+        nearbyVerified=locFiltered1
+        nearbyUnverified=locFiltered2
+    querySer1=RegisteredBusinessSerializer(nearbyVerified,many=True)
+    querySer2=BusinessSerializer(nearbyUnverified,many=True)
+    data=querySer1.data+querySer2.data
+    # data=serialize('json',nearby)
     return JsonResponse(data,safe=False)
 
 # method to get recommendations:
@@ -288,10 +307,13 @@ def getRecommendations(request,cat):
     radius=10
     if len(tourCoords)>0:
         radius=haversine((centerCoord[0],centerCoord[1]),(tourCoords[0][0],tourCoords[0][1]))+10
-    query=Business.objects.all().filter(category=cat)
-
-    reco=[loc for loc in query if haversine((loc.lat,loc.lng),(centerCoord[0],centerCoord[1]))<=radius]
-    data=serialize('json',reco)
+    query1=RegisteredBusiness.objects.all().filter(category=cat).order_by('-rating')
+    query2=Business.objects.all().filter(category=cat).order_by('-rating')
+    reco1=[loc for loc in query1 if haversine((loc.lat,loc.lng),(centerCoord[0],centerCoord[1]))<=radius]
+    reco2=[loc for loc in query2 if haversine((loc.lat,loc.lng),(centerCoord[0],centerCoord[1]))<=radius]
+    querySer1=RegisteredBusinessSerializer(reco1,many=True)
+    querySer2=BusinessSerializer(reco2,many=True)
+    data=querySer1.data+querySer2.data
     return JsonResponse(data,safe=False)
 
 # method to get registered business by id
@@ -320,11 +342,6 @@ def handleWishlist(request):
         if wishlist:
             wishlist.delete()
         return JsonResponse({'status':'deleted'})
-
-def logout(request):
-    auth_logout(request)
-    messages.info(request,'You logged out.')
-    return redirect('/')
     
 # Error page:
 def error_404(request,exception):
