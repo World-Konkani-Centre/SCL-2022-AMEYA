@@ -10,6 +10,8 @@ let nearby = [];
 let recommendations = {};
 const baseURL = `${window.location.origin}/api/v1`;
 starIcon = `${window.location.origin}/static/icons/map/star.png`;
+// Selectors:
+const recPanel=document.getElementById("recommendation-panel")
 
 // Map Initialization:
 var map = L.map("map").setView(curLatLang, 13);
@@ -177,6 +179,7 @@ function addRecommendationMarker(cat, id) {
   data = recommendations[cat][id];
   let latLng = [data.lat, data.lng];
   if (recMarker) map.removeLayer(recMarker);
+  hideRecPanel();
   recMarker = new L.marker(latLng, {
     icon: new LeafIcon({
       iconUrl: `${window.location.origin}/static/icons/map/marker.png`,
@@ -342,9 +345,27 @@ document.querySelectorAll("#pills-reco .nav-link").forEach((btn) => {
   });
 });
 // Rec bar mobile handler:
-document.querySelector(".btn-rec-bar").addEventListener("click", (e) => { 
-  document.getElementById("recommendation-panel").classList.toggle("slide-rec-panel");
+document.querySelector(".rec-bar").addEventListener("click", (e) => { 
+  recPanel.classList.toggle("slide-rec-panel");
 });
+document.querySelectorAll("#pills-tour-reco .nav-link").forEach((btn) => {
+  btn.addEventListener("click", (e) => {
+    showRecPanel();
+  });
+}
+);
+
+
+function hideRecPanel() {
+  if (screen.width < 768 )
+    recPanel.classList.remove("slide-rec-panel");
+}
+function showRecPanel() {
+  if (screen.width < 768 )
+    recPanel.classList.add("slide-rec-panel");
+}
+
+  
 
 
 // MAP API:

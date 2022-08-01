@@ -39,10 +39,15 @@
     const recNavHeight = document.querySelector(".recm-options").offsetHeight;
     const dirTab = document.querySelector(".leaflet-routing-alt");
     const dirPill = document.querySelector("#pills-directions");
+    if (screen.width>768){
     dirTab.style.maxHeight =
       window.innerHeight - navHeight - recNavHeight - 30 + "px";
     dirPill.style.maxHeight =
-      window.innerHeight - navHeight - recNavHeight - 30 + "px";
+      window.innerHeight - navHeight - recNavHeight - 30 + "px";}
+      else{
+        dirTab.style.maxHeight="100%";
+        dirPill.style.maxHeight="100%";
+      }
   };
   getCurrLoc();
   createWaypoints(["{{tour.lat}}", "{{tour.lng}}"], "{{tour.id}}");

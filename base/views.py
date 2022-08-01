@@ -182,7 +182,7 @@ def userWishlist(request):
         wishlistDel=Wishlist.objects.get(id=id)
         wishlistDel.delete()
         return JsonResponse({'status':'success'})
-    wishlist=Wishlist.objects.filter(user=user)
+    wishlist=Wishlist.objects.filter(user=user).order_by("-createadAt")
     context={
         'wishlist':wishlist
     }

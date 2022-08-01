@@ -18,13 +18,7 @@
             </section>
           </div>
           <p class="tc-card-text tc-card-category">
-            {% if item.tour.category == '1' %}
-            <span>Adventure</span>
-            {% elif item.tour.category == '2' %}
-            <span>Trekking</span>
-            {% elif item.tour.category == '3' %}
-            <span>Hiking</span>
-            {% endif %}
+            <span>{{ item.tour.get_category_display }}</span>
           </p>
           <p class="tc-card-desc">{{item.tour.description}}</p>
         </div>
@@ -78,7 +72,7 @@
         .then((data) => {
           if (data.status == "success") {
             wishlistAlert("Tour removed form wishlist", "success");
-            btn.parentElement.parentElement.remove();
+            btn.parentElement.parentElement.parentElement.remove();
           }
         }).catch((err) => {
           wishlistAlert(err.message, "danger");

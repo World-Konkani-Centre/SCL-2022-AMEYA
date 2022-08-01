@@ -32,7 +32,7 @@
 /* Recommendations */
 .rec-bar{
   width: 100%;
-  display: grid;
+  display: none;
   place-items: center;
 }
 .rec-bar img{
@@ -265,7 +265,7 @@
 }
 /* Event styles */
 .slide-rec-panel{
-  top:40% !important;
+  top:30% !important;
 }
 /* Media query  */
 @media (max-width: 1350px) {
@@ -283,9 +283,16 @@
     left: 70%;
     top: 85%;
   }
+  .rec-bar{
+    display: grid;
+  }
   #recommendation-panel {
     position: absolute;
     z-index: 9999999;
+    border-radius: 10px 10px 0 0;
     top: 90%;
+  }
+  .map-alert{
+    top: 80%;
   }
 }
