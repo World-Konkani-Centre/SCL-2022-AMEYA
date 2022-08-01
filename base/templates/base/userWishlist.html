@@ -1,14 +1,90 @@
-{% extends 'main.html' %}
-{% load static %} 
-{% block styles %}
+{% extends 'main.html' %} {% load static %} {% block styles %}
 <!-- Replace {name} with the respective css file -->
-<!-- <link rel="stylesheet" href="{% static 'styles/{name}' %}" /> -->
-{% endblock %}
-
-{% block content %} 
+<link rel="stylesheet" href="{% static 'styles/wishlist.css' %}" />
+{% endblock %} {% block content %}
 <!-- Add code from body here -->
-{% for tour in wishlist %}
-    <h1>{{tour.tour}}</h1>
-    <p>{{tour.tour.description}}</p>
-{% endfor %}
+<div class="container mt-5 p-5" id="wishlistCont">
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    {% if wishlist is not empty %} {% for item in wishlist %}
+    <div class="col">
+      <div class="tc-card h-100">
+        <img src="{{item.tour.image.url}}" class="tc-card-img-top" alt="..." />
+        <div class="tc-card-body">
+          <div class="tc-card-header">
+            <h5 class="tc-card-title">{{item.tour.name}}</h5>
+            <section class="stars">
+              <span class="hidden-text">{{item.tour.rating}}</span>&nbsp;
+              <span class="fa fa-star checked"></span>
+            </section>
+          </div>
+          <p class="tc-card-text tc-card-category">
+            {% if item.tour.category == '1' %}
+            <span>Adventure</span>
+            {% elif item.tour.category == '2' %}
+            <span>Trekking</span>
+            {% elif item.tour.category == '3' %}
+            <span>Hiking</span>
+            {% endif %}
+          </p>
+          <p class="tc-card-desc">{{item.tour.description}}</p>
+        </div>
+        <div class="tc-card-footer">
+          <button
+            class="btn btn-primary btn-remove-wishlist"
+            title="Remove from wishlist"
+            data-id="{{item.id}}"
+          >
+            Remove
+          </button>
+          <button class="btn btn-primary" title="View Tour">View</button>
+        </div>
+      </div>
+    </div>
+    {% endfor %} {% endif %} {% if wishlist.count == 0 %}
+    <div class="col">
+      <h5>You do not have anything on your wishlist</h5>
+      <h6>Lets us recommend you something <a href="{% url 'tourForm' %}"> Recommendations</a></h6>
+    </div>
+    {% endif %}
+  </div>
+</div>
+<script>
+  function wishlistAlert(msg, type) {
+  document
+    .getElementById("wishlistCont")
+    .insertAdjacentHTML(
+      "afterbegin",
+      `<div class="alert alert-${type} map-alert alert-message" role="alert">${msg}</div>`
+    );
+}
+  const baseURL = `${window.location.origin}`;
+  document.querySelectorAll(".btn-remove-wishlist").forEach((btn) => {
+    btn.addEventListener("click", function (e) {
+      e.preventDefault();
+      let btn = e.target;
+      let id = btn.getAttribute("data-id");
+      let url = `${baseURL}/user/wishlist`;
+      console.log(url);
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: id,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status == "success") {
+            wishlistAlert("Tour removed form wishlist", "success");
+            btn.parentElement.parentElement.remove();
+          }
+        }).catch((err) => {
+          wishlistAlert(err.message, "danger");
+        });
+    });
+  });
+</script>
+{% include 'base/alertMessages/msgTimeOut.html' %}
 {% endblock %}

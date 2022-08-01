@@ -1,11 +1,12 @@
-.card-footer{
-    background-color: #1E1E1E;
+.card-footer {
+  background-color: #1e1e1e;
 }
 
 div.card:hover {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.514);
-  }
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.514);
+}
 
-.card-title,.stars{
-    display: inline;
-  }
+.card-title,
+.stars {
+  display: inline;
+}

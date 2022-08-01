@@ -341,6 +341,11 @@ document.querySelectorAll("#pills-reco .nav-link").forEach((btn) => {
     getRecommendations(cat);
   });
 });
+// Rec bar mobile handler:
+document.querySelector(".btn-rec-bar").addEventListener("click", (e) => { 
+  document.getElementById("recommendation-panel").classList.toggle("slide-rec-panel");
+});
+
 
 // MAP API:
 
@@ -506,3 +511,4 @@ function addToWishlist(option) {
     })
     .catch((err) => mapAlert(err.message, "danger"));
 }
+

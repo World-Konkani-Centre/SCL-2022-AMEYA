@@ -172,9 +172,16 @@ def userProfile(request):
     return render(request, "base/userProfile.html",context)
 
 # wishlist view function:
+@csrf_exempt
 @login_required
 def userWishlist(request):
     user=request.user
+    if request.method=='POST':
+        body=json.loads(request.body.decode('utf-8'))
+        id=body['id']
+        wishlistDel=Wishlist.objects.get(id=id)
+        wishlistDel.delete()
+        return JsonResponse({'status':'success'})
     wishlist=Wishlist.objects.filter(user=user)
     context={
         'wishlist':wishlist
@@ -338,9 +345,8 @@ def handleWishlist(request):
         wishlist.save()
         return JsonResponse({'status':'success'})
     if option=='remove':
-        wishlist=Wishlist.objects.get(user=user,tour=tour)
-        if wishlist:
-            wishlist.delete()
+        if Wishlist.objects.filter(user=user,tour=tour).exists():
+            Wishlist.objects.get(user=user,tour=tour).delete()
         return JsonResponse({'status':'deleted'})
     
 # Error page:
