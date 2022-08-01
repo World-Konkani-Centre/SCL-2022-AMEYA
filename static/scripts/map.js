@@ -341,6 +341,11 @@ document.querySelectorAll("#pills-reco .nav-link").forEach((btn) => {
     getRecommendations(cat);
   });
 });
+// Rec bar mobile handler:
+document.querySelector(".btn-rec-bar").addEventListener("click", (e) => { 
+  document.getElementById("recommendation-panel").classList.toggle("slide-rec-panel");
+});
+
 
 // MAP API:
 
@@ -507,33 +512,3 @@ function addToWishlist(option) {
     .catch((err) => mapAlert(err.message, "danger"));
 }
 
-// POST request to add tour to wishlist:
-function addToWishlist(option) {
-  const url = `${baseURL}/tour/addToWishlist/`;
-  fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ tourId, option }),
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.status === "success") {
-        document
-          .querySelector(".btn-wishlist")
-          .setAttribute("data-wishlist", "remove");
-        document.querySelector(
-          ".btn-wishlist"
-        ).innerHTML = `<img src="/static/icons/map/wishlist_added.png" alt="wishlist" class="btn-wishlist" data-wishlist="remove"/>`;
-      } else {
-        document
-          .querySelector(".btn-wishlist")
-          .setAttribute("data-wishlist", "add");
-        document.querySelector(
-          ".btn-wishlist"
-        ).innerHTML = `<img src="/static/icons/map/wishlist_add.png" alt="wishlist" class="btn-wishlist" data-wishlist="add"/>`;
-      }
-    })
-    .catch((err) => console.log(err));
-}

@@ -8,7 +8,9 @@
   position: relative;
 }
 #recommendation-panel {
+  background-color: #fff;
   height: calc(100vh - 50px) !important;
+  transition: all 0.5s ease-in-out;
 }
 #recommendation-panel .nav-link {
   font-size: 12px;
@@ -28,6 +30,15 @@
   display: none;
 }
 /* Recommendations */
+.rec-bar{
+  width: 100%;
+  display: grid;
+  place-items: center;
+}
+.rec-bar img{
+  width:50px;
+  margin: 5px 0;
+}
 .recommendations {
   height: calc(100vh - 150px);
 }
@@ -252,6 +263,10 @@
   text-align: center;
   z-index: 9999999;
 }
+/* Event styles */
+.slide-rec-panel{
+  top:40% !important;
+}
 /* Media query  */
 @media (max-width: 1350px) {
   .btn-save-tour {
@@ -269,6 +284,8 @@
     top: 85%;
   }
   #recommendation-panel {
-    display: none;
+    position: absolute;
+    z-index: 9999999;
+    top: 90%;
   }
 }

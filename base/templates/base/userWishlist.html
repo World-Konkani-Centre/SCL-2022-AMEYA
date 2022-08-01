@@ -3,8 +3,7 @@
 <link rel="stylesheet" href="{% static 'styles/wishlist.css' %}" />
 {% endblock %} {% block content %}
 <!-- Add code from body here -->
-<div class="container mt-5 p-5">
-  {% include 'base/alertMessages/messages.html' %}
+<div class="container mt-5 p-5" id="wishlistCont">
   <div class="row row-cols-1 row-cols-md-3 g-4">
     {% if wishlist is not empty %} {% for item in wishlist %}
     <div class="col">
@@ -41,12 +40,23 @@
         </div>
       </div>
     </div>
-    {% endfor %} {% endif %} {% if wishlist is empty %}
-    <h5>No tours in wishlist</h5>
+    {% endfor %} {% endif %} {% if wishlist.count == 0 %}
+    <div class="col">
+      <h5>You do not have anything on your wishlist</h5>
+      <h6>Lets us recommend you something <a href="{% url 'tourForm' %}"> Recommendations</a></h6>
+    </div>
     {% endif %}
   </div>
 </div>
 <script>
+  function wishlistAlert(msg, type) {
+  document
+    .getElementById("wishlistCont")
+    .insertAdjacentHTML(
+      "afterbegin",
+      `<div class="alert alert-${type} map-alert alert-message" role="alert">${msg}</div>`
+    );
+}
   const baseURL = `${window.location.origin}`;
   document.querySelectorAll(".btn-remove-wishlist").forEach((btn) => {
     btn.addEventListener("click", function (e) {
@@ -63,8 +73,18 @@
         body: JSON.stringify({
           id: id,
         }),
-      });
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status == "success") {
+            wishlistAlert("Tour removed form wishlist", "success");
+            btn.parentElement.parentElement.remove();
+          }
+        }).catch((err) => {
+          wishlistAlert(err.message, "danger");
+        });
     });
   });
 </script>
-{% include 'base/alertMessages/msgTimeOut.html' %} {% endblock %}
+{% include 'base/alertMessages/msgTimeOut.html' %}
+{% endblock %}

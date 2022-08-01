@@ -2,7 +2,9 @@
 body {
   background-color: #e2e2e291;
 }
-
+.rec-container{
+  margin-top: 60px;
+}
 .card {
   margin: 0 auto; /* Added */
   float: none; /* Added */

@@ -181,7 +181,7 @@ def userWishlist(request):
         id=body['id']
         wishlistDel=Wishlist.objects.get(id=id)
         wishlistDel.delete()
-        messages.add_message(request, messages.SUCCESS, 'Tour removed from wishlist.')
+        return JsonResponse({'status':'success'})
     wishlist=Wishlist.objects.filter(user=user)
     context={
         'wishlist':wishlist
@@ -345,9 +345,8 @@ def handleWishlist(request):
         wishlist.save()
         return JsonResponse({'status':'success'})
     if option=='remove':
-        wishlist=Wishlist.objects.get(user=user,tour=tour)
-        if wishlist:
-            wishlist.delete()
+        if Wishlist.objects.filter(user=user,tour=tour).exists():
+            Wishlist.objects.get(user=user,tour=tour).delete()
         return JsonResponse({'status':'deleted'})
     
 # Error page:
