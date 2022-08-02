@@ -299,7 +299,7 @@
     position: absolute;
     z-index: 9999999;
     border-radius: 10px 10px 0 0;
-    top: calc(100% - 20px);
+    top: calc(100% - 80px);
   }
   .leaflet-routing-collapse-btn {
     display: none !important;
