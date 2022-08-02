@@ -18,13 +18,7 @@
             </section>
           </div>
           <p class="tc-card-text tc-card-category">
-            {% if item.tour.category == '1' %}
-            <span>Adventure</span>
-            {% elif item.tour.category == '2' %}
-            <span>Trekking</span>
-            {% elif item.tour.category == '3' %}
-            <span>Hiking</span>
-            {% endif %}
+            <span>{{ item.tour.get_category_display }}</span>
           </p>
           <p class="tc-card-desc">{{item.tour.description}}</p>
         </div>
@@ -36,27 +30,32 @@
           >
             Remove
           </button>
-          <button class="btn btn-primary" title="View Tour">View</button>
+          <a href="{% url 'tourDetails' %}{{item.tour.id}}"
+            ><button class="btn btn-primary" title="View Tour">View</button></a
+          >
         </div>
       </div>
     </div>
     {% endfor %} {% endif %} {% if wishlist.count == 0 %}
     <div class="col">
       <h5>You do not have anything on your wishlist</h5>
-      <h6>Lets us recommend you something <a href="{% url 'tourForm' %}"> Recommendations</a></h6>
+      <h6>
+        Lets us recommend you something
+        <a href="{% url 'tourForm' %}"> Recommendations</a>
+      </h6>
     </div>
     {% endif %}
   </div>
 </div>
 <script>
   function wishlistAlert(msg, type) {
-  document
-    .getElementById("wishlistCont")
-    .insertAdjacentHTML(
-      "afterbegin",
-      `<div class="alert alert-${type} map-alert alert-message" role="alert">${msg}</div>`
-    );
-}
+    document
+      .getElementById("wishlistCont")
+      .insertAdjacentHTML(
+        "afterbegin",
+        `<div class="alert alert-${type} map-alert alert-message" role="alert">${msg}</div>`
+      );
+  }
   const baseURL = `${window.location.origin}`;
   document.querySelectorAll(".btn-remove-wishlist").forEach((btn) => {
     btn.addEventListener("click", function (e) {
@@ -78,13 +77,13 @@
         .then((data) => {
           if (data.status == "success") {
             wishlistAlert("Tour removed form wishlist", "success");
-            btn.parentElement.parentElement.remove();
+            btn.parentElement.parentElement.parentElement.remove();
           }
-        }).catch((err) => {
+        })
+        .catch((err) => {
           wishlistAlert(err.message, "danger");
         });
     });
   });
 </script>
-{% include 'base/alertMessages/msgTimeOut.html' %}
-{% endblock %}
+{% include 'base/alertMessages/msgTimeOut.html' %} {% endblock %}

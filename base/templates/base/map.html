@@ -7,7 +7,12 @@
     {% include 'base/components/mapContainer.html' %}
     <div class="col-lg-3 col-md-4 col-sm-6" id="recommendation-panel">
       <div class="rec-bar">
-      <img src="{% static 'icons/map/bar.png' %}" alt="-" class="btn-rec-bar"></div>
+        <img
+          src="{% static 'icons/map/bar.png' %}"
+          alt="-"
+          class="btn-rec-bar"
+        />
+      </div>
       <div class="col-12 recm-options">
         {% include 'base/components/mapPanelNav.html' %}
       </div>
@@ -25,13 +30,18 @@
       const recNavHeight = document.querySelector(".recm-options").offsetHeight;
       const recPillsHeight = document.querySelector("#pills-reco").offsetHeight;
       const recTab = document.querySelector("#pills-recm .tab-content");
-      recTab.style.height =
-        window.innerHeight -
-        navHeight -
-        recNavHeight -
-        recPillsHeight -
-        20 +
-        "px";
+      if (screen.width > 768) {
+        recTab.style.height =
+          window.innerHeight -
+          navHeight -
+          recNavHeight -
+          recPillsHeight -
+          20 +
+          "px";
+      } else {
+        recTab.style.height =
+          window.innerHeight * 0.7 - recNavHeight - recPillsHeight - 100 + "px";
+      }
     }, 500);
   };
   const dirSetHeight = () => {
@@ -39,13 +49,19 @@
     const recNavHeight = document.querySelector(".recm-options").offsetHeight;
     const dirTab = document.querySelector(".leaflet-routing-alt");
     const dirPill = document.querySelector("#pills-directions");
-    dirTab.style.maxHeight =
-      window.innerHeight - navHeight - recNavHeight - 30 + "px";
-    dirPill.style.maxHeight =
-      window.innerHeight - navHeight - recNavHeight - 30 + "px";
+    if (screen.width > 768) {
+      dirTab.style.maxHeight =
+        window.innerHeight - navHeight - recNavHeight - 30 + "px";
+      dirPill.style.maxHeight =
+        window.innerHeight - navHeight - recNavHeight - 30 + "px";
+    } else {
+      dirTab.style.maxHeight =
+        window.innerHeight * 0.7 - navHeight - recNavHeight - 30 + "px";
+      dirPill.style.maxHeight =
+        window.innerHeight * 0.7 - navHeight - recNavHeight - 30 + "px";
+    }
   };
   getCurrLoc();
   createWaypoints(["{{tour.lat}}", "{{tour.lng}}"], "{{tour.id}}");
 </script>
-{% include 'base/alertMessages/msgTimeOut.html' %}
- {% endblock %}
+{% include 'base/alertMessages/msgTimeOut.html' %} {% endblock %}

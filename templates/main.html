@@ -31,9 +31,9 @@
 
     <!-- Iconify -->
     <script src="https://code.iconify.design/2/2.2.1/iconify.min.js"></script>
-    <link rel="stylesheet" href="{% static 'styles/styles.css' %}" />
     <!-- Scripts -->
     {% block styles %} {% endblock %}
+    <link rel="stylesheet" href="{% static 'styles/styles.css' %}" />
 
     <title>Yatra Mitra</title>
   </head>
@@ -78,7 +78,14 @@
                 >
               </li>
               <li class="nav-item dropdown nav-profile">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <a
+                  class="nav-link dropdown-toggle"
+                  href="#"
+                  id="navbarDropdown"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
                   {% if user.profile.image %}
                   <span
                     class="iconify-inline navbar-toggler-icon mx-4 my-2 fa-lg"
@@ -105,11 +112,45 @@
                   </span>
                   {% endif %}
                 </a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown" width="20px" id="dropdown-menu">
-                  <li><a class="dropdown-item" href="#" id="dropdown-item">Action</a></li>
-                  <li><a class="dropdown-item" href="{% url 'userProfile' %}" id="dropdown-item">My profile</a></li>
-                  <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="{% url 'logout' %}" id="dropdown-item">Log-out</a></li>
+                <ul
+                  class="dropdown-menu dropdown-menu-end"
+                  aria-labelledby="navbarDropdown"
+                  width="20px"
+                  id="dropdown-menu"
+                >
+                  <li>
+                    <a
+                      class="dropdown-item"
+                      href="{% url 'userProfile' %}"
+                      id="dropdown-item"
+                      >My profile</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      class="dropdown-item"
+                      href="{% url 'trips' %}"
+                      id="dropdown-item"
+                      >My Trips</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      class="dropdown-item"
+                      href="{% url 'userWishlist' %}"
+                      id="dropdown-item"
+                      >My Wishlist</a
+                    >
+                  </li>
+                  <li><hr class="dropdown-divider" /></li>
+                  <li>
+                    <a
+                      class="dropdown-item"
+                      href="{% url 'logout' %}"
+                      id="dropdown-item"
+                      >Log-out</a
+                    >
+                  </li>
                 </ul>
               </li>
               {% else %}
