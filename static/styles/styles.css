@@ -130,3 +130,15 @@ nav {
     right: 2px;
   }
 }
+
+#dropdown-menu{
+  margin-right: 10px;
+}
+
+#dropdown-menu,#dropdown-item{
+  background-color: #1e1e1e;
+}
+
+#dropdown-menu:hover,#dropdown-item:hover{
+  color: #ffffff;
+}
