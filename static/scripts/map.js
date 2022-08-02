@@ -11,7 +11,7 @@ let recommendations = {};
 const baseURL = `${window.location.origin}/api/v1`;
 starIcon = `${window.location.origin}/static/icons/map/star.png`;
 // Selectors:
-const recPanel=document.getElementById("recommendation-panel")
+const recPanel = document.getElementById("recommendation-panel");
 
 // Map Initialization:
 var map = L.map("map").setView(curLatLang, 13);
@@ -234,17 +234,13 @@ function createWaypoints(latLngArr, id) {
         },
       })
         .on("routesfound", (e) => {
+          console.log(e.routes);
           routeCoordinates = e.routes[0].coordinates;
         })
         .addTo(map);
       // Add directions to side panel:
-      if (screen.width > 768) {
-        let mapDir = document.getElementById("pills-directions");
-        var routingControlContainer = routing.getContainer();
-        var controlContainerParent = routingControlContainer.parentNode;
-        controlContainerParent.removeChild(routingControlContainer);
-        mapDir.appendChild(routingControlContainer.childNodes[0]);
-      }
+      let dirTab = routing.onAdd(map);
+      document.getElementById("pills-directions").appendChild(dirTab);
     });
   } else {
     mapAlert("Geolocation is not supported by this browser.", "danger");
@@ -279,13 +275,8 @@ function createRecWaypoints(cat, id) {
         })
         .addTo(map);
       // Add directions to side panel:
-      if (screen.width > 768) {
-        let mapDir = document.getElementById("pills-directions");
-        var routingControlContainer = recRouting.getContainer();
-        var controlContainerParent = routingControlContainer.parentNode;
-        controlContainerParent.removeChild(routingControlContainer);
-        mapDir.appendChild(routingControlContainer.childNodes[0]);
-      }
+      let dirTab = recRouting.onAdd(map);
+      document.getElementById("pills-directions").appendChild(dirTab);
     });
   } else {
     mapAlert("Geolocation is not supported by this browser.", "danger");
@@ -345,28 +336,21 @@ document.querySelectorAll("#pills-reco .nav-link").forEach((btn) => {
   });
 });
 // Rec bar mobile handler:
-document.querySelector(".rec-bar").addEventListener("click", (e) => { 
+document.querySelector(".rec-bar").addEventListener("click", (e) => {
   recPanel.classList.toggle("slide-rec-panel");
 });
 document.querySelectorAll("#pills-tour-reco .nav-link").forEach((btn) => {
   btn.addEventListener("click", (e) => {
     showRecPanel();
   });
-}
-);
-
+});
 
 function hideRecPanel() {
-  if (screen.width < 768 )
-    recPanel.classList.remove("slide-rec-panel");
+  if (screen.width < 768) recPanel.classList.remove("slide-rec-panel");
 }
 function showRecPanel() {
-  if (screen.width < 768 )
-    recPanel.classList.add("slide-rec-panel");
+  if (screen.width < 768) recPanel.classList.add("slide-rec-panel");
 }
-
-  
-
 
 // MAP API:
 
@@ -410,7 +394,6 @@ function getNearBy(cat) {
   })
     .then((res) => res.json())
     .then((data) => {
-      console.log(data);
       if (data.length === 0) throw new Error("No nearby locations found");
       nearby = addMarkersWithPopup(data, icon);
     })
@@ -532,4 +515,3 @@ function addToWishlist(option) {
     })
     .catch((err) => mapAlert(err.message, "danger"));
 }
-
