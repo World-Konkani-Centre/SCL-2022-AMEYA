@@ -131,7 +131,7 @@ function addMarkersWithPopup(data, icon) {
             ? '<p class="verified-biz"><img src="/static/icons/map/verified.png" alt="Verified" />verified</p>'
             : ""
         }</h3>
-        <p>Rating: ${
+        <p class="map-popup-rating">Rating: ${
           e.rating
         } <img width="15px" src=${starIcon} alt="stars"/></p></div> <img class="map-popup-image" src="${
           e.type ? e.banner : e.image
@@ -158,7 +158,7 @@ function addDestinationMarker(latlng, id) {
         }),
       })
         .bindPopup(
-          `<div class="map-popup dest-popup"><div class="map-popup-header"><h3>${data.name}</h3><p>Rating: ${data.rating} <img width="18px" src=${starIcon} alt="stars"/></p></div><img class="map-popup-image" src="/media/${data.image}"/><p>${data.description}</p></div>`
+          `<div class="map-popup dest-popup"><div class="map-popup-header"><h3>${data.name}</h3><p class="map-popup-rating">Rating: ${data.rating} <img width="18px" src=${starIcon} alt="stars"/></p></div><img class="map-popup-image" src="/media/${data.image}"/><p>${data.description}</p></div>`
         )
         .addTo(map);
       navigator.permissions &&
@@ -194,7 +194,7 @@ function addRecommendationMarker(cat, id) {
           ? '<p class="verified-biz"><img src="/static/icons/map/verified.png" alt="Verified" />verified</p>'
           : ""
       }</h3>
-      <p>Rating: ${
+      <p class="map-popup-rating">Rating: ${
         data.rating
       } <img width="15px" src=${starIcon} alt="stars"/></p></div> <img class="map-popup-image" src="${
         data.type ? data.banner : data.image
@@ -234,7 +234,6 @@ function createWaypoints(latLngArr, id) {
         },
       })
         .on("routesfound", (e) => {
-          console.log(e.routes);
           routeCoordinates = e.routes[0].coordinates;
         })
         .addTo(map);
