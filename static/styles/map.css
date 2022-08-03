@@ -8,11 +8,20 @@
   position: relative;
 }
 #recommendation-panel {
+  background-color: #fff;
   height: calc(100vh - 50px) !important;
+  transition: all 0.5s ease-in-out;
 }
 #recommendation-panel .nav-link {
   font-size: 12px;
   border-radius: 20px;
+}
+#map .leaflet-routing-container {
+  display: none;
+}
+.leaflet-bar {
+  box-shadow: none !important;
+  border-radius: none !important;
 }
 .leaflet-routing-alt {
   margin-top: 10px !important;
@@ -28,6 +37,15 @@
   display: none;
 }
 /* Recommendations */
+.rec-bar {
+  width: 100%;
+  display: none;
+  place-items: center;
+}
+.rec-bar img {
+  width: 50px;
+  margin: 5px 0;
+}
 .recommendations {
   height: calc(100vh - 150px);
 }
@@ -141,14 +159,14 @@
 }
 /* Recommendation Card */
 .rec-card {
-  max-width: 350px;
   width: 100%;
-  background: #e0e0e0;
+  background: #f1f1f1;
   padding: 15px;
   margin: 10px 0;
   border-radius: 10px;
 }
 .rec-card .rec-header {
+  width: 100%;
   display: flex;
   align-items: center;
   margin-bottom: 1.5rem;
@@ -159,6 +177,7 @@
   margin-bottom: 0 !important;
 }
 .rec-card-body {
+  width: 100%;
   display: flex;
   flex-direction: column;
 }
@@ -219,6 +238,11 @@
 .leaflet-popup-content {
   width: fit-content !important;
   padding: 0 !important;
+  margin-right: 8px;
+  margin-left: 8px;
+}
+.leaflet-popup-content-wrapper {
+  border-radius: 5px !important;
 }
 .map-popup {
   width: 350px;
@@ -252,6 +276,10 @@
   text-align: center;
   z-index: 9999999;
 }
+/* Event styles */
+.slide-rec-panel {
+  top: 30vh !important;
+}
 /* Media query  */
 @media (max-width: 1350px) {
   .btn-save-tour {
@@ -268,7 +296,36 @@
     left: 70%;
     top: 85%;
   }
+  .rec-bar {
+    display: grid;
+  }
   #recommendation-panel {
-    display: none;
+    height: 70vh !important;
+    position: absolute;
+    z-index: 9999999;
+    border-radius: 15px 15px 0 0;
+    top: calc(100% - 80px);
+  }
+  .leaflet-routing-collapse-btn {
+    display: none !important;
+  }
+  .map-alert {
+    top: 80%;
+  }
+  .map-popup {
+    width: 200px;
+  }
+  .map-popup-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .map-popup-header h3 {
+    width: 100%;
+    justify-content: space-between !important;
+    font-size: 14px !important;
+  }
+  .map-popup-rating {
+    align-self: flex-start;
+    margin: 5px 0 !important;
   }
 }

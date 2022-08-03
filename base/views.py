@@ -1,3 +1,4 @@
+from unicodedata import category
 from django.shortcuts import render,redirect
 from django.http import JsonResponse
 from django.core.serializers import serialize
@@ -96,17 +97,16 @@ def recommendations(request):
     if request.method=='POST':
         contents=Tour.objects.all()
         category1= request.POST['category']  #Retrieves the category entered by the user
-        category2=request.POST['place']
-        
+        category2=request.POST['place'] 
         tourData = Tour.objects.all().filter(category=category1,place=category2).order_by('-rating').values()
-            #Filter by highest rating
         context={
             'tourData':tourData
         }
         return render(request,"base/recommendations.html",context)
     else:
        tourData=Tour.objects.all().order_by('-rating').values()
-       context={'tourData':tourData}
+       context={'tourData':tourData
+       }
        return render(request,"base/recommendations.html",context)
 
 def aboutUs(request):
@@ -172,10 +172,17 @@ def userProfile(request):
     return render(request, "base/userProfile.html",context)
 
 # wishlist view function:
+@csrf_exempt
 @login_required
 def userWishlist(request):
     user=request.user
-    wishlist=Wishlist.objects.filter(user=user)
+    if request.method=='POST':
+        body=json.loads(request.body.decode('utf-8'))
+        id=body['id']
+        wishlistDel=Wishlist.objects.get(id=id)
+        wishlistDel.delete()
+        return JsonResponse({'status':'success'})
+    wishlist=Wishlist.objects.filter(user=user).order_by("-createadAt")
     context={
         'wishlist':wishlist
     }
@@ -338,9 +345,8 @@ def handleWishlist(request):
         wishlist.save()
         return JsonResponse({'status':'success'})
     if option=='remove':
-        wishlist=Wishlist.objects.get(user=user,tour=tour)
-        if wishlist:
-            wishlist.delete()
+        if Wishlist.objects.filter(user=user,tour=tour).exists():
+            Wishlist.objects.get(user=user,tour=tour).delete()
         return JsonResponse({'status':'deleted'})
     
 # Error page:
