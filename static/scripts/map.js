@@ -234,6 +234,7 @@ function createWaypoints(latLngArr, id) {
         },
       })
         .on("routesfound", (e) => {
+          console.log(e.routes);
           routeCoordinates = e.routes[0].coordinates;
         })
         .addTo(map);
