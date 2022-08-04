@@ -22,6 +22,7 @@ urlpatterns = [
     path('tourReview/<int:id>/',views.tourReview,name='tourReview'),
     path('business/register/',views.registerBusiness,name='registerBusiness'),
     path('business/profile/',views.registerBusiness,name='profileBusiness'),
+    path('business/delete/',views.deleteBusiness,name='deleteBusiness'),
     path('api/v1/tour/<int:id>',views.getTour,name='getTour'),
     path('api/v1/nearby/<str:cat>/',views.getNearby,name='getNearby'),
     path('api/v1/recommendations/<str:cat>/',views.getRecommendations,name='getRecommendations'),
