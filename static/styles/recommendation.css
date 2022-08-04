@@ -256,7 +256,6 @@ a:active {
  @media all and (device-width: 820px) and (device-height: 1180px) and (orientation:portrait){
     .card{
       width: 130% !important;
-      margin-left:0% !important;
     }
     .sub-header{
       position: relative;

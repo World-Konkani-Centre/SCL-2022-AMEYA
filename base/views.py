@@ -172,10 +172,17 @@ def userProfile(request):
     return render(request, "base/userProfile.html",context)
 
 # wishlist view function:
+@csrf_exempt
 @login_required
 def userWishlist(request):
     user=request.user
-    wishlist=Wishlist.objects.filter(user=user)
+    if request.method=='POST':
+        body=json.loads(request.body.decode('utf-8'))
+        id=body['id']
+        wishlistDel=Wishlist.objects.get(id=id,user=user)
+        wishlistDel.delete()
+        return JsonResponse({'status':'success'})
+    wishlist=Wishlist.objects.filter(user=user).order_by("-createadAt")
     context={
         'wishlist':wishlist
     }
@@ -205,7 +212,7 @@ def updatePassword(request):
 def registerBusiness(request):
     id=request.GET.get('id')
     if id!=None:
-        business=RegisteredBusiness.objects.get(id=id)
+        business=RegisteredBusiness.objects.get(id=id,user=request.user)
         context={'business':business}
     else:
         context={'business':None}
@@ -222,7 +229,7 @@ def registerBusiness(request):
         lng=request.POST.get('longitude')
         logo=request.FILES.get('logo')
         banner=request.FILES.get('banner')
-        business=RegisteredBusiness(name=name,address=address,zipcode=zipcode,phone=phone,email=email,category=category,description=description,lat=lat,lng=lng,logo=logo,banner=banner,website=website)
+        business=RegisteredBusiness(user=request.user,name=name,address=address,zipcode=zipcode,phone=phone,email=email,category=category,description=description,lat=lat,lng=lng,logo=logo,banner=banner,website=website)
         business.save()
         html_content = render_to_string('base/email/email.html',{'title':'Your Business has been regisered','message':'Your Business has been regisered. Thank you.','name':name})
         text_content = strip_tags(html_content)
@@ -253,11 +260,28 @@ def registerBusiness(request):
 
     return render(request,"base/registerBusiness.html",context)
 
-
-# view to get registered business details by id:
-def getBusinessDetails(request,id):
-    business=RegisteredBusiness.objects.get(id=id)
-    return render(request,"base/businessDetails.html",{'business':business})
+#Delete registered business:
+@login_required
+def deleteBusiness(request):
+    id=request.GET.get('id')
+    business=RegisteredBusiness.objects.get(id=id,user=request.user)
+    context={'business':business}
+    if request.method=='POST':
+        business=RegisteredBusiness.objects.get(id=id)
+        password=request.POST.get('password')
+        if request.user.check_password(password):
+            business.delete()
+            # Send mail:
+            html_content = render_to_string('base/email/email.html',{'title':'Your Business has been deleted','message':'Your Business has been deleted. Thank you.','name':business.name})
+            text_content = strip_tags(html_content)
+            email_content = EmailMultiAlternatives('Your Business has been deleted successfully', text_content, settings.EMAIL_HOST_USER, [business.email])
+            email_content.attach_alternative(html_content, "text/html")
+            email_content.send()
+            messages.add_message(request, messages.SUCCESS, 'Your Business has been deleted successfully!')
+            return redirect('home')
+        else:
+            messages.add_message(request, messages.ERROR, 'Please enter correct password!')
+    return render(request,"base/deleteRegBiz.html",context)
 
 # method to get nearby restaurants,hotels and repair shops:
 @csrf_exempt
@@ -338,9 +362,8 @@ def handleWishlist(request):
         wishlist.save()
         return JsonResponse({'status':'success'})
     if option=='remove':
-        wishlist=Wishlist.objects.get(user=user,tour=tour)
-        if wishlist:
-            wishlist.delete()
+        if Wishlist.objects.filter(user=user,tour=tour).exists():
+            Wishlist.objects.get(user=user,tour=tour).delete()
         return JsonResponse({'status':'deleted'})
     
 # Error page:

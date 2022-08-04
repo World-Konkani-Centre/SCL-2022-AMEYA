@@ -116,11 +116,7 @@
         </div>
       </div>
 
-<<<<<<< HEAD
 <form class="col-md-6 border-right" name = "form" method="POST" action="{% url 'recommendations' %}">
-=======
-      <form class="col-md-6 border-right" name = "form" method="POST" action="{% url 'recommendations' %}">
->>>>>>> 7e1931055fa9f8f66fd6a458f65f258e7241e48a
           {% csrf_token %}
           <div class="p-2 py-3">
             <div class="container rounded-end">
@@ -167,23 +163,6 @@
               <div class="py-2"></div>
             </div>
           </div>
-          <div class="row">
-            <div class="col">
-              <button
-                class="m-3 btn btn-primary profile-button mx-4"
-                type="button"
-              >
-                <a href="{{request.META.HTTP_REFERER}}">Back</a>
-              </button>
-            </div>
-            <div class="col text-end mx-2">
-              <button class="m-3 btn btn-primary profile-button" type="submit">
-                <!-- <a href="profile.html">Submit</a> -->
-                Submit
-              </button>
-            </div>
-            <div class="py-2"></div>
-          </div>
         </div>
       </form>
     </div>
@@ -226,34 +205,3 @@ function my_function2(){
 
   
 
-{% block js %}
-<script>
-
-var date=new Date();
-var tdate=date.getDate();
-if(tdate<10){
-  tdate='0'+tdate;
-}
-var month=date.getMonth()+1;
-if(month<10){
-  month='0'+month;
-}
-var year=date.getFullYear();
-var minDate=year + "-" + month + "-" + tdate;
-
-document.getElementById("startdate").setAttribute('min',minDate);
-document.getElementById("enddate").setAttribute('min',minDate);
-
-function my_function1(){
-  var minDaterev=document.getElementById("startdate").value;
-  document.getElementById("enddate").min=minDaterev;
-}
-
-function my_function2(){
-  var maxDaterev=document.getElementById("enddate").value;
-  document.getElementById("startdate").max = maxDaterev;
-}
- 
-</script>
-{% endblock %}
-{% endblock %}

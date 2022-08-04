@@ -10,10 +10,12 @@ let nearby = [];
 let recommendations = {};
 const baseURL = `${window.location.origin}/api/v1`;
 starIcon = `${window.location.origin}/static/icons/map/star.png`;
+// Selectors:
+const recPanel = document.getElementById("recommendation-panel");
 
 // Map Initialization:
 var map = L.map("map").setView(curLatLang, 13);
-L.tileLayer("https://tile.osm.ch/sswitzerland/{z}/{x}/{y}.png", {
+L.tileLayer("https://tile.osm.ch/switzerland/{z}/{x}/{y}.png", {
   maxZoom: 19,
   attribution:
     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -129,7 +131,7 @@ function addMarkersWithPopup(data, icon) {
             ? '<p class="verified-biz"><img src="/static/icons/map/verified.png" alt="Verified" />verified</p>'
             : ""
         }</h3>
-        <p>Rating: ${
+        <p class="map-popup-rating">Rating: ${
           e.rating
         } <img width="15px" src=${starIcon} alt="stars"/></p></div> <img class="map-popup-image" src="${
           e.type ? e.banner : e.image
@@ -156,7 +158,7 @@ function addDestinationMarker(latlng, id) {
         }),
       })
         .bindPopup(
-          `<div class="map-popup dest-popup"><div class="map-popup-header"><h3>${data.name}</h3><p>Rating: ${data.rating} <img width="18px" src=${starIcon} alt="stars"/></p></div><img class="map-popup-image" src="/media/${data.image}"/><p>${data.description}</p></div>`
+          `<div class="map-popup dest-popup"><div class="map-popup-header"><h3>${data.name}</h3><p class="map-popup-rating">Rating: ${data.rating} <img width="18px" src=${starIcon} alt="stars"/></p></div><img class="map-popup-image" src="/media/${data.image}"/><p>${data.description}</p></div>`
         )
         .addTo(map);
       navigator.permissions &&
@@ -177,6 +179,7 @@ function addRecommendationMarker(cat, id) {
   data = recommendations[cat][id];
   let latLng = [data.lat, data.lng];
   if (recMarker) map.removeLayer(recMarker);
+  hideRecPanel();
   recMarker = new L.marker(latLng, {
     icon: new LeafIcon({
       iconUrl: `${window.location.origin}/static/icons/map/marker.png`,
@@ -191,7 +194,7 @@ function addRecommendationMarker(cat, id) {
           ? '<p class="verified-biz"><img src="/static/icons/map/verified.png" alt="Verified" />verified</p>'
           : ""
       }</h3>
-      <p>Rating: ${
+      <p class="map-popup-rating">Rating: ${
         data.rating
       } <img width="15px" src=${starIcon} alt="stars"/></p></div> <img class="map-popup-image" src="${
         data.type ? data.banner : data.image
@@ -231,17 +234,13 @@ function createWaypoints(latLngArr, id) {
         },
       })
         .on("routesfound", (e) => {
+          console.log(e.routes);
           routeCoordinates = e.routes[0].coordinates;
         })
         .addTo(map);
       // Add directions to side panel:
-      if (screen.width > 768) {
-        let mapDir = document.getElementById("pills-directions");
-        var routingControlContainer = routing.getContainer();
-        var controlContainerParent = routingControlContainer.parentNode;
-        controlContainerParent.removeChild(routingControlContainer);
-        mapDir.appendChild(routingControlContainer.childNodes[0]);
-      }
+      let dirTab = routing.onAdd(map);
+      document.getElementById("pills-directions").appendChild(dirTab);
     });
   } else {
     mapAlert("Geolocation is not supported by this browser.", "danger");
@@ -276,13 +275,8 @@ function createRecWaypoints(cat, id) {
         })
         .addTo(map);
       // Add directions to side panel:
-      if (screen.width > 768) {
-        let mapDir = document.getElementById("pills-directions");
-        var routingControlContainer = recRouting.getContainer();
-        var controlContainerParent = routingControlContainer.parentNode;
-        controlContainerParent.removeChild(routingControlContainer);
-        mapDir.appendChild(routingControlContainer.childNodes[0]);
-      }
+      let dirTab = recRouting.onAdd(map);
+      document.getElementById("pills-directions").appendChild(dirTab);
     });
   } else {
     mapAlert("Geolocation is not supported by this browser.", "danger");
@@ -341,6 +335,22 @@ document.querySelectorAll("#pills-reco .nav-link").forEach((btn) => {
     getRecommendations(cat);
   });
 });
+// Rec bar mobile handler:
+document.querySelector(".rec-bar").addEventListener("click", (e) => {
+  recPanel.classList.toggle("slide-rec-panel");
+});
+document.querySelectorAll("#pills-tour-reco .nav-link").forEach((btn) => {
+  btn.addEventListener("click", (e) => {
+    showRecPanel();
+  });
+});
+
+function hideRecPanel() {
+  if (screen.width < 768) recPanel.classList.remove("slide-rec-panel");
+}
+function showRecPanel() {
+  if (screen.width < 768) recPanel.classList.add("slide-rec-panel");
+}
 
 // MAP API:
 
@@ -384,7 +394,6 @@ function getNearBy(cat) {
   })
     .then((res) => res.json())
     .then((data) => {
-      console.log(data);
       if (data.length === 0) throw new Error("No nearby locations found");
       nearby = addMarkersWithPopup(data, icon);
     })
