@@ -98,14 +98,14 @@ def recommendations(request):
         contents=Tour.objects.all()
         category1= request.POST['category']  #Retrieves the category entered by the user
         category2=request.POST['place'] 
-        tourData = Tour.objects.all().filter(category=category1,place=category2).order_by('-rating').values()
+        tour_data = Tour.objects.all().filter(category=category1,place=category2).order_by('-rating').values()
         context={
-            'tourData':tourData
+            'tour_data':tour_data
         }
         return render(request,"base/recommendations.html",context)
     else:
-       tourData=Tour.objects.all().order_by('-rating').values()
-       context={'tourData':tourData
+       tour_data=Tour.objects.all().order_by('-rating').values()
+       context={'tour_data':tour_data
        }
        return render(request,"base/recommendations.html",context)
 
@@ -117,8 +117,12 @@ def contact(request):
     context={}
     return render(request,"base/contact.html",context)
 
-def tourDetails(request):
-    context={}
+
+def tourDetails(request,data):
+    tourData=Tour.objects.filter(id=data)
+    if request.method=='POST':
+        tourData=Tour.objects.get(id=data)
+    context={'tourData':tourData}
     return render(request,"base/tourDetails.html",context)
 
 def tourForm(request):
@@ -179,7 +183,7 @@ def userWishlist(request):
     if request.method=='POST':
         body=json.loads(request.body.decode('utf-8'))
         id=body['id']
-        wishlistDel=Wishlist.objects.get(id=id)
+        wishlistDel=Wishlist.objects.get(id=id,user=user)
         wishlistDel.delete()
         return JsonResponse({'status':'success'})
     wishlist=Wishlist.objects.filter(user=user).order_by("-createadAt")
@@ -212,7 +216,7 @@ def updatePassword(request):
 def registerBusiness(request):
     id=request.GET.get('id')
     if id!=None:
-        business=RegisteredBusiness.objects.get(id=id)
+        business=RegisteredBusiness.objects.get(id=id,user=request.user)
         context={'business':business}
     else:
         context={'business':None}
@@ -229,7 +233,7 @@ def registerBusiness(request):
         lng=request.POST.get('longitude')
         logo=request.FILES.get('logo')
         banner=request.FILES.get('banner')
-        business=RegisteredBusiness(name=name,address=address,zipcode=zipcode,phone=phone,email=email,category=category,description=description,lat=lat,lng=lng,logo=logo,banner=banner,website=website)
+        business=RegisteredBusiness(user=request.user,name=name,address=address,zipcode=zipcode,phone=phone,email=email,category=category,description=description,lat=lat,lng=lng,logo=logo,banner=banner,website=website)
         business.save()
         html_content = render_to_string('base/email/email.html',{'title':'Your Business has been regisered','message':'Your Business has been regisered. Thank you.','name':name})
         text_content = strip_tags(html_content)
@@ -260,11 +264,28 @@ def registerBusiness(request):
 
     return render(request,"base/registerBusiness.html",context)
 
-
-# view to get registered business details by id:
-def getBusinessDetails(request,id):
-    business=RegisteredBusiness.objects.get(id=id)
-    return render(request,"base/businessDetails.html",{'business':business})
+#Delete registered business:
+@login_required
+def deleteBusiness(request):
+    id=request.GET.get('id')
+    business=RegisteredBusiness.objects.get(id=id,user=request.user)
+    context={'business':business}
+    if request.method=='POST':
+        business=RegisteredBusiness.objects.get(id=id)
+        password=request.POST.get('password')
+        if request.user.check_password(password):
+            business.delete()
+            # Send mail:
+            html_content = render_to_string('base/email/email.html',{'title':'Your Business has been deleted','message':'Your Business has been deleted. Thank you.','name':business.name})
+            text_content = strip_tags(html_content)
+            email_content = EmailMultiAlternatives('Your Business has been deleted successfully', text_content, settings.EMAIL_HOST_USER, [business.email])
+            email_content.attach_alternative(html_content, "text/html")
+            email_content.send()
+            messages.add_message(request, messages.SUCCESS, 'Your Business has been deleted successfully!')
+            return redirect('home')
+        else:
+            messages.add_message(request, messages.ERROR, 'Please enter correct password!')
+    return render(request,"base/deleteRegBiz.html",context)
 
 # method to get nearby restaurants,hotels and repair shops:
 @csrf_exempt

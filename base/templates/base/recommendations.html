@@ -10,7 +10,7 @@
 {% block content %}
 
 
-{% for data in tourData %}
+{% for data in tour_data %}
 <div class="rec-container">
 <div class="container rounded-3">
     <section class="card hover01">
@@ -18,12 +18,11 @@
         <div class="col-md-4">
             <img src="/media/{{data.image}}" class="card-img" style="height:350px;width: 100%; object-fit: cover;" alt="{{data.name}}">
         </div>
-        <!-- <div class="col-8"> -->
-            <div class="col-md-4 vertical">
+        <div class="col-md-8">
             <div class="card-body">
-                <h5 class="card-title">{{data.name}}</h5>
-                <section>
-                  <span class="hidden-text">{{data.rating}}</span>
+                <h5 class="card-title">{{data.name}} </h5>
+                <section style="display:inline; padding-left: 20px;" class="rating-class">
+                <span class="hidden-text">{{data.rating}}</span>
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   <span class="rating-star">
                     <!-- By default the star is full else it is empty otherwise it is half -->
@@ -33,26 +32,20 @@
                         <i class="fa fa-star{% if data.rating < 3.5%}-o{% elif data.rating >= 3.5 and data.rating < 4 %}-half-o{% endif %}" style="color:#f1d554;" aria-hidden="true"></i>
                         <i class="fa fa-star{% if data.rating < 4.5%}-o{% elif data.rating >= 4.5 and data.rating < 5 %}-half-o{% endif %}" style="color:#f1d554;" aria-hidden="true"></i>
                   </span>
-                </section>
-                <!-- End of card-body -->
-            
-                <!-- End of col-8 -->
-                </div>
-                <button class="disabled text-muted mt-n2">{{data.category}}</button>
+                </section>  
+           </div>
+        <div class="row  row-cols-2">
+            <div class="col-md-7">
+                <section style="display:inline;" class="sub-header">
+                <button class="disabled text-muted mt-n2 cat">{{ data.category}}</button>
                 {% if data.rating > 3.9 %}
-                <button class="disabled text-muted mt-n2">{{data.subtext}}</button>
+                <button class="disabled text-muted mt-n2 sub">{{data.subtext}}</button>
                 {% else %}
-                <button class="disabled text-muted mt-n2">People also visited</button>
+                <button class="disabled text-muted mt-n2 sub">People also visited</button>
                 {% endif %}
-                <p class="card-text py-4 px-3" style="height:100px ;">
-                    {{data.description}}
-                </p>
-            </div> 
-           
-            <div class="col-md-4">
-              <!-- <div class="col-sm-3 mx-4"> -->
-            <div class="row">
-                <p class="avg-price">Avg-Price
+                </section>
+                <p class="card-text py-4 px-3"  style="height:250px;">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste velit magnam excepturi dicta maiores necessitatibus nisi ipsa, corrupti quasi, dolores aliquam illo obcaecati veritatis provident! Explicabo corrupti voluptatibus id quaerat!
                 </p>
                 <button class="disabled price">
                 <p class="fare-price">&#x20B9;{{data.avg_fare}}</p>
@@ -62,16 +55,27 @@
             <div class="row">
                 <div class="btn-group">
                 <button class="More-info  my-5">View Tour</button>
-                <button class="More-info mx-4 my-5">Details</button>
+                <button class="More-info mx-4 my-5"><a href="{% url 'tourDetails' data.id %}" color: white;>See more</a></button>
                </div>
-            </div>
-            </div>
-            <!-- End of row div -->
-        </div>    
+               <div class="col-md-5">
+                    <p class="avg-price">Avg-Price</p>
+                    <button class="disabled price">
+                    <p class="fare-price">&#x20B9;{{data.avg_fare}}</p>
+                    <p class="text-muted">per person</p>
+                    </button>
+                    <div class="btn-group">
+                    <button class="More-info  my-5">View Tour</button>
+                    <button class="More-info mx-4 my-5">Details</button>
+                    </div>
+               </div>
+        </div>
+        </div>
+    </div>
     </section>
-    <!-- End of bootstrap card -->
 </div>
 </div>
+           
+
 
 {% endfor %}
 

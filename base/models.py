@@ -98,6 +98,7 @@ class Business(models.Model):
 class RegisteredBusiness(models.Model):
     category_choices=[('restaurant','Restaurant'),('hotel','Hotel'),('repair','Repair'),('transport','Transport'),('shoping','Shoping'),('gas','Gas'),('parking','Parking'),('bank','Bank')]
     id=models.BigAutoField(primary_key=True)
+    user=models.ForeignKey(User,on_delete=models.CASCADE,default='')
     name=models.CharField(max_length=100)
     type=models.BooleanField(default=True)
     address=models.CharField(max_length=700)
