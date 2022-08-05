@@ -16,6 +16,8 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.conf import settings
+from .serializers import BusinessSerializer,RegisteredBusinessSerializer
+from rest_framework.response import Response
 
 # Create your views here.
 
@@ -86,21 +88,25 @@ def login(request):
             return render(request,"base/login.html")
     return render(request,"base/login.html")
 
+def logout(request):
+    auth_logout(request)
+    messages.info(request,'You logged out.')
+    return redirect('/')
+
 def recommendations(request):
     if request.method=='POST':
         contents=Tour.objects.all()
         category1= request.POST['category']  #Retrieves the category entered by the user
-        category2=request.POST['place']
-        
+        category2=request.POST['place'] 
         tourData = Tour.objects.all().filter(category=category1,place=category2).order_by('-rating').values()
-            #Filter by highest rating
         context={
             'tourData':tourData
         }
         return render(request,"base/recommendations.html",context)
     else:
        tourData=Tour.objects.all().order_by('-rating').values()
-       context={'tourData':tourData}
+       context={'tourData':tourData
+       }
        return render(request,"base/recommendations.html",context)
 
 def aboutUs(request):
@@ -166,10 +172,17 @@ def userProfile(request):
     return render(request, "base/userProfile.html",context)
 
 # wishlist view function:
+@csrf_exempt
 @login_required
 def userWishlist(request):
     user=request.user
-    wishlist=Wishlist.objects.filter(user=user)
+    if request.method=='POST':
+        body=json.loads(request.body.decode('utf-8'))
+        id=body['id']
+        wishlistDel=Wishlist.objects.get(id=id,user=user)
+        wishlistDel.delete()
+        return JsonResponse({'status':'success'})
+    wishlist=Wishlist.objects.filter(user=user).order_by("-createadAt")
     context={
         'wishlist':wishlist
     }
@@ -199,7 +212,7 @@ def updatePassword(request):
 def registerBusiness(request):
     id=request.GET.get('id')
     if id!=None:
-        business=RegisteredBusiness.objects.get(id=id)
+        business=RegisteredBusiness.objects.get(id=id,user=request.user)
         context={'business':business}
     else:
         context={'business':None}
@@ -216,7 +229,7 @@ def registerBusiness(request):
         lng=request.POST.get('longitude')
         logo=request.FILES.get('logo')
         banner=request.FILES.get('banner')
-        business=RegisteredBusiness(name=name,address=address,zipcode=zipcode,phone=phone,email=email,category=category,description=description,lat=lat,lng=lng,logo=logo,banner=banner,website=website)
+        business=RegisteredBusiness(user=request.user,name=name,address=address,zipcode=zipcode,phone=phone,email=email,category=category,description=description,lat=lat,lng=lng,logo=logo,banner=banner,website=website)
         business.save()
         html_content = render_to_string('base/email/email.html',{'title':'Your Business has been regisered','message':'Your Business has been regisered. Thank you.','name':name})
         text_content = strip_tags(html_content)
@@ -247,16 +260,34 @@ def registerBusiness(request):
 
     return render(request,"base/registerBusiness.html",context)
 
-
-# view to get registered business details by id:
-def getBusinessDetails(request,id):
-    business=RegisteredBusiness.objects.get(id=id)
-    return render(request,"base/businessDetails.html",{'business':business})
+#Delete registered business:
+@login_required
+def deleteBusiness(request):
+    id=request.GET.get('id')
+    business=RegisteredBusiness.objects.get(id=id,user=request.user)
+    context={'business':business}
+    if request.method=='POST':
+        business=RegisteredBusiness.objects.get(id=id)
+        password=request.POST.get('password')
+        if request.user.check_password(password):
+            business.delete()
+            # Send mail:
+            html_content = render_to_string('base/email/email.html',{'title':'Your Business has been deleted','message':'Your Business has been deleted. Thank you.','name':business.name})
+            text_content = strip_tags(html_content)
+            email_content = EmailMultiAlternatives('Your Business has been deleted successfully', text_content, settings.EMAIL_HOST_USER, [business.email])
+            email_content.attach_alternative(html_content, "text/html")
+            email_content.send()
+            messages.add_message(request, messages.SUCCESS, 'Your Business has been deleted successfully!')
+            return redirect('home')
+        else:
+            messages.add_message(request, messages.ERROR, 'Please enter correct password!')
+    return render(request,"base/deleteRegBiz.html",context)
 
 # method to get nearby restaurants,hotels and repair shops:
 @csrf_exempt
 def getNearby(request,cat):
-    nearby=[]
+    nearbyVerified=[]
+    nearbyUnverified=[]
     body=json.loads(request.body.decode('utf-8'))
     routeCoords=body['routeCoordinates']
     tourCoords=body['tourCoordinates']
@@ -265,18 +296,29 @@ def getNearby(request,cat):
     radius=10
     if len(tourCoords)>0:
         radius=haversine((centerCoord[0],centerCoord[1]),(tourCoords[0][0],tourCoords[0][1]))+50
-    query=Business.objects.all().filter(category=cat)
+    query1=RegisteredBusiness.objects.all().filter(category=cat)
+    query2=Business.objects.all().filter(category=cat)
 
-    locFiltered=[loc for loc in query if haversine((loc.lat,loc.lng),(centerCoord[0],centerCoord[1]))<=radius]
+    locFiltered1=[loc for loc in query1 if haversine((loc.lat,loc.lng),(centerCoord[0],centerCoord[1]))<=radius]
+    locFiltered2=[loc for loc in query2 if haversine((loc.lat,loc.lng),(centerCoord[0],centerCoord[1]))<=radius]
     if len(routeCoords)>0:
-        for item in locFiltered:
+        for item in locFiltered1:
             for route in routeCoords:
                 if haversine((item.lat,item.lng),(route["lat"],route["lng"]),unit=Unit.KILOMETERS)<=3:
-                    nearby.append(item)
+                    nearbyVerified.append(item)
+                    break
+        for item in locFiltered2:
+            for route in routeCoords:
+                if haversine((item.lat,item.lng),(route["lat"],route["lng"]),unit=Unit.KILOMETERS)<=3:
+                    nearbyUnverified.append(item)
                     break
     else:
-        nearby=locFiltered
-    data=serialize('json',nearby)
+        nearbyVerified=locFiltered1
+        nearbyUnverified=locFiltered2
+    querySer1=RegisteredBusinessSerializer(nearbyVerified,many=True)
+    querySer2=BusinessSerializer(nearbyUnverified,many=True)
+    data=querySer1.data+querySer2.data
+    # data=serialize('json',nearby)
     return JsonResponse(data,safe=False)
 
 # method to get recommendations:
@@ -289,10 +331,13 @@ def getRecommendations(request,cat):
     radius=10
     if len(tourCoords)>0:
         radius=haversine((centerCoord[0],centerCoord[1]),(tourCoords[0][0],tourCoords[0][1]))+10
-    query=Business.objects.all().filter(category=cat)
-
-    reco=[loc for loc in query if haversine((loc.lat,loc.lng),(centerCoord[0],centerCoord[1]))<=radius]
-    data=serialize('json',reco)
+    query1=RegisteredBusiness.objects.all().filter(category=cat).order_by('-rating')
+    query2=Business.objects.all().filter(category=cat).order_by('-rating')
+    reco1=[loc for loc in query1 if haversine((loc.lat,loc.lng),(centerCoord[0],centerCoord[1]))<=radius]
+    reco2=[loc for loc in query2 if haversine((loc.lat,loc.lng),(centerCoord[0],centerCoord[1]))<=radius]
+    querySer1=RegisteredBusinessSerializer(reco1,many=True)
+    querySer2=BusinessSerializer(reco2,many=True)
+    data=querySer1.data+querySer2.data
     return JsonResponse(data,safe=False)
 
 # method to get registered business by id
@@ -317,15 +362,9 @@ def handleWishlist(request):
         wishlist.save()
         return JsonResponse({'status':'success'})
     if option=='remove':
-        wishlist=Wishlist.objects.get(user=user,tour=tour)
-        if wishlist:
-            wishlist.delete()
+        if Wishlist.objects.filter(user=user,tour=tour).exists():
+            Wishlist.objects.get(user=user,tour=tour).delete()
         return JsonResponse({'status':'deleted'})
-
-def logout(request):
-    auth_logout(request)
-    messages.info(request,'You logged out.')
-    return redirect('/')
     
 # Error page:
 def error_404(request,exception):

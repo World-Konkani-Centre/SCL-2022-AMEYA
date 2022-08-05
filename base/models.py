@@ -80,6 +80,7 @@ class Business(models.Model):
     category_choices=[('restaurant','Restaurant'),('hotel','Hotel'),('repair','Repair'),('transport','Transport'),('shoping','Shoping'),('gas','Gas'),('parking','Parking'),('bank','Bank')]
     id=models.BigAutoField(primary_key=True)
     name=models.CharField(max_length=100)
+    type=models.BooleanField(default=False)
     category=models.CharField(max_length=100,choices=category_choices,default='restaurant')
     description=models.CharField(max_length=500)
     website=models.CharField(max_length=50,blank=True)
@@ -97,21 +98,24 @@ class Business(models.Model):
 class RegisteredBusiness(models.Model):
     category_choices=[('restaurant','Restaurant'),('hotel','Hotel'),('repair','Repair'),('transport','Transport'),('shoping','Shoping'),('gas','Gas'),('parking','Parking'),('bank','Bank')]
     id=models.BigAutoField(primary_key=True)
+    user=models.ForeignKey(User,on_delete=models.CASCADE,default='')
     name=models.CharField(max_length=100)
+    type=models.BooleanField(default=True)
     address=models.CharField(max_length=700)
     description=models.CharField(max_length=500)
     zipcode=models.CharField(max_length=6)
     category=models.CharField(max_length=100,choices=category_choices,default='restaurant')
-    phone=models.CharField(max_length=10)
+    phone=models.CharField(max_length=10,blank=True)
     email=models.EmailField(max_length=100)
-    website=models.CharField(max_length=50,null=True)
+    website=models.CharField(max_length=50,null=True,blank=True)
     rating=models.FloatField(default=5,validators=[MinValueValidator(1),MaxValueValidator(5)],null=True)
     lat=models.DecimalField(max_digits=20,decimal_places=15)
     lng=models.DecimalField(max_digits=20,decimal_places=15)
-    logo=models.ImageField(upload_to='images/regBiz',null=True)
-    banner=models.ImageField(upload_to='images/regBiz',null=True)
+    logo=models.ImageField(upload_to='images/regBiz',null=True,blank=True)
+    banner=models.ImageField(upload_to='images/regBiz',null=True,blank=True)
     createadAt=models.DateTimeField(auto_now_add=True)
     updateAt=models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
+

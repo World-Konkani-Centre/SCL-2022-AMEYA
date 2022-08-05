@@ -10,6 +10,8 @@ let nearby = [];
 let recommendations = {};
 const baseURL = `${window.location.origin}/api/v1`;
 starIcon = `${window.location.origin}/static/icons/map/star.png`;
+// Selectors:
+const recPanel = document.getElementById("recommendation-panel");
 
 // Map Initialization:
 var map = L.map("map").setView(curLatLang, 13);
@@ -121,7 +123,19 @@ function addMarkersWithPopup(data, icon) {
       }),
     })
       .bindPopup(
-        `<div class="map-popup nearby-popup"><div class="map-popup-header"><h3>${e.name}</h3><p>Rating: ${e.rating} <img width="15px" src=${starIcon} alt="stars"/></p></div> <img class="map-popup-image" src="/media/${e.image}"/><p>${e.description}</p></div>`
+        `<div class="map-popup nearby-popup"><div class="map-popup-header"><h3>${
+          e.name
+        }
+        ${
+          e.type
+            ? '<p class="verified-biz"><img src="/static/icons/map/verified.png" alt="Verified" />verified</p>'
+            : ""
+        }</h3>
+        <p class="map-popup-rating">Rating: ${
+          e.rating
+        } <img width="15px" src=${starIcon} alt="stars"/></p></div> <img class="map-popup-image" src="${
+          e.type ? e.banner : e.image
+        }"/><p>${e.description}</p></div>`
       )
       .addTo(map);
     markers.push(m);
@@ -144,7 +158,7 @@ function addDestinationMarker(latlng, id) {
         }),
       })
         .bindPopup(
-          `<div class="map-popup dest-popup"><div class="map-popup-header"><h3>${data.name}</h3><p>Rating: ${data.rating} <img width="18px" src=${starIcon} alt="stars"/></p></div><img class="map-popup-image" src="/media/${data.image}"/><p>${data.description}</p></div>`
+          `<div class="map-popup dest-popup"><div class="map-popup-header"><h3>${data.name}</h3><p class="map-popup-rating">Rating: ${data.rating} <img width="18px" src=${starIcon} alt="stars"/></p></div><img class="map-popup-image" src="/media/${data.image}"/><p>${data.description}</p></div>`
         )
         .addTo(map);
       navigator.permissions &&
@@ -165,13 +179,26 @@ function addRecommendationMarker(cat, id) {
   data = recommendations[cat][id];
   let latLng = [data.lat, data.lng];
   if (recMarker) map.removeLayer(recMarker);
+  hideRecPanel();
   recMarker = new L.marker(latLng, {
     icon: new LeafIcon({
       iconUrl: `${window.location.origin}/static/icons/map/marker.png`,
     }),
   })
     .bindPopup(
-      `<div class="map-popup rec-popup"><div class="map-popup-header"><h3>${data.name}</h3><p>Rating: ${data.rating} <img width="15px" src=${starIcon} alt="stars"/></p></div><img class="map-popup-image" src="/media/${data.image}"/><p>${data.description}</p></div>`
+      `<div class="map-popup rec-popup"><div class="map-popup-header"><h3>${
+        data.name
+      }
+      ${
+        data.type
+          ? '<p class="verified-biz"><img src="/static/icons/map/verified.png" alt="Verified" />verified</p>'
+          : ""
+      }</h3>
+      <p class="map-popup-rating">Rating: ${
+        data.rating
+      } <img width="15px" src=${starIcon} alt="stars"/></p></div> <img class="map-popup-image" src="${
+        data.type ? data.banner : data.image
+      }"/><p>${data.description}</p></div>`
     )
     .addTo(map);
   recMarker.openPopup();
@@ -207,17 +234,13 @@ function createWaypoints(latLngArr, id) {
         },
       })
         .on("routesfound", (e) => {
+          console.log(e.routes);
           routeCoordinates = e.routes[0].coordinates;
         })
         .addTo(map);
       // Add directions to side panel:
-      if (screen.width > 768) {
-        let mapDir = document.getElementById("pills-directions");
-        var routingControlContainer = routing.getContainer();
-        var controlContainerParent = routingControlContainer.parentNode;
-        controlContainerParent.removeChild(routingControlContainer);
-        mapDir.appendChild(routingControlContainer.childNodes[0]);
-      }
+      let dirTab = routing.onAdd(map);
+      document.getElementById("pills-directions").appendChild(dirTab);
     });
   } else {
     mapAlert("Geolocation is not supported by this browser.", "danger");
@@ -252,13 +275,8 @@ function createRecWaypoints(cat, id) {
         })
         .addTo(map);
       // Add directions to side panel:
-      if (screen.width > 768) {
-        let mapDir = document.getElementById("pills-directions");
-        var routingControlContainer = recRouting.getContainer();
-        var controlContainerParent = routingControlContainer.parentNode;
-        controlContainerParent.removeChild(routingControlContainer);
-        mapDir.appendChild(routingControlContainer.childNodes[0]);
-      }
+      let dirTab = recRouting.onAdd(map);
+      document.getElementById("pills-directions").appendChild(dirTab);
     });
   } else {
     mapAlert("Geolocation is not supported by this browser.", "danger");
@@ -317,6 +335,22 @@ document.querySelectorAll("#pills-reco .nav-link").forEach((btn) => {
     getRecommendations(cat);
   });
 });
+// Rec bar mobile handler:
+document.querySelector(".rec-bar").addEventListener("click", (e) => {
+  recPanel.classList.toggle("slide-rec-panel");
+});
+document.querySelectorAll("#pills-tour-reco .nav-link").forEach((btn) => {
+  btn.addEventListener("click", (e) => {
+    showRecPanel();
+  });
+});
+
+function hideRecPanel() {
+  if (screen.width < 768) recPanel.classList.remove("slide-rec-panel");
+}
+function showRecPanel() {
+  if (screen.width < 768) recPanel.classList.add("slide-rec-panel");
+}
 
 // MAP API:
 
@@ -360,8 +394,6 @@ function getNearBy(cat) {
   })
     .then((res) => res.json())
     .then((data) => {
-      data = JSON.parse(data);
-      data = data.map((d) => d.fields);
       if (data.length === 0) throw new Error("No nearby locations found");
       nearby = addMarkersWithPopup(data, icon);
     })
@@ -376,6 +408,7 @@ function getRecommendations(cat) {
   <div class="header">
     <div class="details">
       <span class="name"></span>
+      <span class="rating"></span>
     </div>
   </div>
   <div class="card-body">
@@ -384,46 +417,15 @@ function getRecommendations(cat) {
       <div class="line line-1"></div>
       <div class="line line-2"></div>
       <div class="line line-3"></div>
-      <div class="line line-4"></div>
-      <div class="line line-5"></div>
+    </div>
+    <div class="card-btns description">
+    <div class="line line-4"></div>
+    <div class="line line-5"></div>
+    <div class="line line-6"></div>
     </div>
   </div>
 </div>
-<div class="card">
-  <div class="header">
-    <div class="details">
-      <span class="name"></span>
-    </div>
-  </div>
-  <div class="card-body">
-    <div class="img"></div>
-    <div class="description">
-      <div class="line line-1"></div>
-      <div class="line line-2"></div>
-      <div class="line line-3"></div>
-      <div class="line line-4"></div>
-      <div class="line line-5"></div>
-    </div>
-  </div>
-</div>
-<div class="card">
-  <div class="header">
-    <div class="details">
-      <span class="name"></span>
-    </div>
-  </div>
-  <div class="card-body">
-    <div class="img"></div>
-    <div class="description">
-      <div class="line line-1"></div>
-      <div class="line line-2"></div>
-      <div class="line line-3"></div>
-      <div class="line line-4"></div>
-      <div class="line line-5"></div>
-    </div>
-  </div>
-</div>
-`;
+`.repeat(3);
   let data = {
     tourCoordinates,
     center: getCenter(tourCoordinates),
@@ -438,8 +440,6 @@ function getRecommendations(cat) {
   })
     .then((res) => res.json())
     .then((data) => {
-      data = JSON.parse(data);
-      data = data.map((d) => d.fields);
       recommendations[cat] = data;
       tab.innerHTML = "";
       if (data.length === 0) {
@@ -454,15 +454,26 @@ function getRecommendations(cat) {
           `<div class="rec-card">
         <div class="rec-header">
           <h4>${d.name}</h4>
+          ${
+            d.type
+              ? '<p class="verified-biz"><img src="/static/icons/map/verified.png" alt="Verified" />verified</p>'
+              : ""
+          }
+          <p class="rec-card-rating">${
+            d.rating
+          } <img width="15px" src=${starIcon} alt="stars"/></p>
         </div>
         <div class="rec-card-body">
-          <img src="/media/${d.image}" alt="Image-${d.name}" class="rec-img">
+          <img src="${d.type ? d.banner : d.image}" alt="Image-${
+            d.name
+          }" class="rec-img">
           <div class="rec-description">
             <p>${d.description}</p>
           </div>
           <div class="rec-btns">
             <button class="rec-btn" onClick="createRecWaypoints('${cat}','${key}');">Directions</button>
             <button class="rec-btn" onClick="addRecommendationMarker('${cat}','${key}');">View</button>
+            <button class="rec-btn" onClick="createRecWaypoints('${cat}','${key}');">Add to tour</button>
           </div>
         </div>
         </div>`
@@ -491,6 +502,7 @@ function addToWishlist(option) {
         document.querySelector(
           ".btn-wishlist"
         ).innerHTML = `<img src="/static/icons/map/wishlist_added.png" alt="wishlist" class="btn-wishlist" data-wishlist="remove"/>`;
+        mapAlert("Tour added to wishlist", "success");
       } else {
         document
           .querySelector(".btn-wishlist")
@@ -498,6 +510,7 @@ function addToWishlist(option) {
         document.querySelector(
           ".btn-wishlist"
         ).innerHTML = `<img src="/static/icons/map/wishlist_add.png" alt="wishlist" class="btn-wishlist" data-wishlist="add"/>`;
+        mapAlert("Tour removed from wishlist", "success");
       }
     })
     .catch((err) => mapAlert(err.message, "danger"));
