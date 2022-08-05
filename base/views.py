@@ -117,8 +117,12 @@ def contact(request):
     context={}
     return render(request,"base/contact.html",context)
 
-def tourDetails(request):
-    context={}
+
+def tourDetails(request,data):
+    tourData=Tour.objects.filter(id=data)
+    if request.method=='POST':
+        tourData=Tour.objects.get(id=data)
+    context={'tourData':tourData}
     return render(request,"base/tourDetails.html",context)
 
 def tourForm(request):

@@ -27,7 +27,7 @@ urlpatterns = [
     path('api/v1/nearby/<str:cat>/',views.getNearby,name='getNearby'),
     path('api/v1/recommendations/<str:cat>/',views.getRecommendations,name='getRecommendations'),
     path('api/v1/tour/addToWishlist/',views.handleWishlist,name='handleWishlist'),
-    path('tourDetails/',views.tourDetails,name='tourDetails'),
+    path('tourDetails/<int:data>',views.tourDetails,name='tourDetails'),
     path('updatePassword/',views.updatePassword ,name='updatePassword'),
     path('reset_password/',auth_views.PasswordResetView.as_view(template_name='base/passwordReset/password_reset_form.html', form_class=UserPasswordResetForm), name='reset_password'),
     path('reset_password/email/',auth_views.PasswordResetView.as_view(template_name='base/passwordReset/password_reset_form.html', form_class=UserPasswordResetForm, html_email_template_name='base/passwordReset/password_reset_email.html'), name='reset_password'),

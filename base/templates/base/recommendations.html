@@ -47,6 +47,15 @@
                 <p class="card-text py-4 px-3"  style="height:250px;">
                   Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste velit magnam excepturi dicta maiores necessitatibus nisi ipsa, corrupti quasi, dolores aliquam illo obcaecati veritatis provident! Explicabo corrupti voluptatibus id quaerat!
                 </p>
+                <button class="disabled price">
+                <p class="fare-price">&#x20B9;{{data.avg_fare}}</p>
+                <p class="text-muted">per person</p>
+                </button>
+            </div>
+            <div class="row">
+                <div class="btn-group">
+                <button class="More-info  my-5">View Tour</button>
+                <button class="More-info mx-4 my-5"><a href="{% url 'tourDetails' data.id %}" color: white;>See more</a></button>
                </div>
                <div class="col-md-5">
                     <p class="avg-price">Avg-Price</p>
