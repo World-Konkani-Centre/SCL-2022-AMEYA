@@ -62,9 +62,9 @@ def signup(request):
             user = User.objects.create(email=email, username=username, password=make_password(password))
             user.save() 
             auth_login(request, user)    
-            html_content = render_to_string('base/email/email.html',{'title':'Welcome to Tourist Guide','message':'Welcome to Tourist Guide. Thank you for signing up.','name':username})
+            html_content = render_to_string('base/email/email.html',{'title':'Welcome to Yatra Mitra App','message':'Welcome to  Yatra Mitra app. Thank you for signing up.','name':username})
             text_content = strip_tags(html_content)
-            email_content = EmailMultiAlternatives('Welcome to Tourist Guide', text_content, settings.EMAIL_HOST_USER, [email])
+            email_content = EmailMultiAlternatives('Welcome to Yatra Mitra App', text_content, settings.EMAIL_HOST_USER, [email])
             email_content.attach_alternative(html_content, "text/html")
             email_content.send()
             messages.add_message(request, messages.INFO, 'You have successfully signed up.')
@@ -95,18 +95,14 @@ def logout(request):
 
 def recommendations(request):
     if request.method=='POST':
-        contents=Tour.objects.all()
         category1= request.POST['category']  #Retrieves the category entered by the user
         category2=request.POST['place'] 
-        tour_data = Tour.objects.all().filter(category=category1,place=category2).order_by('-rating').values()
-        context={
-            'tour_data':tour_data
-        }
+        tour_data = Tour.objects.all().filter(category=category1,place=category2).order_by('-rating')
+        context={'tour_data':tour_data}
         return render(request,"base/recommendations.html",context)
     else:
-       tour_data=Tour.objects.all().order_by('-rating').values()
-       context={'tour_data':tour_data
-       }
+       tour_data=Tour.objects.all().order_by('-rating')
+       context={'tour_data':tour_data}
        return render(request,"base/recommendations.html",context)
 
 def aboutUs(request):
@@ -378,23 +374,19 @@ def error_404(request,exception):
 
 #delete user profile
 
-def DeleteUser(request,username,id):    
+def deleteUser(request,username,id):    
     profile = User.objects.get(username = username)
-    u=username
-    print(u)
-    id1=id
-    print(id1)
-
     context={'profile':profile}
     if request.method=='POST':
         profile=User.objects.get(id=id, email=request.user.email)
+        userEmail=request.user.email
         password1=request.POST.get('password')
         if request.user.check_password(password1):
             profile.delete()
             # Send mail:
-            html_content = render_to_string('base/email/email.html',{'title':'Your account has been deleted','message':'Your account has been deleted successfully. Thank you.','username':user.username})
+            html_content = render_to_string('base/email/email.html',{'title':'Your account has been deleted','message':'Your account has been deleted successfully. Thank you.','username':username})
             text_content = strip_tags(html_content)
-            email_content = EmailMultiAlternatives('Your account has been deleted successfully', text_content, settings.EMAIL_HOST_USER, [request.user.email])
+            email_content = EmailMultiAlternatives('Your account has been deleted successfully', text_content, settings.EMAIL_HOST_USER, [userEmail])
             email_content.attach_alternative(html_content, "text/html")
             email_content.send()
             messages.add_message(request, messages.SUCCESS, 'Your account has been deleted successfully!')

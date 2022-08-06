@@ -161,6 +161,14 @@ button {
   padding: 0;
   cursor: pointer;
 }
+.alert-message {
+  width: 90%;
+  margin: 0 auto;
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
 
 .main_bt {
   background: #ee580f;
@@ -198,6 +206,7 @@ a.readmore_bt {
   text-align: center;
 }
 .banner-main {
+  margin-top: 56.16px;
   position: relative;
 }
 .banner-main .text-bg h1 {

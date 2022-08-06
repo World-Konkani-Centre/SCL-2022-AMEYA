@@ -2,12 +2,10 @@
 <!-- Replace {name} with the respective css file -->
 <link rel="stylesheet" href="{% static 'styles/home.css' %}" />
 {% endblock %} {% block content %}
-<!--  -->
-{% include 'base/alertMessages/messages.html' %}
-
 <body class="main-layout">
   <section>
     <div class="banner-main">
+      {% include 'base/alertMessages/messages.html' %}
       <img src="{% static 'images/home/banner.jpg' %}" alt="#" width="100%" />
       <div class="container">
         <div class="text-bg">
