@@ -15,7 +15,7 @@ const recPanel = document.getElementById("recommendation-panel");
 
 // Map Initialization:
 var map = L.map("map").setView(curLatLang, 13);
-L.tileLayer("https://tile.osm.ch/switzerland/{z}/{x}/{y}.png", {
+L.tileLayer("https://tile.osm.ch/sswitzerland/{z}/{x}/{y}.png", {
   maxZoom: 19,
   attribution:
     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -224,6 +224,7 @@ function createWaypoints(latLngArr, id) {
       tourCoordinates = latLngArr;
       latLngArr = latLngArr.map((l) => L.latLng(...l));
       // Create a route:
+      mapAlert("Finding best route...", "info");
       const routing = L.Routing.control({
         waypoints: latLngArr,
         lineOptions: {
@@ -282,7 +283,37 @@ function createRecWaypoints(cat, id) {
     mapAlert("Geolocation is not supported by this browser.", "danger");
   }
 }
-
+// Create a new waypoint route for the add to tour button:
+function createAddWaypoints(latLng) {
+  if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(function (pos) {
+      curLatLang = [pos.coords.latitude, pos.coords.longitude];
+      latLngArr = [curLatLang, [...latLngArr]];
+      tourCoordinates = latLngArr;
+      latLngArr = latLngArr.map((l) => L.latLng(...l));
+      // Create a route:
+      if (addRouting) map.removeControl(addRouting);
+      addRouting = L.Routing.control({
+        waypoints: latLngArr,
+        lineOptions: {
+          styles: [{ color: "#58D68D", opacity: 1, weight: 5 }],
+        },
+        createMarker: function () {
+          return null;
+        },
+      })
+        .on("routesfound", (e) => {
+          addRouteCoordinates = e.routes[0].coordinates;
+        })
+        .addTo(map);
+      // Add directions to side panel:
+      let dirTab = addRouting.onAdd(map);
+      document.getElementById("pills-directions").appendChild(dirTab);
+    });
+  } else {
+    mapAlert("Geolocation is not supported by this browser.", "danger");
+  }
+}
 // Map Eventlisteners:
 
 // Map alert handler:

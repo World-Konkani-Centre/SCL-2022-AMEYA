@@ -67,16 +67,19 @@
                 >
               </li>
               <li class="nav-item">
+                <a
+                  class="nav-link items"
+                  aria-current="page"
+                  href="{% url 'tourForm' %}"
+                  ><button><span>Find Trips</span></button></a
+                >
+              </li>
+              <li class="nav-item">
                 <a class="nav-link items" href="{% url 'aboutUs' %}"
                   ><button><span>About Us</span></button></a
                 >
               </li>
               {% if user.is_authenticated %}
-              <li class="nav-item">
-                <a class="nav-link items" href="{% url 'trips' %}"
-                  ><button><span>Your trips</span></button></a
-                >
-              </li>
               <li class="nav-item dropdown nav-profile">
                 <a
                   class="nav-link dropdown-toggle"
@@ -148,7 +151,7 @@
                       class="dropdown-item"
                       href="{% url 'logout' %}"
                       id="dropdown-item"
-                      >Log-out</a
+                      >Logout</a
                     >
                   </li>
                 </ul>
