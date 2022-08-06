@@ -1,6 +1,7 @@
 // Global Variables:
 let tourId;
 let tourData;
+let routing = null;
 let recMarker = null;
 let recRouting = null;
 let curLatLang = [12.933969688632496, 77.61193685079267];
@@ -15,7 +16,7 @@ const recPanel = document.getElementById("recommendation-panel");
 
 // Map Initialization:
 var map = L.map("map").setView(curLatLang, 13);
-L.tileLayer("https://tile.osm.ch/switzerland/{z}/{x}/{y}.png", {
+L.tileLayer("https://tile.osm.ch/sswitzerland/{z}/{x}/{y}.png", {
   maxZoom: 19,
   attribution:
     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -224,7 +225,8 @@ function createWaypoints(latLngArr, id) {
       tourCoordinates = latLngArr;
       latLngArr = latLngArr.map((l) => L.latLng(...l));
       // Create a route:
-      const routing = L.Routing.control({
+      mapAlert("Finding best route...", "info");
+      routing = L.Routing.control({
         waypoints: latLngArr,
         lineOptions: {
           styles: [{ color: "#65b5ff", opacity: 1, weight: 5 }],
@@ -282,7 +284,39 @@ function createRecWaypoints(cat, id) {
     mapAlert("Geolocation is not supported by this browser.", "danger");
   }
 }
-
+// Create a new waypoint route for the add to tour button:
+function createAddWaypoints(lat, lng) {
+  if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(function (pos) {
+      curLatLang = [pos.coords.latitude, pos.coords.longitude];
+      let latLng = [lat, lng];
+      tourCoordinates = [curLatLang, latLng, ...tourCoordinates.slice(1)];
+      let latLngArr = tourCoordinates;
+      latLngArr = latLngArr.map((l) => L.latLng(...l));
+      // Create a route:
+      if (routing) map.removeControl(routing);
+      if (recRouting) map.removeControl(recRouting);
+      routing = L.Routing.control({
+        waypoints: latLngArr,
+        lineOptions: {
+          styles: [{ color: "#58D68D", opacity: 1, weight: 5 }],
+        },
+        createMarker: function () {
+          return null;
+        },
+      })
+        .on("routesfound", (e) => {
+          addRouteCoordinates = e.routes[0].coordinates;
+        })
+        .addTo(map);
+      // Add directions to side panel:
+      let dirTab = addRouting.onAdd(map);
+      document.getElementById("pills-directions").appendChild(dirTab);
+    });
+  } else {
+    mapAlert("Geolocation is not supported by this browser.", "danger");
+  }
+}
 // Map Eventlisteners:
 
 // Map alert handler:
@@ -473,7 +507,9 @@ function getRecommendations(cat) {
           <div class="rec-btns">
             <button class="rec-btn" onClick="createRecWaypoints('${cat}','${key}');">Directions</button>
             <button class="rec-btn" onClick="addRecommendationMarker('${cat}','${key}');">View</button>
-            <button class="rec-btn" onClick="createRecWaypoints('${cat}','${key}');">Add to tour</button>
+            <button class="rec-btn" onClick="createAddWaypoints('${d.lat}','${
+            d.lng
+          }');">Add to tour</button>
           </div>
         </div>
         </div>`

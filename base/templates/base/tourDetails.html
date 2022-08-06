@@ -18,10 +18,7 @@
         <div class="col my-3 rounded-end">
           <br>
           <br>
-         
-          
           <img src='/media/{{data.image}}' class="card-img" alt="{{data.name}}" height="40%" width="90%" >
-          
         </div>
         <div class="mx-2 my-2 align-text-center">
           <h5>Average Fair: {{data.avg_fare}}</h5>
@@ -40,8 +37,6 @@
         
           <h5 class="card-title">{{data.name}}</h5>
           {% if user.is_authenticated %} {% if wishlist %}
-       
-          
           <button
             class="btn btn-primary btn-wishlist"
             data-wishlist="remove"
@@ -147,37 +142,9 @@
               
                 </div>
                 <div class="d2" style="text-align:center">
-                  <style>
-                  .button {
-                    background-color: #1e1e1e;
-                    border: none;
-                    
-                    color: white;
-                    padding: 15px 32px;
-                    text-align: center;
-                    text-decoration: none;
-                    display: inline-block;
-                    font-size: 16px;
-                    margin: 4px 2px;
-                    cursor: pointer;
-                    border-radius: 4px;
-                  }
-                </style>
-                <button class="button">
-                  <style>
-                    a:link, a:visited {
-                      background-color: #1e1e1e;
-                      color: white;
-                     
-                      text-align: center;
-                      
-                    }
-               
-                  
-                  </style>
-                  {% comment %} <a href="{% url 'map'   %}">View tour</a> {% endcomment %}
-                  <a href="/map/?id=1">View tour</a>
-                </button>
+                <a href="{% url 'map' %}?id{{data.id}}"><button class="btn btn-primary">
+                  View tour
+                </button></a>
               </div>
 
           
@@ -200,8 +167,3 @@
 <div>
 {%endfor%}
 {% endblock %}
-
-
-
-
-//tourdetails
