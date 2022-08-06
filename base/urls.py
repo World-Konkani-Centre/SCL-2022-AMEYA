@@ -17,6 +17,7 @@ urlpatterns = [
     path('trip/',views.trip,name='trip'),
     path('trips/',views.trips,name='trips'),
     path('user/profile/',views.userProfile,name='userProfile'),
+    path('user/profile/delete/<username>/<int:id>',views.DeleteUser,name='delete_user'),
     path('user/wishlist',views.userWishlist,name='userWishlist'),
     path('tourForm/',views.tourForm,name='tourForm'),
     path('tourReview/<int:id>/',views.tourReview,name='tourReview'),
@@ -34,6 +35,7 @@ urlpatterns = [
     path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(template_name='base/passwordReset/password_reset_done.html') ,name='password_reset_done'),
     path('password_reset_confirm/<uidb64>/<token>/',auth_views.PasswordResetConfirmView.as_view(template_name='base/passwordReset/password_reset_confirm.html', form_class=PasswordResetingForm) ,name='password_reset_confirm'),
     path('password_reset_complete',auth_views.PasswordResetCompleteView.as_view(template_name='base/passwordReset/password_reset_complete.html'),name='password_reset_complete'),
+    
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
