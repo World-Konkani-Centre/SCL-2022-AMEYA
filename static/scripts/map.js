@@ -1,6 +1,7 @@
 // Global Variables:
 let tourId;
 let tourData;
+let routing = null;
 let recMarker = null;
 let recRouting = null;
 let curLatLang = [12.933969688632496, 77.61193685079267];
@@ -225,7 +226,7 @@ function createWaypoints(latLngArr, id) {
       latLngArr = latLngArr.map((l) => L.latLng(...l));
       // Create a route:
       mapAlert("Finding best route...", "info");
-      const routing = L.Routing.control({
+      routing = L.Routing.control({
         waypoints: latLngArr,
         lineOptions: {
           styles: [{ color: "#65b5ff", opacity: 1, weight: 5 }],
@@ -284,16 +285,18 @@ function createRecWaypoints(cat, id) {
   }
 }
 // Create a new waypoint route for the add to tour button:
-function createAddWaypoints(latLng) {
+function createAddWaypoints(lat, lng) {
   if ("geolocation" in navigator) {
     navigator.geolocation.getCurrentPosition(function (pos) {
       curLatLang = [pos.coords.latitude, pos.coords.longitude];
-      latLngArr = [curLatLang, [...latLngArr]];
-      tourCoordinates = latLngArr;
+      let latLng = [lat, lng];
+      tourCoordinates = [curLatLang, latLng, ...tourCoordinates.slice(1)];
+      let latLngArr = tourCoordinates;
       latLngArr = latLngArr.map((l) => L.latLng(...l));
       // Create a route:
-      if (addRouting) map.removeControl(addRouting);
-      addRouting = L.Routing.control({
+      if (routing) map.removeControl(routing);
+      if (recRouting) map.removeControl(recRouting);
+      routing = L.Routing.control({
         waypoints: latLngArr,
         lineOptions: {
           styles: [{ color: "#58D68D", opacity: 1, weight: 5 }],
@@ -504,7 +507,9 @@ function getRecommendations(cat) {
           <div class="rec-btns">
             <button class="rec-btn" onClick="createRecWaypoints('${cat}','${key}');">Directions</button>
             <button class="rec-btn" onClick="addRecommendationMarker('${cat}','${key}');">View</button>
-            <button class="rec-btn" onClick="createRecWaypoints('${cat}','${key}');">Add to tour</button>
+            <button class="rec-btn" onClick="createAddWaypoints('${d.lat}','${
+            d.lng
+          }');">Add to tour</button>
           </div>
         </div>
         </div>`
