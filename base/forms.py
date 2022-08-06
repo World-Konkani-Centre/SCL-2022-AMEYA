@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserChangeForm,PasswordChangeForm,Password
 from .models import Profile
 
 
+
 class UserUpdateForm(forms.ModelForm):
     email =forms.EmailField(max_length=40, widget=forms.EmailInput(attrs={ 'class' : 'form-control my-2', 'placeholder':'Email','readonly':True})) 
     username =forms.CharField(widget=forms.TextInput(attrs={ 'class' : 'form-control my-2', 'placeholder':'Username'}))
@@ -55,3 +56,4 @@ class PasswordResetingForm(SetPasswordForm):
         model=User
         fields = ['new_password1','new_password2']
         
+

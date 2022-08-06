@@ -40,13 +40,8 @@
                 <span class="text-black-50">{{user.email}}</span>
               </div>
               <div class="my-4 text-center">
-                <a
-                  class="btn btn-primary profile-button"
-                  type="button"
-                  href="{% url 'logout' %}"
-                >
-                  Logout
-                </a>
+
+              <a href="{% url 'delete_user' user.username user.id %}"><button type="button" class="btn btn-danger">Delete Account</button></a>
               </div>
             </div>
           </div>

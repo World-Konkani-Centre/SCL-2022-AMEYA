@@ -369,3 +369,32 @@ def handleWishlist(request):
 # Error page:
 def error_404(request,exception):
     return render(request,'base/errorPages/404.html')
+
+
+
+#delete user profile
+
+def DeleteUser(request,username,id):    
+    profile = User.objects.get(username = username)
+    u=username
+    print(u)
+    id1=id
+    print(id1)
+
+    context={'profile':profile}
+    if request.method=='POST':
+        profile=User.objects.get(id=id, email=request.user.email)
+        password1=request.POST.get('password')
+        if request.user.check_password(password1):
+            profile.delete()
+            # Send mail:
+            html_content = render_to_string('base/email/email.html',{'title':'Your account has been deleted','message':'Your account has been deleted successfully. Thank you.','username':user.username})
+            text_content = strip_tags(html_content)
+            email_content = EmailMultiAlternatives('Your account has been deleted successfully', text_content, settings.EMAIL_HOST_USER, [request.user.email])
+            email_content.attach_alternative(html_content, "text/html")
+            email_content.send()
+            messages.add_message(request, messages.SUCCESS, 'Your account has been deleted successfully!')
+            return redirect('home')
+        else:
+            messages.add_message(request, messages.ERROR, 'Please enter correct password!')
+    return render(request,"base/deleteUser.html",context)
