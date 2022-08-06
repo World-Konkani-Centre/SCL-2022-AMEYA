@@ -98,14 +98,14 @@ def recommendations(request):
         contents=Tour.objects.all()
         category1= request.POST['category']  #Retrieves the category entered by the user
         category2=request.POST['place'] 
-        tourData = Tour.objects.all().filter(category=category1,place=category2).order_by('-rating').values()
+        tour_data = Tour.objects.all().filter(category=category1,place=category2).order_by('-rating').values()
         context={
-            'tourData':tourData
+            'tour_data':tour_data
         }
         return render(request,"base/recommendations.html",context)
     else:
-       tourData=Tour.objects.all().order_by('-rating').values()
-       context={'tourData':tourData
+       tour_data=Tour.objects.all().order_by('-rating').values()
+       context={'tour_data':tour_data
        }
        return render(request,"base/recommendations.html",context)
 
@@ -117,8 +117,12 @@ def contact(request):
     context={}
     return render(request,"base/contact.html",context)
 
-def tourDetails(request):
-    context={}
+
+def tourDetails(request,data):
+    tourData=Tour.objects.filter(id=data)
+    if request.method=='POST':
+        tourData=Tour.objects.get(id=data)
+    context={'tourData':tourData}
     return render(request,"base/tourDetails.html",context)
 
 def tourForm(request):

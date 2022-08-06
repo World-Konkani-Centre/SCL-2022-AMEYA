@@ -31,10 +31,10 @@ class Tour(models.Model):
         return self.name
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
-    id=models.BigAutoField(primary_key=True)
     role_choices=[('1','User'),('2','Business')]
     gender_choices=[('1','Male'),('2','Female'),('3','Dont want to specify')]
+    id=models.BigAutoField(primary_key=True)
+    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     gender=models.CharField(max_length=1,choices=gender_choices,default='1')
     phone=models.CharField(blank=True, max_length=10,default='')
     DOB=models.DateField(null=True)
@@ -58,7 +58,7 @@ class Profile(models.Model):
 class TourReviews(models.Model):
     id=models.BigAutoField(primary_key=True)
     tour=models.ForeignKey(Tour,on_delete=models.CASCADE)
-    # user=models.ForeignKey(User,on_delete=models.CASCADE)
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
     rating=models.IntegerField(default=5,validators=[MinValueValidator(1),MaxValueValidator(5)])
     review=models.CharField(max_length=500)
     createadAt=models.DateTimeField(auto_now_add=True)

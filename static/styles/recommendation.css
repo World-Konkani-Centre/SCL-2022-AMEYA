@@ -1,8 +1,9 @@
 /* Common CSS properties for the page */
 body {
   background-color: #e2e2e291;
+  overflow-x: hidden;
 }
-.rec-container{
+.rec-container {
   margin-top: 60px;
 }
 .card {
@@ -20,8 +21,8 @@ body {
   color: rgb(255, 234, 3);
 }
 
-.vertical{
-border-right: 1px dashed rgb(226, 224, 224);
+.vertical {
+  border-right: 1px dashed rgb(226, 224, 224);
 }
 
 .hover01 {
@@ -42,6 +43,13 @@ border-right: 1px dashed rgb(226, 224, 224);
   border-style: none;
   border-radius: 3px;
 }
+
+/* .sub-msg{
+  color: #2c2a2a;
+  position: relative;
+  top: 90px !important;
+  left: 65px !important;
+} */
 
 a:link {
   text-decoration: none;
@@ -70,13 +78,14 @@ a:active {
   font-family: Georgia, "Times New Roman", Times, serif;
   font-size: 28px;
   padding-top: 2%;
+  display: inline;
 }
 
 .container {
   padding: 1%;
 }
 
-.card-text{
+.card-text {
   /* white-space: nowrap; */
   overflow: hidden;
   text-overflow: ellipsis;
@@ -84,162 +93,185 @@ a:active {
   width: 350px;
 }
 
-.mt-n1{
+.mt-n1 {
   margin-top: -35px !important;
   margin-left: 25px !important;
 }
 
-.mt-n2{
+.mt-n2 {
   margin-left: 20px !important;
 }
 
-.mt-n3{
+.mt-n3 {
   padding-left: 50px;
 }
 
+.btn-group {
+  position: relative;
+  right: 30px;
+}
 
-
-.price{
+.price {
   border-radius: 5px;
   border-style: none;
   height: 45px;
   width: 120px;
   position: relative;
-  top: 70px;
-  left: 85px;
-
+  top: 80px;
+  right: 40px;
 }
 
-.fare-price{
-  color:rgb(185, 77, 154);
+.fare-price {
+  color: rgb(185, 77, 154);
   font-weight: bold;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 16px;
   padding-top: 10px;
 }
 
-.More-info{
+.More-info {
   border-style: none;
-  background-color:#1e1e1e;
+  background-color: #1e1e1e;
   height: 45px;
   width: 100px;
   border-radius: 30px;
-  color:#fff;
+  color: #fff;
   position: relative;
   top: 80px;
   left: 30px;
 }
 
-.More-info:hover{
+.More-info:hover {
   background-color: rgb(222, 231, 229);
   color: #1e1e1e;
 }
 
-.avg-price{
+.avg-price {
   font-family: Georgia, "Times New Roman", Times, serif;
   font-size: 20px;
   position: relative;
-  top: 70px;
-  left: 90px;
+  top: 30px;
+  left: 70px;
+  display: inline;
 }
-
 
 /* Media queries */
 /* =============================================================================================== */
+@media only screen and (max-width: 768px) {
+  .card-body {
+    height: 350px;
+    width: 100%;
+  }
+  .col-md-7 {
+    height: 100px !important;
+  }
+}
 
-@media only screen and (min-width: 600px) {
-   .card-text{
-      overflow: hidden;
-      text-overflow: ellipsis;
-      width: auto;
-   }
-   .price{
-      bottom: 30px;
-   }
+@media only screen and (max-width: 991px) {
+  .card {
+    width: 140% !important;
+  }
+}
+
+@media only screen and (min-width: 601px) and (max-width: 767px) {
+  .card-body {
+    height: 160px !important;
+  }
+  .sub-header {
+    position: relative;
+    bottom: 80px !important;
+  }
+  .card-text {
+    position: relative;
+    bottom: 80px !important;
+  }
+  .avg-price {
+    position: relative;
+    top: -50px !important;
+    left: 150px !important;
+  }
+  .price {
+    position: relative;
+    left: 50px !important;
+    top: -1px !important;
+  }
+  .btn-group {
+    position: relative;
+    left: 50px !important;
+    top: -60px !important;
+  }
 }
 
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
-.btn-group{
- position: relative;
- top:-100px !important;
-}
-.avg-price{
+  .card {
+    width: 140% !important;
+  }
+  .card-title {
+    font-size: 23px !important;
+  }
+  .card-text {
     position: relative;
-    top: 20px !important;
-    right: 20px !important;
-}
-.price{
-      position: relative;
-      top: -30px !important;
-      left: 200px !important;
-}
-.container{
-  align-items: center;
-  padding-left: 20px;
-}
-}
-
-
-/* Medium devices (landscape tablets, 768px and up) */
-@media only screen and (max-width: 912px) and (max-height:1368px) {
-.btn-group{
-     position: relative;
-     right: 20px !important;
-}
-}
-
-@media all and (device-width: 768px) and (device-height: 1024px) and (orientation:portrait) {
-.mt-n1{
-  position: relative;
-  left: 450px !important;
-}
-}
-
-@media all and (device-width: 820px) and (device-height: 1180px) and (orientation:portrait) {
-.mt-n1{
-  position: relative;
-  left: 450px !important;
-}
+    bottom: 270px !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 200%;
+    /* height: 100px !important; */
+  }
+  .avg-price {
+    position: relative;
+    left: -215px !important;
+    top: -40px !important;
+  }
+  .price {
+    position: relative;
+    left: -320px !important;
+    top: -1px !important;
+  }
+  .btn-group {
+    position: relative;
+    top: -180px !important;
+  }
+  .sub-header {
+    position: relative;
+    bottom: 275px !important;
+  }
+  .cat {
+    padding-bottom: 7px !important;
+  }
 }
 
-@media all and (device-width: 912px) and (device-height: 1368px) and (orientation:portrait) {
- .mt-n1{
-  position: relative;
-  left: 450px !important;
- }
+/* Galaxy Fold */
+@media all and (device-width: 280px) and (device-height: 653px) and (orientation: portrait) {
+  .card {
+    width: 200% !important;
+  }
 }
 
-@media all and (device-width: 540px) and (device-height: 720px) and (orientation:portrait){
-.card-text{
-  width: 500px !important;
-}
-}
-
-@media all and (device-width: 280px) and (device-height: 653px) and (orientation:portrait){
-.card-text{
-  width: 250px;
-}
-.avg-price{
-  position: relative;
-  left: -2px !important;
-}
-.price{
-  position: relative;
-   height: 30px !important;
-   left: -1px !important;
-}
-.More-info{
-  font-size: 10px !important;
-}
-.fare-price{
-  font-size: 15px !important;
-}
+/* Ipad Air */
+@media all and (device-width: 820px) and (device-height: 1180px) and (orientation: portrait) {
+  .card {
+    width: 130% !important;
+  }
+  .sub-header {
+    position: relative;
+    top: 18px !important;
+  }
 }
 
+/* Ipad Mini */
+@media all and (device-width: 768px) and (device-height: 1024px) and (orientation: portrait) {
+  .card {
+    width: 140% !important;
+  }
+  .card-body {
+    height: 100px !important;
+  }
+}
 
-
-
-
-
-
+/*  Surface Pro 7 */
+@media all and (device-width: 912px) and (device-height: 1368px) and (orientation: portrait) {
+  .card {
+    width: 140% !important;
+  }
+}

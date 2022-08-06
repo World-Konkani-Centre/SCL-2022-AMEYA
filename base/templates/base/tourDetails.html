@@ -1,117 +1,162 @@
 {% extends 'main.html' %}
+
 {% load static %} 
 {% block styles %}
 <!-- Replace {name} with the respective css file -->
-<link rel="stylesheet" href="{% static 'styles/{tourdetails.css}' %}" />
+<link rel="stylesheet" href="{% static 'styles/tourDetails.css' %}" />
 {% endblock %}
 
 {% block content %} 
 <!-- Add code from body here -->
 <!--container-->
+<script src="{% static 'scripts/tourDetails.js' %}"></script>
+{% for data in tourData%}
+<div class="container-md">
 <div class="container rounded-end">
   <div class="row">
-    <div class="col-md-7 border-right">
-      <div class="col my-3 rounded-end">
-        <img src="iskon - Copy.jpg" height="40%" width="100%" border="2px rounded">
-      </div>
-      <div class="mx-2 my-2 align-text-center">
-        <h5></h6>
-          <h5>Best time to visit: 7:30AM to 8:30PM</h6>
-      </div>
+    <div class="col-md-7 ">
+        <div class="col my-3 rounded-end">
+          <br>
+          <br>
+          <img src='/media/{{data.image}}' class="card-img" alt="{{data.name}}" height="40%" width="90%" >
+        </div>
+        <div class="mx-2 my-2 align-text-center">
+          <h5>Average Fair: {{data.avg_fare}}</h5>
+            <h5>Best time to visit: {{data.hours_open}}</h6>
+        </div>
     </div>
 
     <div class="col-md-5 border-right">
       <div class="mx-2 my-3 rounded-end">
         <div>
-          <h2>ISKCON TEMPLE</h2>
+          <br>
+          <br>
+          {% comment %} <div class="pull-right">
+            <button class ="btn btn-sm btn-danger add-wishlist" data-product="{{data.id}}"><i class="fa fa-heart"></i></button>
+          </div> {% endcomment %}
+        
+          <h5 class="card-title">{{data.name}}</h5>
+          {% if user.is_authenticated %} {% if wishlist %}
+          <button
+            class="btn btn-primary btn-wishlist"
+            data-wishlist="remove"
+            title="Wishlist"
+          >
+            <img
+              src="{% static 'icons/map/wishlist_added.png' %}"
+              alt="wishlist"
+              class="btn-wishlist float-right "  data-wishlist="remove"/>
+          </button>
+          {% else %}
+          <button
+            class="btn btn-primary btn-wishlist float-right" data-wishlist="add"
+            title="Wishlist">
+            <img
+              src="{% static 'icons/map/wishlist_add.png' %}"
+              alt="wishlist"
+              class="btn-wishlist float-right"
+              data-wishlist="add"
+            />
+          </button>
+          {% endif %} {% endif %}
+           
           <div>
-            <font size="5">
-              <a href="https://goo.gl/maps/ZW2gPWE673a7v7618" text-decoration="none">
-                <span class="red">&star;</span>
-                <span class="red"">&star;</span>
-            <span class=" red"">&star;</span>
-                <span class="red"">&star;</span>             
-            <span class=" black"">&star;</span>
-              </a>
-              <span><img src="customer.jpg" width="30" height="30"></span>
+            <font size="3">
+              <section>
+                <span class="hidden-text">{{data.rating}}</span>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span class="rating-star">
+                  <!-- By default the star is full else it is empty otherwise it is half -->
+                      <i class="fa fa-star{% if data.rating < 0.5%}-o{% elif data.rating >= 0.5 and data.rating < 1 %}-half-o{% endif %}" style="color:#f1d554;" aria-hidden="true"></i>
+                      <i class="fa fa-star{% if data.rating < 1.5%}-o{% elif data.rating >= 1.5 and data.rating < 2 %}-half-o{% endif %}" style="color:#f1d554;" aria-hidden="true"></i>
+                      <i class="fa fa-star{% if data.rating < 2.5%}-o{% elif data.rating >= 2.5 and data.rating < 3 %}-half-o{% endif %}" style="color:#f1d554;" aria-hidden="true"></i>
+                      <i class="fa fa-star{% if data.rating < 3.5%}-o{% elif data.rating >= 3.5 and data.rating < 4 %}-half-o{% endif %}" style="color:#f1d554;" aria-hidden="true"></i>
+                      <i class="fa fa-star{% if data.rating < 4.5%}-o{% elif data.rating >= 4.5 and data.rating < 5 %}-half-o{% endif %}" style="color:#f1d554;" aria-hidden="true"></i>
+                </span>
+              </section>
+              
             </font>
           </div>
-        </div><br>
-
+        </div>
+        <br>
+        
         <div class="align-content-center">
-          <div>
-            <h5>Sri Radha-Krishna Chandra temple is one of the largest Hindu temple in the world. It is located at
-              Rajajinagar, in north bengalore in the Indian state of Karntaka.</h5>
+          <div class="p1" style="text-align: justify;">
+           
+            
+            {{data.description}}
           </div>
         </div>
-        <div class="my-3">
-          <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">Hours</th>
-                <th scope="col">Contact</th>
-              </tr>
-            </thead>
+        <div class="my-7">
+          <br>
+          <div class="container">   
+            <div class="row">
+             <div class="col-sm-8">
+              <strong>Hours</strong> 
+             </div>
+              <div class="col-sm-4" >
+                <strong>Contact</strong> 
+              </div>
+            </div>
+            <hr/>
+            {% comment %} <div class="divider py-1 bg-success"></div> {% endcomment %}
+              {% comment %} {%if data:","%} {% endcomment %}
+        
+                {% comment %} 
+                {% comment %} <div class="col-sm-8"><h6>{{data.hours_open}} </h6></div> {% endcomment %}
+                      {% comment %} <div class="col-sm-4" >
+                        <h6>{{data.contact}}</h6></div> {% endcomment %}
+                {% comment %} {% endif %} {% endcomment %}
+                <div class="row">
+                  <div class="col-sm-8"> Sunday 7:15AM-8PM </div>
+                  <div class="col-sm-4" >Hare Krishna Hill</div>
+                </div>
+                  <div class="row">
+                  <div class="col-sm-8"> Monday 7:15AM-1PM & 4PM-8PM </div>
+                  <div class="col-sm-4" >Chord Rd</div>
+                </div>
+                  <div class="row">
+                  <div class="col-sm-8"> Tuesday 7:15AM-1PM & 4PM-8PM </div>
+                  <div class="col-sm-4" >1st R block</div>
+                </div>
+                  <div class="row">
+                  <div class="col-sm-8"> Wednesday 7:15AM-1PM & 4PM-8PM </div>
+                  <div class="col-sm-4" >Rajajinagar,</div>
+                </div>
+                  <div class="row">
+                  <div class="col-sm-8">Thursday 7:15AM-1PM & 4PM-8PM </div>
+                  <div class="col-sm-4" > Karnataka</div>
+                </div>
+                  <div class="row">
+                  <div class="col-sm-8">Friday 7:15AM-1PM & 4PM-8PM</div>
+                  <div class="col-sm-4" > India</div>
+                </div>
+                  <div class="row">
+                  <div class="col-sm-8">Thursday 7:15AM-1PM & 4PM-8PM </div>
+                  <div class="col-sm-4" > Karnataka</div>
+                </div>
+            <br>
+            <br>
+                  
+              
+              
+                </div>
+                <div class="d2" style="text-align:center">
+                <a href="{% url 'map' %}?id{{data.id}}"><button class="btn btn-primary">
+                  View tour
+                </button></a>
+              </div>
 
-            <tbody>
-              <td>
-                Sunday 7:15AM-8PM
-              </td>
-              <td>
-                Hare Krishna Hill
-              </td>
-              </tr>
-              <tr>
-                <td>
-                  Monday 7:15AM-1PM & 4PM-8PM
-                </td>
-                <td>
-                  Chord Rd
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Tuesday 7:15AM-1PM & 4PM-8PM
-                </td>
-                <td>
-                  1st R block
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Wednesday 7:15AM-1PM & 4PM-8PM
-                </td>
-                <td>
-                  Rajajinagar,
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Thursday 7:15AM-1PM & 4PM-8PM
-                </td>
-                <td>
-                  Karnataka
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Friday 7:15AM-1PM & 4PM-8PM
-                </td>
-                <td>
-                  India
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Saturday 7:15AM-1PM & 4PM-8PM
-                </td>
-                <td>
-                  +91 80 2347 1956
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+          
+           
+            
+        
+            </div>
+          </div>
+          </div>
+              
+          
+                  </div>
       </div>
     </div>
   </div>
@@ -119,5 +164,6 @@
 </div>
 <div class="my-5">
 </div>
-
+<div>
+{%endfor%}
 {% endblock %}
