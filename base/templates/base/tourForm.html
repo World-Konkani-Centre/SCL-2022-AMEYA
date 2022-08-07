@@ -4,7 +4,7 @@
 
 {% endblock %}
 
-{% block content %} 
+{% block content %}
 <!-- Add code from body here -->
 <!--Destination-->
 <div class="py-5">
@@ -14,101 +14,88 @@
 
       <div class="col mx-1 py-4 border-right">
         <div class="col align-self-center">
-          <div
-            id="carouselExampleCaptions"
-            class="carousel slide carousel-fade"
-            data-bs-ride="carousel"
-          >
+          <div id="carouselExampleCaptions" class="carousel slide carousel-fade" data-bs-ride="carousel">
             <div class="carousel-indicators">
-              <button
-                type="button"
-                data-bs-target="#carouselExampleCaptions"
-                data-bs-slide-to="0"
-                class="active"
-                aria-current="true"
-                aria-label="Slide 1"
-              ></button>
-              <button
-                type="button"
-                data-bs-target="#carouselExampleCaptions"
-                data-bs-slide-to="1"
-                aria-label="Slide 2"
-              ></button>
-              <button
-                type="button"
-                data-bs-target="#carouselExampleCaptions"
-                data-bs-slide-to="2"
-                aria-label="Slide 3"
-              ></button>
+              <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"
+                aria-current="true" aria-label="Slide 1"></button>
+              <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"
+                aria-label="Slide 2"></button>
+              <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"
+                aria-label="Slide 3"></button>
+                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="3"
+                aria-label="Slide 4"></button>
+              <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="4"
+                aria-label="Slide 5"></button>
+              <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="5"
+                aria-label="Slide 6"></button>
             </div>
 
             <div class="container">
-              <div class="carousel-inner">
-                <div class="carousel-item active">
-                  <img
-                    src="{% static 'images/tourForm/travel1.jpg' %}"
-                    class="img-fluid"
-                    alt="..."
-                  />
+              <div class="carousel-inner" >
+                <div class="carousel-item active" data-bs-interval="2000">
+                  <img src="{% static 'images/tourForm/travel1.jpg' %}" class="img-fluid" alt="..." />
                   <div class="carousel-caption d-none d-md-block">
-                    <h5>First slide label</h5>
+                    <h5>Karnataka Vidhana Soudha</h5>
                     <p>
-                      Some representative placeholder content for the first
-                      slide.
+                      Vidhana Soudha in Bangalore, India, is the seat of the state legislature of Karnataka.
                     </p>
                   </div>
                 </div>
-                <div class="carousel-item">
-                  <img
-                    src="{% static 'images/tourForm/travel2.jpg' %}"
-                    class="img-fluid"
-                    alt="..."
-                  />
+                <div class="carousel-item" data-bs-interval="2000">
+                  <img src="{% static 'images/tourForm/travel2.jpg' %}" class="img-fluid" alt="..." />
                   <div class="carousel-caption d-none d-md-block">
-                    <h5>Second slide label</h5>
+                    <h5>Nandi Hills</h5>
                     <p>
-                      Some representative placeholder content for the second
-                      slide.
+                      Nandi Hills, or Nandidurg, is a hill fortress in the south Indian state of Karnataka.
                     </p>
                   </div>
                 </div>
-                <div class="carousel-item">
-                  <img
-                    src="{% static 'images/tourForm/travel3.jpg' %}"
-                    class="img-fluid"
-                    alt="..."
-                  />
+                <div class="carousel-item" data-bs-interval="2000">
+                  <img src="{% static 'images/tourForm/travel3.jpg' %}" class="img-fluid" alt="..." />
                   <div class="carousel-caption d-none d-md-block">
-                    <h5>Third slide label</h5>
+                    <h5>Lalbagh Botanical Garden</h5>
                     <p>
-                      Some representative placeholder content for the third
-                      slide.
+                      Lalbagh Botanical Garden, is an botanical garden in Bangalore, India, with an over 200-year
+                      history.
+                    </p>
+                  </div>
+                </div>
+                <div class="carousel-item" data-bs-interval="2000">
+                  <img src="{% static 'images/tourForm/travel4.jpg' %}" class="img-fluid" alt="..." />
+                  <div class="carousel-caption d-none d-md-block">
+                    <h5>St. Lawrence Shrine Minor Basilica</h5>
+                    <p>
+                      St. Lawrence Shrine Basilica or Attur Basilica is a Roman Catholic church in Karkala, India.
+                    </p>
+                  </div>
+                </div>
+                <div class="carousel-item" data-bs-interval="2000">
+                  <img src="{% static 'images/tourForm/travel5.jpg' %}" class="img-fluid" alt="..." />
+                  <div class="carousel-caption d-none d-md-block">
+                    <h5>Bangalore Palace</h5>
+                    <p>
+                      Bangalore Palace is a royal palace located in Bangalore, Karnataka, India, in an area that was owned by Rev. J. Garrett.
+                    </p>
+                  </div>
+                </div>
+                <div class="carousel-item" data-bs-interval="2000">
+                  <img src="{% static 'images/tourForm/travel6.jpg' %}" class="img-fluid" alt="..." />
+                  <div class="carousel-caption d-none d-md-block">
+                    <h5>Sathodi Falls</h5>
+                    <p>
+                      Sathoddi Falls is a waterfall in India that is formed by several unnamed streams near Kallaramane Ghat, Uttara Kannada District, near Yellapur, Karnataka.
                     </p>
                   </div>
                 </div>
               </div>
-              <button
-                class="carousel-control-prev"
-                type="button"
-                data-bs-target="#carouselExampleCaptions"
-                data-bs-slide="prev"
-              >
-                <span
-                  class="carousel-control-prev-icon"
-                  aria-hidden="true"
-                ></span>
+              <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
+                data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
               </button>
-              <button
-                class="carousel-control-next"
-                type="button"
-                data-bs-target="#carouselExampleCaptions"
-                data-bs-slide="next"
-              >
-                <span
-                  class="carousel-control-next-icon"
-                  aria-hidden="true"
-                ></span>
+              <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
+                data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Next</span>
               </button>
             </div>
@@ -116,86 +103,104 @@
         </div>
       </div>
 
-<form class="col-md-6 border-right" name = "form" method="POST" action="{% url 'recommendations' %}">
-          {% csrf_token %}
-          <div class="p-2 py-3">
-            <div class="container rounded-end">
-              <div class="mb-4">
-                <label for="place" class="form-label">Enter your Destination</label>
-                <select name="place" id="place" class="form-select form-control" aria-label="Default select example" required>
-                  <option value="" disabled selected hidden><p class="light-text">ex: Bangalore</p></option>
-                  <option type="submit" name="choice1" value="1"><p class="light-text"> Bangalore </p></option>
-                  <option type="submit" name="choice2" value="2"><p class="light-text"> Dakshina Kannada </p></option>
-                  <option type="submit" name="choice3" value="3"><p class="light-text">Udupi </p></option>
-                  <option type="submit" name="choice3" value="4"><p class="light-text">Uttara Kannada</p></option>
-                </select>
-                
-              </div>
-              <div class="mb-4">
-                <label for="category" class="form-label">Select Category</label>
-                <select name="category" id="category" class="form-select form-control" aria-label="Default select example" required>
-                  <option value="" disabled selected hidden>ex: adventure</option>
-                  <option type="submit" name="choice1" value="1">Adventure</option>
-                  <option type="submit" name="choice2" value="2">Trekking</option>
-                  <option type="submit" name="choice3" value="3">Hiking</option>
-                </select>
-              </div>
-              <div class="mb-4"> 
-                <label for="startdate" class="form-label">Start Date</label> 
-                <input type="date" onchange="my_function1()" class="form-control" id="startdate"  name="startdate" required />
-              </div>
-              <div class="mb-4">
-                <label for="enddate" class="form-label">End Date</label>
-                <input type="date" onchange="my_function2()" class="form-control" id="enddate" name="enddate" required />
-              </div>
+      <form class="col-md-6 border-right" name="form" method="POST" action="{% url 'recommendations' %}">
+        {% csrf_token %}
+        <div class="p-2 py-3">
+          <div class="container rounded-end">
+            <div class="mb-4">
+              <label for="place" class="form-label">Enter your Destination</label>
+              <select name="place" id="place" class="form-select form-control" aria-label="Default select example"
+                required>
+                <option value="" disabled selected hidden>
+                  <p class="light-text">ex: Bangalore</p>
+                </option>
+                <option type="submit" name="choice1" value="1">
+                  <p class="light-text"> Bangalore </p>
+                </option>
+                <option type="submit" name="choice2" value="2">
+                  <p class="light-text"> Dakshina Kannada </p>
+                </option>
+                <option type="submit" name="choice3" value="3">
+                  <p class="light-text">Udupi </p>
+                </option>
+                <option type="submit" name="choice3" value="4">
+                  <p class="light-text">Uttara Kannada</p>
+                </option>
+              </select>
+
             </div>
+<<<<<<< HEAD
             <div class="row">
               <div class="col text-end mx-2">
                 <button class="m-3 btn btn-primary profile-button" type="submit">
                   Submit
                 </button>
               </div>
+=======
+            <div class="mb-4">
+              <label for="category" class="form-label">Select Category</label>
+              <select name="category" id="category" class="form-select form-control" aria-label="Default select example"
+                required>
+                <option value="" disabled selected hidden>ex: adventure</option>
+                <option type="submit" name="choice1" value="1">Adventure</option>
+                <option type="submit" name="choice2" value="2">Trekking</option>
+                <option type="submit" name="choice3" value="3">Hiking</option>
+              </select>
+            </div>
+            <div class="mb-4">
+              <label for="startdate" class="form-label">Start Date</label>
+              <input type="date" onchange="my_function1()" class="form-control" id="startdate" name="startdate"
+                required />
+            </div>
+            <div class="mb-4">
+              <label for="enddate" class="form-label">End Date</label>
+              <input type="date" onchange="my_function2()" class="form-control" id="enddate" name="enddate" required />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col text-end mx-2">
+              <button class="m-3 btn btn-primary profile-button" type="submit">
+                Submit
+              </button>
+>>>>>>> 7d0996d865980af8b0cf9908366b6836300b00b0
             </div>
           </div>
         </div>
-      </form>
     </div>
+    </form>
   </div>
+</div>
 
-  
+
 
 {% block js %}
 <script>
 
-var date=new Date();
-var tdate=date.getDate();
-if(tdate<10){
-  tdate='0'+tdate;
-}
-var month=date.getMonth()+1;
-if(month<10){
-  month='0'+month;
-}
-var year=date.getFullYear();
-var minDate=year + "-" + month + "-" + tdate;
+  var date = new Date();
+  var tdate = date.getDate();
+  if (tdate < 10) {
+    tdate = '0' + tdate;
+  }
+  var month = date.getMonth() + 1;
+  if (month < 10) {
+    month = '0' + month;
+  }
+  var year = date.getFullYear();
+  var minDate = year + "-" + month + "-" + tdate;
 
-document.getElementById("startdate").setAttribute('min',minDate);
-document.getElementById("enddate").setAttribute('min',minDate);
+  document.getElementById("startdate").setAttribute('min', minDate);
+  document.getElementById("enddate").setAttribute('min', minDate);
 
-function my_function1(){
-  var minDaterev=document.getElementById("startdate").value;
-  document.getElementById("enddate").min=minDaterev;
-}
+  function my_function1() {
+    var minDaterev = document.getElementById("startdate").value;
+    document.getElementById("enddate").min = minDaterev;
+  }
 
-function my_function2(){
-  var maxDaterev=document.getElementById("enddate").value;
-  document.getElementById("startdate").max = maxDaterev;
-}
- 
+  function my_function2() {
+    var maxDaterev = document.getElementById("enddate").value;
+    document.getElementById("startdate").max = maxDaterev;
+  }
+
 </script>
 {% endblock %}
 {% endblock %}
-
-
-  
-
