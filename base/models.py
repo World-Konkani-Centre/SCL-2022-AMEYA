@@ -26,6 +26,11 @@ class Tour(models.Model):
     updateAt=models.DateTimeField(auto_now=True)
     image=models.ImageField(upload_to='images/recommendation',null=True,blank=True)
     subtext=models.CharField(max_length=200,default='')
+    start_month_choices=[('1','January'),('2','February'),('3','March'),('4','April'),('5','May'),('6','June'),('7','July'),('8','August'),('9','September'),('10','October'),('11','November'),('12','December')]
+    end_month_choices=[('1','January'),('2','February'),('3','March'),('4','April'),('5','May'),('6','June'),('7','July'),('8','August'),('9','September'),('10','October'),('11','November'),('12','December')]
+    start_month=models.CharField(max_length=2,choices=start_month_choices,default='1')
+    end_month=models.CharField(max_length=2,choices=end_month_choices,default='1')
+
 
     def __str__(self):
         return self.name
