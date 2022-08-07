@@ -18,7 +18,7 @@ const recPanel = document.getElementById("recommendation-panel");
 
 // Map Initialization:
 var map = L.map("map").setView(curLatLang, 13);
-L.tileLayer("https://tile.osm.ch/sswitzerland/{z}/{x}/{y}.png", {
+L.tileLayer("https://tile.osm.ch/switzerland/{z}/{x}/{y}.png", {
   maxZoom: 19,
   attribution:
     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -93,6 +93,7 @@ function getCenter(data) {
 
 // Add a single marker to map:
 function addMarkerWithPopup(data) {
+  hideRecPanel();
   m = L.marker([data.lat, data.lng], {
     icon: new LeafIcon({
       iconUrl: `${window.location.origin}/static/icons/map/marker.png`,
@@ -296,10 +297,12 @@ function createRecWaypoints(cat, id) {
       latLngArr = latLngArr.map((l) => L.latLng(...l));
       // Create a route:
       if (recRouting) map.removeControl(recRouting);
+      mapAlert("Finding best route...", "info");
       recRouting = L.Routing.control({
         waypoints: latLngArr,
         lineOptions: {
-          styles: [{ color: "#58D68D", opacity: 1, weight: 5 }],
+          styles: [{ color: "#FF763A", opacity: 1, weight: 5 }],
+          // styles: [{ color: "#58D68D", opacity: 1, weight: 5 }],
         },
         createMarker: function () {
           return null;
@@ -332,6 +335,7 @@ function createAddWaypoints(lat, lng, cat, id) {
       // Create a route:
       if (routing) map.removeControl(routing);
       if (recRouting) map.removeControl(recRouting);
+      mapAlert("Finding best route...", "info");
       routing = L.Routing.control({
         waypoints: latLngArr,
         lineOptions: {

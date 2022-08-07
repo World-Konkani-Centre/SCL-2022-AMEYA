@@ -208,8 +208,10 @@ def updatePassword(request):
     else:
         return redirect('login')
        
-@login_required
+# @login_required
 def registerBusiness(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
     id=request.GET.get('id')
     if id!=None:
         business=RegisteredBusiness.objects.get(id=id,user=request.user)
@@ -295,7 +297,7 @@ def getNearby(request,cat):
     # Calculate radius of center:
     radius=10
     if len(tourCoords)>0:
-        radius=haversine((centerCoord[0],centerCoord[1]),(tourCoords[0][0],tourCoords[0][1]))+50
+        radius=haversine((centerCoord[0],centerCoord[1]),(tourCoords[0][0],tourCoords[0][1]))+3
     query1=RegisteredBusiness.objects.all().filter(category=cat)
     query2=Business.objects.all().filter(category=cat)
 
@@ -304,12 +306,12 @@ def getNearby(request,cat):
     if len(routeCoords)>0:
         for item in locFiltered1:
             for route in routeCoords:
-                if haversine((item.lat,item.lng),(route["lat"],route["lng"]),unit=Unit.KILOMETERS)<=3:
+                if haversine((item.lat,item.lng),(route["lat"],route["lng"]),unit=Unit.KILOMETERS)<=2:
                     nearbyVerified.append(item)
                     break
         for item in locFiltered2:
             for route in routeCoords:
-                if haversine((item.lat,item.lng),(route["lat"],route["lng"]),unit=Unit.KILOMETERS)<=3:
+                if haversine((item.lat,item.lng),(route["lat"],route["lng"]),unit=Unit.KILOMETERS)<=2:
                     nearbyUnverified.append(item)
                     break
     else:

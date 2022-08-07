@@ -210,13 +210,16 @@ a.readmore_bt {
   position: relative;
 }
 .banner-main .text-bg h1 {
-  font-size: 90px;
+  font-size: 50px;
   line-height: 108px;
   text-transform: uppercase;
   color: #0adef8;
   font-weight: bold;
   padding-bottom: 35px;
   padding-top: 25px;
+}
+.banner-title {
+  color: #1e1e1e;
 }
 .white {
   color: #fff;
@@ -276,8 +279,7 @@ label {
   margin-bottom: 5px;
 }
 .footer {
-  background-color: #022739;
-  margin-top: 90px;
+  background-color: #1e1e1e;
 }
 .footer .Follow {
   margin-bottom: 27px;
@@ -355,7 +357,7 @@ ul.link li a:hover {
     padding-bottom: 6px;
     padding-top: 25px;
     margin-top: 38px;
-    font-size: 71px;
+    font-size: 50px;
     line-height: 76px;
   }
   .main_bt {

@@ -6,10 +6,16 @@
   <section>
     <div class="banner-main">
       {% include 'base/alertMessages/messages.html' %}
-      <img src="{% static 'images/home/banner.jpg' %}" alt="#" width="100%" />
+      <img
+        src="{% static 'images/home/main_banner.png' %}"
+        alt="#"
+        width="100%"
+      />
       <div class="container">
         <div class="text-bg">
-          <h1>Yatra Mitra<br /><strong class="white">Amazing Tour</strong></h1>
+          <h1>
+            Yatra Mitra<br /><strong class="banner-title">Amazing Tour</strong>
+          </h1>
           <div class="button_section">
             <a class="main_bt" href="#">Read More</a>
           </div>
@@ -78,8 +84,10 @@
             <div class="Follow">
               <h3>ADDITIONAL LINKS</h3>
               <ul class="link">
-                <li><a href="#">About us</a></li>
-                <li><a href="#">Terms and conditions</a></li>
+                <li><a href="{% url 'aboutUs' %}">About us</a></li>
+                <li>
+                  <a href="{% url 'registerBusiness' %}">Register Business</a>
+                </li>
                 <li><a href="#"> Privacy policy</a></li>
                 <li><a href="#">News</a></li>
                 <li><a href="#"> Contact us</a></li>
