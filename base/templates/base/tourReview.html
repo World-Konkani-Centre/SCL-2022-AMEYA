@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="{% static 'styles/tourReview.css' %}" />
 {% endblock %} {% block content %}
 <div class="container tour-rev-form">
-  {% include 'base/messages.html' %}
+  {% include 'base/alertMessages/messages.html' %}
   <h3>Tour Review</h3>
   <div class="row">
     <div class="col-md-12">
@@ -62,4 +62,4 @@
     </div>
   </div>
 </div>
-{% endblock %} {% block scripts %} {% endblock %}
+{% include 'base/alertMessages/msgTimeOut.html' %} {% endblock %}
