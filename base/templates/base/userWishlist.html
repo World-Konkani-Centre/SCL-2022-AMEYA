@@ -76,7 +76,7 @@
         .then((res) => res.json())
         .then((data) => {
           if (data.status == "success") {
-            wishlistAlert("Tour removed form wishlist", "success");
+            wishlistAlert("Tour removed from wishlist", "success");
             btn.parentElement.parentElement.parentElement.remove();
           }
         })

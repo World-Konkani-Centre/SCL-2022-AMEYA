@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from PIL import Image
 # Tour model:
 class Tour(models.Model):
-    category_choices=[('1','Adventure'),('2','Trekking'),('3','Hiking')]
+    category_choices=[('1','Adventure'),('2','Trekking'),('3','Hiking'),('4','Historical'),('5','Wildlife'),('6','Religious'),('7','Relaxation')]
     category_choices1=[('1','Bangalore'),('2','Dakshina Kannada'),('3','Udupi'),('4','Uttara Kannada')]
     id=models.BigAutoField(primary_key=True)
     name=models.CharField(max_length=100)
@@ -58,7 +58,7 @@ class Profile(models.Model):
 class TourReviews(models.Model):
     id=models.BigAutoField(primary_key=True)
     tour=models.ForeignKey(Tour,on_delete=models.CASCADE)
-    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    user=models.ForeignKey(User,on_delete=models.CASCADE,default="")
     rating=models.IntegerField(default=5,validators=[MinValueValidator(1),MaxValueValidator(5)])
     review=models.CharField(max_length=500)
     createadAt=models.DateTimeField(auto_now_add=True)

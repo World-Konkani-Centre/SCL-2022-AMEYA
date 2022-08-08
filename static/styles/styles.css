@@ -20,6 +20,9 @@ a {
   text-decoration: none;
   color: #000;
 }
+.btn {
+  border-radius: 25px !important;
+}
 /* Standard styling for navbar*/
 nav {
   padding: 20px;
