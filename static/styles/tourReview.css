@@ -29,8 +29,13 @@
   height: auto;
 }
 /* 5 ⭐ rating*/
+.review-stars{
+  width: 100%;
+  display: grid;
+  place-items: center;
+}
 .rate {
-  float: left;
+  /* float: left; */
   height: 46px;
   padding: 0 10px;
 }
