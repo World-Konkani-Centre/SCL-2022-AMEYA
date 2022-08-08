@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from unicodedata import category
 from django.shortcuts import render,redirect
 from django.http import JsonResponse
@@ -114,11 +115,25 @@ def contact(request):
     return render(request,"base/contact.html",context)
 
 
-def tourDetails(request,data):
-    tourData=Tour.objects.filter(id=data)
-    if request.method=='POST':
-        tourData=Tour.objects.get(id=data)
-    context={'tourData':tourData}
+def tourDetails(request,id):
+    tour=Tour.objects.get(id=id)
+    tourData=Tour.objects.filter(id=id).values()[0]
+    context={}
+    # Open hours:
+    hours=tourData['hours_open']
+    tourData['hours_open']=hours.split(',')
+    context['data']=tourData
+    # Wishlist:
+    if request.user.is_authenticated:
+        user=request.user
+        if Wishlist.objects.filter(user=user,tour=tour).exists():
+            wishlist=True
+        else:
+            wishlist=False
+        context['wishlist']=wishlist
+    # Reviews:
+    reviews=TourReviews.objects.filter(tour=tour).order_by('-rating')
+    context['reviews']=reviews
     return render(request,"base/tourDetails.html",context)
 
 def tourForm(request):
@@ -128,16 +143,41 @@ def tourForm(request):
 @login_required
 def tourReview(request,id):
     tour=Tour.objects.get(id=id)
+    context={'tour':tour}
+    user=request.user
+    # Submit review:
     if request.method=='POST':
         rating=request.POST.get('rating')
         review=request.POST.get('review')
-        user=request.user
         if(rating==None): rating=1
-        rev=TourReviews(rating=float(rating),review=review,tour=tour,user=user)
-        rev.save()
-        messages.add_message(request, messages.SUCCESS, 'Your Review has been submitted successfully!')
-    context={'tour':tour}
+        if(TourReviews.objects.filter(user=user,tour=tour).exists()):
+            rev=TourReviews.objects.get(user=user,tour=tour)
+            rev.rating=rating
+            rev.review=review
+            rev.save()
+            messages.add_message(request, messages.INFO, 'Your Review has been updated.')
+        else:
+            TourReviews.objects.create(user=user,tour=tour,rating=rating,review=review)
+            messages.add_message(request, messages.SUCCESS, 'Your Review has been submitted.')
+        return redirect('tourDetails',id=id)
+    # Review already in database:
+    if TourReviews.objects.filter(tour=tour,user=user).exists():
+        review=TourReviews.objects.get(tour=tour,user=user)
+        context['review']=review
+        messages.add_message(request, messages.INFO, 'You have already submitted a review for this tour.')
     return render(request,"base/tourReview.html",context)
+
+# Delete review:
+@login_required
+def deleteTourReview(request,id):
+    user=request.user
+    tourId=NULL
+    if TourReviews.objects.filter(id=id,user=user).exists():
+        rev=TourReviews.objects.get(id=id,user=user)
+        tourId=rev.tour.id
+        rev.delete()
+        messages.add_message(request, messages.INFO, 'You have successfully deleted your review.')
+    return redirect('tourDetails',id=tourId)
 
 def trip(request):
     context={}
