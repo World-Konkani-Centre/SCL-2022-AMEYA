@@ -133,7 +133,6 @@ def tourDetails(request,id):
         context['wishlist']=wishlist
     # Reviews:
     reviews=TourReviews.objects.filter(tour=tour).order_by('-rating')
-    # context['reviews']=reviews
     # Reviews pagination:
     paginator = Paginator(reviews, 5) # Show 5 reviews per page
     page = request.GET.get('page')
