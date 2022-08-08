@@ -18,7 +18,7 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.conf import settings
 from .serializers import BusinessSerializer,RegisteredBusinessSerializer
-from rest_framework.response import Response
+from django.core.paginator import Paginator
 
 # Create your views here.
 
@@ -133,6 +133,11 @@ def tourDetails(request,id):
         context['wishlist']=wishlist
     # Reviews:
     reviews=TourReviews.objects.filter(tour=tour).order_by('-rating')
+    # context['reviews']=reviews
+    # Reviews pagination:
+    paginator = Paginator(reviews, 5) # Show 5 reviews per page
+    page = request.GET.get('page')
+    reviews = paginator.get_page(page)
     context['reviews']=reviews
     return render(request,"base/tourDetails.html",context)
 

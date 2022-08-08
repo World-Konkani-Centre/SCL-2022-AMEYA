@@ -1,10 +1,18 @@
 .tour-details-container {
-  margin-top: 60px !important;
+  margin-top: 70px !important;
+}
+.tour-datails-card{
+  background-color: #fff;
+  border-radius: 10px;
+  padding-bottom: 20px;
+  padding-top: 20px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
 }
 .tour-details-container .card-img {
   width: 100%;
   height: auto;
   max-height: 350px;
+  border-radius: 10px;
   object-fit: cover;
 }
 .tour-details-table a {
@@ -50,7 +58,7 @@
 }
 .btn {
   width: fit-content;
-  font-size: 12px;
+  font-size: 14px;
   border-radius: 15px;
   background-color: #1e1e1e !important;
   margin: 0 5px;
@@ -59,7 +67,7 @@
   transition: all 0.3s ease-in-out;
 }
 .btn:hover {
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 /* Review */
 .review-card {
@@ -88,4 +96,21 @@
 .review-body .review-data {
   font-size: 14px;
   color: rgb(151, 151, 151);
+}
+/* Avg fare */
+.avg-fare p{
+  font-size: 15px;
+}
+.avg-fare .avg-lable{
+  font-size: 18px;
+  font-weight: 600;
+}
+/* Pagination */
+.review-pagination .pagination{
+  width: 100%;
+  justify-content: center;
+}
+.page-item.active .page-link{
+  background-color: #1e1e1e;
+  border-color: #1e1e1e;
 }
