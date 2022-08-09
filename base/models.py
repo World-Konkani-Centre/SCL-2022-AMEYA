@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Avg
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.auth.models import User
 from PIL import Image
@@ -26,6 +27,21 @@ class Tour(models.Model):
     updateAt=models.DateTimeField(auto_now=True)
     image=models.ImageField(upload_to='images/recommendation',null=True,blank=True)
     subtext=models.CharField(max_length=200,default='')
+
+    # Calculate the average rating of the tour from TourReview model:
+    def get_avg_rating(self):
+        rating=TourReviews.objects.filter(tour=self).aggregate(Avg('rating'))['rating__avg']
+        if rating:
+            return round(rating,1)
+        else:
+            return 1.0
+    
+    def calc_avg_rating(self):
+        rating=TourReviews.objects.filter(tour=self).aggregate(Avg('rating'))['rating__avg']
+        if rating:
+            self.rating=round(rating,1)
+        else:
+            self.rating=1.0
 
     def __str__(self):
         return self.name
