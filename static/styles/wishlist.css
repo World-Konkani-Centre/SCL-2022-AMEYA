@@ -10,11 +10,11 @@
 .tc-card {
   background-color: #fff;
   border-radius: 8px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
   transition: all 0.5s ease-in-out;
 }
 .tc-card:hover {
   transform: scale(1.01);
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3);
 }
 .tc-card-header {
   display: flex;
