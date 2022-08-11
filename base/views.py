@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from unicodedata import category
 from django.shortcuts import render,redirect
 from django.http import JsonResponse
@@ -18,6 +19,7 @@ from django.utils.html import strip_tags
 from django.conf import settings
 from .serializers import BusinessSerializer,RegisteredBusinessSerializer
 from rest_framework.response import Response
+from django.core.paginator import Paginator
 import datetime
 
 # Create your views here.
@@ -94,10 +96,11 @@ def logout(request):
     messages.info(request,'You logged out.')
     return redirect('/')
 
+
 def recommendations(request):
     if request.method=='POST':
         contents=Tour.objects.all()
-        category1= request.POST['category']  #Retrieves the category entered by the user
+        category1= request.POST['category']  
         category2=request.POST['place'] 
         start_date=request.POST['startdate']
         end_date=request.POST['enddate']
@@ -105,19 +108,34 @@ def recommendations(request):
         datem2 = datetime.datetime.strptime(end_date, "%Y-%m-%d")
         start_month=datem1.month
         end_month=datem2.month
-        tour_data = Tour.objects.all().filter(category=category1,place=category2).order_by('-rating')
-        context={
-            'tour_data':tour_data
-        }
+        tour_data=''
+        if(start_month>end_month):
+            start_month=1
+        for i in range(start_month,end_month+1):
+            tour_data = Tour.objects.all().filter(category=category1,place=category2,date__icontains=i).order_by('-rating')
+            if tour_data:
+                paginator = Paginator(tour_data, 5) 
+                page = request.GET.get('page')
+                tour_data = paginator.get_page(page)
+                context={
+                  'tour_data':tour_data
+                 }
+                return render(request,"base/recommendations.html",context)
+
         if not tour_data:
             messages.error(request,"Sorry! We couldn't find recommmendations of your choice!")
             return render(request,"base/tourForm.html")
-        return render(request,"base/recommendations.html",context)
+               
     else:
        tour_data=Tour.objects.all().order_by('-rating')
-       context={'tour_data':tour_data
+       paginator = Paginator(tour_data, 5) 
+       page = request.GET.get('page')
+       tour_data = paginator.get_page(page)
+       context={
+        'tour_data':tour_data
        }
        return render(request,"base/recommendations.html",context)
+
 
 def aboutUs(request):
     context={}

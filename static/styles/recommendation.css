@@ -240,6 +240,10 @@ a:active {
   .cat{
     padding-bottom: 7px !important;
   }
+  .recommendation-pagination{
+    position: relative;
+    left: 80px !important;
+  }
   }
 
   @media only screen and (max-width: 320px){
@@ -264,6 +268,10 @@ a:active {
   @media all and (device-width: 280px) and (device-height: 653px) and (orientation:portrait) {
     .card{
       width: 200% !important;
+    }
+    .recommendation-pagination{
+      position: relative;
+      left: 135px !important;
     }
   }
 
@@ -305,6 +313,7 @@ a:active {
  @media all and (device-width: 912px) and (device-height: 1368px) and (orientation:portrait){
   .card{
     width: 140% !important;
+    margin-right: 20% !important;
   }
   .card-text{
     font-size: 11px;
@@ -323,3 +332,5 @@ a:active {
     bottom: 3px !important;
   }
  }
+
+
