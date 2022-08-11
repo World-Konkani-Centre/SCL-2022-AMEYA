@@ -1,5 +1,5 @@
 from django.db import models
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator,validate_comma_separated_integer_list
 from django.contrib.auth.models import User
 from PIL import Image
 # Tour model:
@@ -26,6 +26,7 @@ class Tour(models.Model):
     updateAt=models.DateTimeField(auto_now=True)
     image=models.ImageField(upload_to='images/recommendation',null=True,blank=True)
     subtext=models.CharField(max_length=200,default='')
+    date = models.CharField(validators=[validate_comma_separated_integer_list],max_length=200, blank=True, null=True,default='')
 
     def __str__(self):
         return self.name
