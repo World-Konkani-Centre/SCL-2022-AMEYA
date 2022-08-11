@@ -2,6 +2,9 @@
 <!-- Replace {name} with the respective css file -->
 <link rel="stylesheet" href="{% static 'styles/login.css' %}" />
 {% endblock %} {% block content %}
+<br>
+<br>
+<br>
 <div class="container">
   {% include 'base/alertMessages/messages.html' %}
   <form action="{% url 'login' %}" method="POST" class="form-container">

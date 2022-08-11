@@ -5,6 +5,7 @@ from django.core.serializers import serialize
 from django.contrib import messages
 from .models import RegisteredBusiness,Tour,Business,TourReviews,Wishlist,Profile
 from haversine import haversine,Unit
+from django.template.defaulttags import register
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.contrib.auth.models import User
@@ -122,6 +123,10 @@ def tourDetails(request,data):
     tourData=Tour.objects.filter(id=data)
     if request.method=='POST':
         tourData=Tour.objects.get(id=data)
+    # @register.filter(name='line_break') 
+    # def line_break(contact): 
+    #     return contact.replace(',', '')
+
     context={'tourData':tourData}
     return render(request,"base/tourDetails.html",context)
 
@@ -142,6 +147,9 @@ def tourReview(request,id):
         messages.add_message(request, messages.SUCCESS, 'Your Review has been submitted successfully!')
     context={'tour':tour}
     return render(request,"base/tourReview.html",context)
+def teamProfile(request):
+    context={}
+    return render(request,"base/teamProfile.html",context)
 
 def trip(request):
     context={}

@@ -17,6 +17,7 @@ urlpatterns = [
     path('trip/',views.trip,name='trip'),
     path('trips/',views.trips,name='trips'),
     path('user/profile/',views.userProfile,name='userProfile'),
+    path('teamProfile/',views.teamProfile,name='teamProfile'),
     path('user/wishlist',views.userWishlist,name='userWishlist'),
     path('tourForm/',views.tourForm,name='tourForm'),
     path('tourReview/<int:id>/',views.tourReview,name='tourReview'),
