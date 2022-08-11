@@ -31,14 +31,12 @@ class Tour(models.Model):
         return self.name
 
 class Profile(models.Model):
-    role_choices=[('1','User'),('2','Business')]
     gender_choices=[('1','Male'),('2','Female'),('3','Dont want to specify')]
     id=models.BigAutoField(primary_key=True)
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     gender=models.CharField(max_length=1,choices=gender_choices,default='1')
     phone=models.CharField(blank=True, max_length=10,default='')
     DOB=models.DateField(null=True)
-    role=models.CharField(max_length=1,choices=role_choices,default='1')
     image=models.ImageField(blank=True,upload_to='images/user', height_field=None, width_field=None, max_length=100,null=True)
 
     def __str__(self):
