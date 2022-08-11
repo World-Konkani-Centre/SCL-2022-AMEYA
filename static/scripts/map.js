@@ -6,6 +6,8 @@ let recMarker = null;
 let recRouting = null;
 let curLatLang = [12.933969688632496, 77.61193685079267];
 let routeCoordinates = [];
+let tourRouteData = [];
+let routeMarkers = [];
 let tourCoordinates = [];
 let nearby = [];
 let recommendations = {};
@@ -16,7 +18,7 @@ const recPanel = document.getElementById("recommendation-panel");
 
 // Map Initialization:
 var map = L.map("map").setView(curLatLang, 13);
-L.tileLayer("https://tile.osm.ch/sswitzerland/{z}/{x}/{y}.png", {
+L.tileLayer("https://tile.osm.ch/switzerland/{z}/{x}/{y}.png", {
   maxZoom: 19,
   attribution:
     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -90,12 +92,30 @@ function getCenter(data) {
 }
 
 // Add a single marker to map:
-function addMarker(latLng, icon) {
-  var marker = L.marker(latLng, {
+function addMarkerWithPopup(data) {
+  hideRecPanel();
+  m = L.marker([data.lat, data.lng], {
     icon: new LeafIcon({
-      iconUrl: `${window.location.origin}/static/icons/map/${icon}.png`,
+      iconUrl: `${window.location.origin}/static/icons/map/marker.png`,
     }),
-  }).addTo(map);
+  })
+    .bindPopup(
+      `<div class="map-popup nearby-popup"><div class="map-popup-header"><h3>${
+        data.name
+      }
+    ${
+      data.type
+        ? '<p class="verified-biz"><img src="/static/icons/map/verified.png" alt="Verified" />verified</p>'
+        : ""
+    }</h3>
+    <p class="map-popup-rating">Rating: ${
+      data.rating
+    } <img width="15px" src=${starIcon} alt="stars"/></p></div> <img class="map-popup-image" src="${
+        data.type ? data.banner : data.image
+      }"/><p>${data.description}</p></div>`
+    )
+    .addTo(map);
+  return m;
 }
 
 // Add multiple markers to map:
@@ -213,6 +233,21 @@ function removeMarkers(data) {
   });
 }
 
+// Add a multiple route markers to map:
+function addRouteMarkers() {
+  let m;
+  removeMarkers(routeMarkers);
+  tourRouteData.forEach((e) => {
+    let item = recommendations[e.cat].find((i) => i.id == e.id);
+    console.log(item);
+    if (item) {
+      m = addMarkerWithPopup(item);
+    }
+    routeMarkers.push(m);
+  });
+  // fitMarkers(routeMarkers);
+}
+
 // Create Waypoints route:
 function createWaypoints(latLngArr, id) {
   tourId = id;
@@ -236,7 +271,6 @@ function createWaypoints(latLngArr, id) {
         },
       })
         .on("routesfound", (e) => {
-          console.log(e.routes);
           routeCoordinates = e.routes[0].coordinates;
         })
         .addTo(map);
@@ -263,10 +297,12 @@ function createRecWaypoints(cat, id) {
       latLngArr = latLngArr.map((l) => L.latLng(...l));
       // Create a route:
       if (recRouting) map.removeControl(recRouting);
+      mapAlert("Finding best route...", "info");
       recRouting = L.Routing.control({
         waypoints: latLngArr,
         lineOptions: {
-          styles: [{ color: "#58D68D", opacity: 1, weight: 5 }],
+          styles: [{ color: "#FF763A", opacity: 1, weight: 5 }],
+          // styles: [{ color: "#58D68D", opacity: 1, weight: 5 }],
         },
         createMarker: function () {
           return null;
@@ -285,21 +321,25 @@ function createRecWaypoints(cat, id) {
   }
 }
 // Create a new waypoint route for the add to tour button:
-function createAddWaypoints(lat, lng) {
+function createAddWaypoints(lat, lng, cat, id) {
   if ("geolocation" in navigator) {
     navigator.geolocation.getCurrentPosition(function (pos) {
       curLatLang = [pos.coords.latitude, pos.coords.longitude];
       let latLng = [lat, lng];
       tourCoordinates = [curLatLang, latLng, ...tourCoordinates.slice(1)];
+      tourRouteData.push({ cat: cat, id: id });
+      console.log(tourRouteData);
+      addRouteMarkers();
       let latLngArr = tourCoordinates;
       latLngArr = latLngArr.map((l) => L.latLng(...l));
       // Create a route:
       if (routing) map.removeControl(routing);
       if (recRouting) map.removeControl(recRouting);
+      mapAlert("Finding best route...", "info");
       routing = L.Routing.control({
         waypoints: latLngArr,
         lineOptions: {
-          styles: [{ color: "#58D68D", opacity: 1, weight: 5 }],
+          styles: [{ color: "#65b5ff", opacity: 1, weight: 5 }],
         },
         createMarker: function () {
           return null;
@@ -310,7 +350,7 @@ function createAddWaypoints(lat, lng) {
         })
         .addTo(map);
       // Add directions to side panel:
-      let dirTab = addRouting.onAdd(map);
+      let dirTab = routing.onAdd(map);
       document.getElementById("pills-directions").appendChild(dirTab);
     });
   } else {
@@ -509,7 +549,7 @@ function getRecommendations(cat) {
             <button class="rec-btn" onClick="addRecommendationMarker('${cat}','${key}');">View</button>
             <button class="rec-btn" onClick="createAddWaypoints('${d.lat}','${
             d.lng
-          }');">Add to tour</button>
+          }','${cat}','${d.id}');">Add to tour</button>
           </div>
         </div>
         </div>`
