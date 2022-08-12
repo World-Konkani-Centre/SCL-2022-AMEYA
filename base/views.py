@@ -4,6 +4,7 @@ from django.core.serializers import serialize
 from django.contrib import messages
 from .models import RegisteredBusiness,Tour,Business,TourReviews,Wishlist,Profile
 from haversine import haversine,Unit
+from django.template.defaulttags import register
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.contrib.auth.models import User
@@ -199,6 +200,9 @@ def tourReview(request,id):
         context['review']=review
         messages.add_message(request, messages.INFO, 'You have already submitted a review for this tour.')
     return render(request,"base/tourReview.html",context)
+def teamProfile(request):
+    context={}
+    return render(request,"base/teamProfile.html",context)
 
 # Delete review:
 @login_required
