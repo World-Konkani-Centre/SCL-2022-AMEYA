@@ -1,6 +1,6 @@
 from django.db import models
 from django.db.models import Avg
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator,validate_comma_separated_integer_list
 from django.contrib.auth.models import User
 from PIL import Image
 # Tour model:
@@ -27,6 +27,7 @@ class Tour(models.Model):
     updateAt=models.DateTimeField(auto_now=True)
     image=models.ImageField(upload_to='images/recommendation',null=True,blank=True)
     subtext=models.CharField(max_length=200,default='')
+    date = models.CharField(validators=[validate_comma_separated_integer_list],max_length=200, blank=True, null=True,default='')
 
     # Calculate the average rating of the tour from TourReview model:
     def get_avg_rating(self):
@@ -47,14 +48,12 @@ class Tour(models.Model):
         return self.name
 
 class Profile(models.Model):
-    role_choices=[('1','User'),('2','Business')]
     gender_choices=[('1','Male'),('2','Female'),('3','Dont want to specify')]
     id=models.BigAutoField(primary_key=True)
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     gender=models.CharField(max_length=1,choices=gender_choices,default='1')
     phone=models.CharField(blank=True, max_length=10,default='')
     DOB=models.DateField(null=True)
-    role=models.CharField(max_length=1,choices=role_choices,default='1')
     image=models.ImageField(blank=True,upload_to='images/user', height_field=None, width_field=None, max_length=100,null=True)
 
     def __str__(self):

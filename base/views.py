@@ -1,11 +1,10 @@
-from asyncio.windows_events import NULL
-from unicodedata import category
 from django.shortcuts import render,redirect
 from django.http import JsonResponse
 from django.core.serializers import serialize
 from django.contrib import messages
 from .models import RegisteredBusiness,Tour,Business,TourReviews,Wishlist,Profile
 from haversine import haversine,Unit
+from django.template.defaulttags import register
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.contrib.auth.models import User
@@ -18,7 +17,9 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.conf import settings
 from .serializers import BusinessSerializer,RegisteredBusinessSerializer
+from rest_framework.response import Response
 from django.core.paginator import Paginator
+import datetime
 
 # Create your views here.
 
@@ -95,20 +96,56 @@ def logout(request):
     messages.info(request,'You logged out.')
     return redirect('/')
 
+
 def recommendations(request):
     if request.method=='POST':
-        category1= request.POST['category']  #Retrieves the category entered by the user
+        contents=Tour.objects.all()
+        category1= request.POST['category']  
         category2=request.POST['place'] 
-        tour_data = Tour.objects.all().filter(category=category1,place=category2)
+    #     tour_data = Tour.objects.all().filter(category=category1,place=category2)
+    # else:
+    #    tour_data=Tour.objects.all()
+    # # calculate avg rating for each tour:
+    # for tour in tour_data:
+    #     tour.calc_avg_rating()
+    # # sort the tours by avg rating:
+    # tour_data.order_by('-rating')
+    # context={'tour_data':tour_data}
+    # return render(request,"base/recommendations.html",context)
+        start_date=request.POST['startdate']
+        end_date=request.POST['enddate']
+        datem1 = datetime.datetime.strptime(start_date, "%Y-%m-%d")
+        datem2 = datetime.datetime.strptime(end_date, "%Y-%m-%d")
+        start_month=datem1.month
+        end_month=datem2.month
+        tour_data=''
+        if(start_month>end_month):
+            start_month=1
+        for i in range(start_month,end_month+1):
+            tour_data = Tour.objects.all().filter(category=category1,place=category2,date__icontains=i).order_by('-rating')
+            if tour_data:
+                paginator = Paginator(tour_data, 5) 
+                page = request.GET.get('page')
+                tour_data = paginator.get_page(page)
+                context={
+                  'tour_data':tour_data
+                 }
+                return render(request,"base/recommendations.html",context)
+
+        if not tour_data:
+            messages.error(request,"Sorry! We couldn't find recommmendations of your choice!")
+            return render(request,"base/tourForm.html")
+               
     else:
-       tour_data=Tour.objects.all()
-    # calculate avg rating for each tour:
-    for tour in tour_data:
-        tour.calc_avg_rating()
-    # sort the tours by avg rating:
-    tour_data.order_by('-rating')
-    context={'tour_data':tour_data}
-    return render(request,"base/recommendations.html",context)
+       tour_data=Tour.objects.all().order_by('-rating')
+       paginator = Paginator(tour_data, 5) 
+       page = request.GET.get('page')
+       tour_data = paginator.get_page(page)
+       context={
+        'tour_data':tour_data
+       }
+       return render(request,"base/recommendations.html",context)
+
 
 def aboutUs(request):
     context={}
@@ -177,6 +214,9 @@ def tourReview(request,id):
         context['review']=review
         messages.add_message(request, messages.INFO, 'You have already submitted a review for this tour.')
     return render(request,"base/tourReview.html",context)
+def teamProfile(request):
+    context={}
+    return render(request,"base/teamProfile.html",context)
 
 # Delete review:
 @login_required
@@ -437,7 +477,7 @@ def deleteUser(request,username,id):
         if request.user.check_password(password1):
             profile.delete()
             # Send mail:
-            html_content = render_to_string('base/email/email.html',{'title':'Your account has been deleted','message':'Your account has been deleted successfully. Thank you.','username':username})
+            html_content = render_to_string('base/email/email.html',{'title':'Your account has been deleted','message':'Your account has been deleted successfully. Thank you.','username':User.username})
             text_content = strip_tags(html_content)
             email_content = EmailMultiAlternatives('Your account has been deleted successfully', text_content, settings.EMAIL_HOST_USER, [userEmail])
             email_content.attach_alternative(html_content, "text/html")
