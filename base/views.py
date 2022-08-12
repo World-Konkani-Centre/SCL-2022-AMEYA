@@ -42,6 +42,7 @@ def map(request):
 
 def getTour(request,id):
     tour=Tour.objects.get(id=id)
+    tour.calc_avg_rating()
     data=serialize('json',[tour])
     return JsonResponse(data,safe=False)
 
@@ -101,6 +102,16 @@ def recommendations(request):
         contents=Tour.objects.all()
         category1= request.POST['category']  
         category2=request.POST['place'] 
+    #     tour_data = Tour.objects.all().filter(category=category1,place=category2)
+    # else:
+    #    tour_data=Tour.objects.all()
+    # # calculate avg rating for each tour:
+    # for tour in tour_data:
+    #     tour.calc_avg_rating()
+    # # sort the tours by avg rating:
+    # tour_data.order_by('-rating')
+    # context={'tour_data':tour_data}
+    # return render(request,"base/recommendations.html",context)
         start_date=request.POST['startdate']
         end_date=request.POST['enddate']
         datem1 = datetime.datetime.strptime(start_date, "%Y-%m-%d")
@@ -152,6 +163,8 @@ def tourDetails(request,id):
     # Open hours:
     hours=tourData['hours_open']
     tourData['hours_open']=hours.split(',')
+    # Avg rating:
+    tourData['rating']=tour.get_avg_rating()
     context['data']=tourData
     # Wishlist:
     if request.user.is_authenticated:
@@ -177,6 +190,7 @@ def tourForm(request):
 @login_required
 def tourReview(request,id):
     tour=Tour.objects.get(id=id)
+    tour.calc_avg_rating()
     context={'tour':tour}
     user=request.user
     # Submit review:
