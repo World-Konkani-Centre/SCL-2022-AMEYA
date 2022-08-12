@@ -1,4 +1,3 @@
-from unicodedata import category
 from django.shortcuts import render,redirect
 from django.http import JsonResponse
 from django.core.serializers import serialize
@@ -19,6 +18,8 @@ from django.utils.html import strip_tags
 from django.conf import settings
 from .serializers import BusinessSerializer,RegisteredBusinessSerializer
 from rest_framework.response import Response
+from django.core.paginator import Paginator
+import datetime
 
 # Create your views here.
 
@@ -63,9 +64,9 @@ def signup(request):
             user = User.objects.create(email=email, username=username, password=make_password(password))
             user.save() 
             auth_login(request, user)    
-            html_content = render_to_string('base/email/email.html',{'title':'Welcome to Tourist Guide','message':'Welcome to Tourist Guide. Thank you for signing up.','name':username})
+            html_content = render_to_string('base/email/email.html',{'title':'Welcome to Yatra Mitra App','message':'Welcome to  Yatra Mitra app. Thank you for signing up.','name':username})
             text_content = strip_tags(html_content)
-            email_content = EmailMultiAlternatives('Welcome to Tourist Guide', text_content, settings.EMAIL_HOST_USER, [email])
+            email_content = EmailMultiAlternatives('Welcome to Yatra Mitra App', text_content, settings.EMAIL_HOST_USER, [email])
             email_content.attach_alternative(html_content, "text/html")
             email_content.send()
             messages.add_message(request, messages.INFO, 'You have successfully signed up.')
@@ -94,21 +95,46 @@ def logout(request):
     messages.info(request,'You logged out.')
     return redirect('/')
 
+
 def recommendations(request):
     if request.method=='POST':
         contents=Tour.objects.all()
-        category1= request.POST['category']  #Retrieves the category entered by the user
+        category1= request.POST['category']  
         category2=request.POST['place'] 
-        tourData = Tour.objects.all().filter(category=category1,place=category2).order_by('-rating').values()
-        context={
-            'tourData':tourData
-        }
-        return render(request,"base/recommendations.html",context)
+        start_date=request.POST['startdate']
+        end_date=request.POST['enddate']
+        datem1 = datetime.datetime.strptime(start_date, "%Y-%m-%d")
+        datem2 = datetime.datetime.strptime(end_date, "%Y-%m-%d")
+        start_month=datem1.month
+        end_month=datem2.month
+        tour_data=''
+        if(start_month>end_month):
+            start_month=1
+        for i in range(start_month,end_month+1):
+            tour_data = Tour.objects.all().filter(category=category1,place=category2,date__icontains=i).order_by('-rating')
+            if tour_data:
+                paginator = Paginator(tour_data, 5) 
+                page = request.GET.get('page')
+                tour_data = paginator.get_page(page)
+                context={
+                  'tour_data':tour_data
+                 }
+                return render(request,"base/recommendations.html",context)
+
+        if not tour_data:
+            messages.error(request,"Sorry! We couldn't find recommmendations of your choice!")
+            return render(request,"base/tourForm.html")
+               
     else:
-       tourData=Tour.objects.all().order_by('-rating').values()
-       context={'tourData':tourData
+       tour_data=Tour.objects.all().order_by('-rating')
+       paginator = Paginator(tour_data, 5) 
+       page = request.GET.get('page')
+       tour_data = paginator.get_page(page)
+       context={
+        'tour_data':tour_data
        }
        return render(request,"base/recommendations.html",context)
+
 
 def aboutUs(request):
     context={}
@@ -119,15 +145,29 @@ def contact(request):
     return render(request,"base/contact.html",context)
 
 
-def tourDetails(request,data):
-    tourData=Tour.objects.filter(id=data)
-    if request.method=='POST':
-        tourData=Tour.objects.get(id=data)
-    # @register.filter(name='line_break') 
-    # def line_break(contact): 
-    #     return contact.replace(',', '')
-
-    context={'tourData':tourData}
+def tourDetails(request,id):
+    tour=Tour.objects.get(id=id)
+    tourData=Tour.objects.filter(id=id).values()[0]
+    context={}
+    # Open hours:
+    hours=tourData['hours_open']
+    tourData['hours_open']=hours.split(',')
+    context['data']=tourData
+    # Wishlist:
+    if request.user.is_authenticated:
+        user=request.user
+        if Wishlist.objects.filter(user=user,tour=tour).exists():
+            wishlist=True
+        else:
+            wishlist=False
+        context['wishlist']=wishlist
+    # Reviews:
+    reviews=TourReviews.objects.filter(tour=tour).order_by('-rating')
+    # Reviews pagination:
+    paginator = Paginator(reviews, 5) # Show 5 reviews per page
+    page = request.GET.get('page')
+    reviews = paginator.get_page(page)
+    context['reviews']=reviews
     return render(request,"base/tourDetails.html",context)
 
 def tourForm(request):
@@ -137,19 +177,44 @@ def tourForm(request):
 @login_required
 def tourReview(request,id):
     tour=Tour.objects.get(id=id)
+    context={'tour':tour}
+    user=request.user
+    # Submit review:
     if request.method=='POST':
         rating=request.POST.get('rating')
         review=request.POST.get('review')
-        user=request.user
         if(rating==None): rating=1
-        rev=TourReviews(rating=float(rating),review=review,tour=tour,user=user)
-        rev.save()
-        messages.add_message(request, messages.SUCCESS, 'Your Review has been submitted successfully!')
-    context={'tour':tour}
+        if(TourReviews.objects.filter(user=user,tour=tour).exists()):
+            rev=TourReviews.objects.get(user=user,tour=tour)
+            rev.rating=rating
+            rev.review=review
+            rev.save()
+            messages.add_message(request, messages.INFO, 'Your Review has been updated.')
+        else:
+            TourReviews.objects.create(user=user,tour=tour,rating=rating,review=review)
+            messages.add_message(request, messages.SUCCESS, 'Your Review has been submitted.')
+        return redirect('tourDetails',id=id)
+    # Review already in database:
+    if TourReviews.objects.filter(tour=tour,user=user).exists():
+        review=TourReviews.objects.get(tour=tour,user=user)
+        context['review']=review
+        messages.add_message(request, messages.INFO, 'You have already submitted a review for this tour.')
     return render(request,"base/tourReview.html",context)
 def teamProfile(request):
     context={}
     return render(request,"base/teamProfile.html",context)
+
+# Delete review:
+@login_required
+def deleteTourReview(request,id):
+    user=request.user
+    tourId=NULL
+    if TourReviews.objects.filter(id=id,user=user).exists():
+        rev=TourReviews.objects.get(id=id,user=user)
+        tourId=rev.tour.id
+        rev.delete()
+        messages.add_message(request, messages.INFO, 'You have successfully deleted your review.')
+    return redirect('tourDetails',id=tourId)
 
 def trip(request):
     context={}
@@ -220,8 +285,10 @@ def updatePassword(request):
     else:
         return redirect('login')
        
-@login_required
+# @login_required
 def registerBusiness(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
     id=request.GET.get('id')
     if id!=None:
         business=RegisteredBusiness.objects.get(id=id,user=request.user)
@@ -307,7 +374,7 @@ def getNearby(request,cat):
     # Calculate radius of center:
     radius=10
     if len(tourCoords)>0:
-        radius=haversine((centerCoord[0],centerCoord[1]),(tourCoords[0][0],tourCoords[0][1]))+50
+        radius=haversine((centerCoord[0],centerCoord[1]),(tourCoords[0][0],tourCoords[0][1]))+3
     query1=RegisteredBusiness.objects.all().filter(category=cat)
     query2=Business.objects.all().filter(category=cat)
 
@@ -316,12 +383,12 @@ def getNearby(request,cat):
     if len(routeCoords)>0:
         for item in locFiltered1:
             for route in routeCoords:
-                if haversine((item.lat,item.lng),(route["lat"],route["lng"]),unit=Unit.KILOMETERS)<=3:
+                if haversine((item.lat,item.lng),(route["lat"],route["lng"]),unit=Unit.KILOMETERS)<=2:
                     nearbyVerified.append(item)
                     break
         for item in locFiltered2:
             for route in routeCoords:
-                if haversine((item.lat,item.lng),(route["lat"],route["lng"]),unit=Unit.KILOMETERS)<=3:
+                if haversine((item.lat,item.lng),(route["lat"],route["lng"]),unit=Unit.KILOMETERS)<=2:
                     nearbyUnverified.append(item)
                     break
     else:
@@ -381,3 +448,28 @@ def handleWishlist(request):
 # Error page:
 def error_404(request,exception):
     return render(request,'base/errorPages/404.html')
+
+
+
+#delete user profile
+
+def deleteUser(request,username,id):    
+    profile = User.objects.get(username = username)
+    context={'profile':profile}
+    if request.method=='POST':
+        profile=User.objects.get(id=id, email=request.user.email)
+        userEmail=request.user.email
+        password1=request.POST.get('password')
+        if request.user.check_password(password1):
+            profile.delete()
+            # Send mail:
+            html_content = render_to_string('base/email/email.html',{'title':'Your account has been deleted','message':'Your account has been deleted successfully. Thank you.','username':User.username})
+            text_content = strip_tags(html_content)
+            email_content = EmailMultiAlternatives('Your account has been deleted successfully', text_content, settings.EMAIL_HOST_USER, [userEmail])
+            email_content.attach_alternative(html_content, "text/html")
+            email_content.send()
+            messages.add_message(request, messages.SUCCESS, 'Your account has been deleted successfully!')
+            return redirect('home')
+        else:
+            messages.add_message(request, messages.ERROR, 'Please enter correct password!')
+    return render(request,"base/deleteUser.html",context)

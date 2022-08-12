@@ -31,6 +31,8 @@
 
     <!-- Iconify -->
     <script src="https://code.iconify.design/2/2.2.1/iconify.min.js"></script>
+    <!--Type Script-->
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
     <!-- Scripts -->
     {% block styles %} {% endblock %}
     <link rel="stylesheet" href="{% static 'styles/styles.css' %}" />
@@ -62,8 +64,24 @@
                 <a
                   class="nav-link items"
                   aria-current="page"
+                  href="{% url 'home' %}"
+                  ><button><span>Home</span></button></a
+                >
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link items"
+                  aria-current="page"
                   href="{% url 'recommendations' %}"
                   ><button><span>Recommendations</span></button></a
+                >
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link items"
+                  aria-current="page"
+                  href="{% url 'tourForm' %}"
+                  ><button><span>Find Trips</span></button></a
                 >
               </li>
               <li class="nav-item">
@@ -72,11 +90,6 @@
                 >
               </li>
               {% if user.is_authenticated %}
-              <li class="nav-item">
-                <a class="nav-link items" href="{% url 'trips' %}"
-                  ><button><span>Your trips</span></button></a
-                >
-              </li>
               <li class="nav-item dropdown nav-profile">
                 <a
                   class="nav-link dropdown-toggle"
@@ -148,7 +161,7 @@
                       class="dropdown-item"
                       href="{% url 'logout' %}"
                       id="dropdown-item"
-                      >Log-out</a
+                      >Logout</a
                     >
                   </li>
                 </ul>
