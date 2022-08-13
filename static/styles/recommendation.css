@@ -155,7 +155,10 @@ a:active {
   left: 60px;
   display: inline;
 }
-
+.page-item.active .page-link{
+  background-color: #1e1e1e;
+  border-color: #1e1e1e;
+}
 
 /* Media queries */
 /* =============================================================================================== */

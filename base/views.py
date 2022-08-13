@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from django.shortcuts import render,redirect
 from django.http import JsonResponse
 from django.core.serializers import serialize
@@ -96,56 +97,35 @@ def logout(request):
     messages.info(request,'You logged out.')
     return redirect('/')
 
-
 def recommendations(request):
+    tour_data=Tour.objects.get_queryset()
     if request.method=='POST':
-        contents=Tour.objects.all()
         category1= request.POST['category']  
         category2=request.POST['place'] 
-    #     tour_data = Tour.objects.all().filter(category=category1,place=category2)
-    # else:
-    #    tour_data=Tour.objects.all()
-    # # calculate avg rating for each tour:
-    # for tour in tour_data:
-    #     tour.calc_avg_rating()
-    # # sort the tours by avg rating:
-    # tour_data.order_by('-rating')
-    # context={'tour_data':tour_data}
-    # return render(request,"base/recommendations.html",context)
         start_date=request.POST['startdate']
         end_date=request.POST['enddate']
         datem1 = datetime.datetime.strptime(start_date, "%Y-%m-%d")
         datem2 = datetime.datetime.strptime(end_date, "%Y-%m-%d")
         start_month=datem1.month
         end_month=datem2.month
-        tour_data=''
+        tour_data = tour_data.filter(category=category1,place=category2)
         if(start_month>end_month):
             start_month=1
         for i in range(start_month,end_month+1):
-            tour_data = Tour.objects.all().filter(category=category1,place=category2,date__icontains=i).order_by('-rating')
-            if tour_data:
-                paginator = Paginator(tour_data, 5) 
-                page = request.GET.get('page')
-                tour_data = paginator.get_page(page)
-                context={
-                  'tour_data':tour_data
-                 }
-                return render(request,"base/recommendations.html",context)
+            tour_data=tour_data.filter(date__icontains=i)
 
         if not tour_data:
             messages.error(request,"Sorry! We couldn't find recommmendations of your choice!")
             return render(request,"base/tourForm.html")
-               
-    else:
-       tour_data=Tour.objects.all().order_by('-rating')
-       paginator = Paginator(tour_data, 5) 
-       page = request.GET.get('page')
-       tour_data = paginator.get_page(page)
-       context={
-        'tour_data':tour_data
-       }
-       return render(request,"base/recommendations.html",context)
-
+    
+    for tour in tour_data:
+        tour.calc_avg_rating()
+    tour_data=tour_data.order_by('-rating')
+    paginator = Paginator(tour_data, 5) 
+    page = request.GET.get('page')
+    tour_data = paginator.get_page(page)
+    context={'tour_data':tour_data}
+    return render(request,"base/recommendations.html",context)
 
 def aboutUs(request):
     context={}
@@ -154,7 +134,6 @@ def aboutUs(request):
 def contact(request):
     context={}
     return render(request,"base/contact.html",context)
-
 
 def tourDetails(request,id):
     tour=Tour.objects.get(id=id)
@@ -214,6 +193,7 @@ def tourReview(request,id):
         context['review']=review
         messages.add_message(request, messages.INFO, 'You have already submitted a review for this tour.')
     return render(request,"base/tourReview.html",context)
+
 def teamProfile(request):
     context={}
     return render(request,"base/teamProfile.html",context)
@@ -242,10 +222,14 @@ def trips(request):
 def userProfile(request):
     if request.method == 'POST':
         u_form =UserUpdateForm(request.POST, instance=request.user)
-        p_form = ProfileUpdateForm(request.POST,request.FILES, instance=request.user.profile)
+        p_form = ProfileUpdateForm(request.POST,request.FILES, instance=request.user.profile)          
 
         if u_form.is_valid() and p_form.is_valid():
-            print(p_form.cleaned_data)
+            # Delete previous image from file system:
+            prev_img=p_form.cleaned_data.get('image')
+            profile=Profile.objects.get(user=request.user)
+            if prev_img!=profile.image:
+                profile.image.delete(save=False)
             u_form.save()
             p_form.save()
             messages.add_message(request, messages.SUCCESS, 'Your account has been Updated')
@@ -344,8 +328,14 @@ def registerBusiness(request):
         business.lat=request.POST.get('latitude')
         business.lng=request.POST.get('longitude')
         if request.FILES.get('logo')!=None:
+            # Delete the old logo from files system and save the new one:
+            if business.logo!=None:
+                business.logo.delete(save=False)
             business.logo=request.FILES.get('logo')
         if request.FILES.get('banner')!=None:
+            # Delete the old banner from files system and save the new one:
+            if business.banner!=None:
+                business.banner.delete(save=False)
             business.banner=request.FILES.get('banner')
         business.save()
         context={'business':business}
@@ -475,6 +465,10 @@ def deleteUser(request,username,id):
         userEmail=request.user.email
         password1=request.POST.get('password')
         if request.user.check_password(password1):
+            # Clear user files:
+            user_profile=Profile.objects.get(user=request.user)
+            if user_profile.image != None:
+                user_profile.image.delete(save=True)
             profile.delete()
             # Send mail:
             html_content = render_to_string('base/email/email.html',{'title':'Your account has been deleted','message':'Your account has been deleted successfully. Thank you.','username':User.username})

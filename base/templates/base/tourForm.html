@@ -7,15 +7,10 @@
 {% block content %}
 <!-- Add code from body here -->
 <!--Destination-->
-{% for msg in messages %}
-<div class="alert alert-danger alert-dismissible fade show my-5" style="position:relative;top:25px; text-align: center;" role="alert">
-  {{msg}}
-  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-{% endfor %}
-
 <div class="py-5">
-  <div class="container rounded">
+  <div class="container mt-5">
+  {% include 'base/alertMessages/messages.html' %}
+  <div class="main-container rounded">
     <div class="row align-content-center">
       <!--Carousal slides-->
 
@@ -171,6 +166,7 @@
     </div>
     </form>
   </div>
+  </div>
 </div>
 {% block js %}
 <script>
@@ -202,4 +198,5 @@
 
 </script>
 {% endblock %}
+{% include 'base/alertMessages/msgTimeOut.html' %}
 {% endblock %}
