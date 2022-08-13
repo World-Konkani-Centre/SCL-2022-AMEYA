@@ -114,7 +114,7 @@ def recommendations(request):
         for i in range(start_month,end_month+1):
             tour_data = Tour.objects.all().filter(category=category1,place=category2,date__icontains=i).order_by('-rating')
             if tour_data:
-                paginator = Paginator(tour_data, 5) 
+                paginator = Paginator(tour_data, 2) 
                 page = request.GET.get('page')
                 tour_data = paginator.get_page(page)
                 context={
@@ -128,7 +128,7 @@ def recommendations(request):
                
     else:
        tour_data=Tour.objects.all().order_by('-rating')
-       paginator = Paginator(tour_data, 5) 
+       paginator = Paginator(tour_data, 2) 
        page = request.GET.get('page')
        tour_data = paginator.get_page(page)
        context={
