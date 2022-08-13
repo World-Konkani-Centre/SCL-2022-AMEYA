@@ -1,3 +1,4 @@
+import profile
 from django.db import models
 from django.db.models import Avg
 from django.core.validators import MaxValueValidator, MinValueValidator,validate_comma_separated_integer_list
@@ -14,7 +15,6 @@ class Tour(models.Model):
     website=models.CharField(max_length=50,blank=True,default='')
     category=models.CharField(max_length=1,choices=category_choices,default='1')
     rating=models.FloatField(default=5,validators=[MinValueValidator(1),MaxValueValidator(5)])
-    # rating_count=
     avg_fare=models.FloatField(default=0)
     address=models.CharField(max_length=700)
     contact=models.CharField(max_length=10,blank=True,default='')
@@ -43,6 +43,7 @@ class Tour(models.Model):
             self.rating=round(rating,1)
         else:
             self.rating=1.0
+        self.save()
 
     def __str__(self):
         return self.name
@@ -61,7 +62,7 @@ class Profile(models.Model):
 
     def save(self, *args, **kwargs):
         super(Profile, self).save(*args, **kwargs)
-        
+
         if(self.image):
             img= Image.open(self.image.path)    
             if img.height > 300 or img.width > 300:

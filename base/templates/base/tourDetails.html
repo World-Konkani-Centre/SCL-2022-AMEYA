@@ -209,7 +209,7 @@
                 </div>
               </div>
               {% endfor %}
-              {% if reviews.object_list.count != 0 %}
+              {% if reviews.paginator.num_pages > 1 %}
                 <nav aria-label="Page navigation example" class="review-pagination">
                   <ul class="pagination">
                     {% if reviews.has_previous %}

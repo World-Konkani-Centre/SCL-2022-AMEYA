@@ -54,9 +54,8 @@ a {
     right: 2px;
   }
 }
-.container {
+.main-container {
   background-color: #ffffff;
-  margin-top: 50px;
 }
 .labels {
   font-size: 11px;
