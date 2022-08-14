@@ -5,14 +5,18 @@ body {
   overflow-x: hidden;
 }
 .rec-container{
-  margin-top: 60px;
+  margin-top: 10px;
 }
 .card {
   margin: 0 auto; /* Added */
   float: none; /* Added */
   margin-bottom: 10px; /* Added */
+  border-radius: 30px 5px;
+  box-shadow: 5px 5px 10px rgba(0,0,0,0.1);
 }
-
+.card-img{
+  height: 350px; width: 100%; object-fit: cover; border-radius: 30px 5px;
+}
 .hidden-text,
 .info-1 {
   color: #9f9d9d;
@@ -34,8 +38,8 @@ border-right: 1px dashed rgb(226, 224, 224);
 }
 
 .hover01:hover {
-  -webkit-transform: scale(1.02);
-  transform: scale(1.02);
+  -webkit-transform: scale(1.01);
+  transform: scale(1.01);
 }
 
 .text-muted:visited,
