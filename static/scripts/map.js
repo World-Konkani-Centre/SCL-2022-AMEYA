@@ -15,6 +15,8 @@ const baseURL = `${window.location.origin}/api/v1`;
 starIcon = `${window.location.origin}/static/icons/map/star.png`;
 // Selectors:
 const recPanel = document.getElementById("recommendation-panel");
+const editPanel=document.querySelector(".edit-tour-panel");
+
 
 // Map Initialization:
 var map = L.map("map").setView(curLatLang, 13);
@@ -239,13 +241,12 @@ function addRouteMarkers() {
   removeMarkers(routeMarkers);
   tourRouteData.forEach((e) => {
     let item = recommendations[e.cat].find((i) => i.id == e.id);
-    console.log(item);
     if (item) {
       m = addMarkerWithPopup(item);
     }
     routeMarkers.push(m);
   });
-  // fitMarkers(routeMarkers);
+  fitMarkers(routeMarkers);
 }
 
 // Create Waypoints route:
@@ -322,13 +323,18 @@ function createRecWaypoints(cat, id) {
 }
 // Create a new waypoint route for the add to tour button:
 function createAddWaypoints(lat, lng, cat, id) {
+  // Check whether the cat and id exist in the in tourRouteData array:
+  let exists = tourRouteData.find((e) => e.cat == cat && e.id == id);
+  if (exists) {
+    mapAlert("You have already added this to your tour.", "danger");
+    return; 
+  }
   if ("geolocation" in navigator) {
     navigator.geolocation.getCurrentPosition(function (pos) {
       curLatLang = [pos.coords.latitude, pos.coords.longitude];
       let latLng = [lat, lng];
       tourCoordinates = [curLatLang, latLng, ...tourCoordinates.slice(1)];
       tourRouteData.push({ cat: cat, id: id });
-      console.log(tourRouteData);
       addRouteMarkers();
       let latLngArr = tourCoordinates;
       latLngArr = latLngArr.map((l) => L.latLng(...l));
@@ -350,6 +356,7 @@ function createAddWaypoints(lat, lng, cat, id) {
         })
         .addTo(map);
       // Add directions to side panel:
+      updateEditPanel(tourRouteData);
       let dirTab = routing.onAdd(map);
       document.getElementById("pills-directions").appendChild(dirTab);
     });
@@ -357,6 +364,80 @@ function createAddWaypoints(lat, lng, cat, id) {
     mapAlert("Geolocation is not supported by this browser.", "danger");
   }
 }
+
+// Recalculate route:
+function recalculateRoute() {
+  if (routing) map.removeControl(routing);
+  if (recRouting) map.removeControl(recRouting);
+  mapAlert("Finding best route...", "info");
+  addRouteMarkers();
+  routing = L.Routing.control({
+    waypoints: tourCoordinates,
+    lineOptions: {
+      styles: [{ color: "#65b5ff", opacity: 1, weight: 5 }],
+    },
+    createMarker: function () {
+      return null;
+    },
+  })
+    .on("routesfound", (e) => {
+      routeCoordinates = e.routes[0].coordinates;
+    })
+    .addTo(map);
+  // Add directions to side panel:
+  let dirTab = routing.onAdd(map);
+  document.getElementById("pills-directions").appendChild(dirTab);
+}
+
+
+// Update edit panel with current tour data:
+function updateEditPanel(tourRouteData) {
+  // Clear previous data:
+  document.querySelector(".btn-edit-tour").style.display = "block";
+  editPanel.innerHTML = "";
+  tourRouteData.forEach((e) => {
+    let item = recommendations[e.cat].find((i) => i.id == e.id);
+    if (item) {
+      editPanel.insertAdjacentHTML(
+        "beforeend",
+        `<div class="drop_card">
+        <div class="drop_data">
+            <img src="${
+              item.type ? item.banner : item.image
+            }" alt="${item.name}" class="drop_img">
+
+            <div>
+                <h1 class="drop_name">${item.name}</h1>
+                <span class="drop_profession">${item.category}</span>
+            </div>
+        </div>
+
+        <div>
+            <img src="/static/icons/map/delete_btn.png" alt="delete" class="et-delete" data-cat="${item.category}" data-id="${item.id}" onclick="removeTour('${item.category}','${item.id}');">
+        </div>
+    </div>`);
+    }
+  }
+  );
+}
+
+// Remove tour from side panel:
+function removeTour(cat,id) {
+  let index = tourRouteData.findIndex((e) => e.cat == cat && e.id == id);
+  if (index > -1) {
+    tourRouteData.splice(index, 1);
+    updateEditPanel(tourRouteData);
+  }
+  // Delete coordinates from tourCoordinates array:
+  let item = recommendations[cat].find((i) => i.id == id);
+  let latLng = [item.lat,item.lng];
+  let index2 = tourCoordinates.findIndex((e) => e[0] == latLng[0] && e[1] == latLng[1]);
+  if (index2 > -1) {
+    tourCoordinates.splice(index2, 1);
+  }
+  recalculateRoute();
+}
+
 // Map Eventlisteners:
 
 // Map alert handler:
@@ -591,3 +672,40 @@ function addToWishlist(option) {
     })
     .catch((err) => mapAlert(err.message, "danger"));
 }
+
+// Edit Tour Panel sortable:
+const dropItems = document.getElementById('drop-items')
+
+new Sortable(dropItems, {
+    animation: 300,
+    chosenClass: "sortable-chosen",
+    dragClass: "sortable-drag"
+});
+
+// Observer for edit tour panel cards:
+var target = document.querySelector('#drop-items');
+
+// create an observer instance
+var observer = new MutationObserver(function(mutations) {
+  mutations.forEach(function(mutation) {
+    if(mutation.type === 'attributes') {
+      let sortedRouteData = [];
+      document.querySelectorAll(".drop_card").forEach(card => {
+        let item={ cat: card.getAttribute("data-cat") , id: card.getAttribute("data-id") };
+        sortedRouteData.push(item);
+      }
+      );
+      tourRouteData = sortedRouteData;
+      recalculateRoute();
+    }
+  });    
+});
+
+// configuration of the observer:
+var config = { attributes: true, childList: true, characterData: true };
+
+// pass in the target node, as well as the observer options
+observer.observe(target, config);
+
+// later, you can stop observing
+// observer.disconnect();

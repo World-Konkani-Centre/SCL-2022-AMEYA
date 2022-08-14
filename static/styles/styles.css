@@ -1,4 +1,18 @@
 @import url("https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap");
+
+/*===== VARIABLES CSS =====*/
+
+:root {
+  /*===== Colors =====*/
+  --first-color: #272a3a;
+  --first-color-light: #e7e7e7;
+  --first-color-lighten: #f8f8fc;
+  /*===== Font and typography =====*/
+  --body-font: "Ubuntu", sans-serif;
+  --normal-font-size: 1rem;
+  --smaller-font-size: 0.813rem;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -6,6 +20,7 @@
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
 }
+
 html {
   scroll-behavior: smooth;
 }
