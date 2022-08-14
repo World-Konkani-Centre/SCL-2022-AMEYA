@@ -30,7 +30,7 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880
 DEBUG = True
 # DEBUG = False
 
-ALLOWED_HOSTS = ['https://yatra-mitra.herokuapp.com','127.0.0.1','localhost']
+ALLOWED_HOSTS = ['https://yatra-mitra.herokuapp.com','127.0.0.1','localhost','.vercel.app']
 
 
 # Application definition
@@ -80,6 +80,8 @@ WSGI_APPLICATION = 'YatraMitra.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
+
+
 
 DATABASES = {
     'default': {

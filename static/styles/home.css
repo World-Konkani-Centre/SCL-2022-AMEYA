@@ -32,6 +32,9 @@ body {
     height: 95vh;
     min-height: 300px;
   }
+  .carousel-item > img {
+    object-fit: cover;
+  }
   .carousel-caption {
     bottom: 350px;
     z-index: 2;
