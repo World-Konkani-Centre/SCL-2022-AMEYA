@@ -63,20 +63,23 @@
           <div class="row row-cols-2">
             <div class="col-md-7">
               <section style="display: inline" class="sub-header">
-                <button class="disabled text-muted mt-n2 cat">
+                <!-- <button class="disabled text-muted mt-n2 cat">
                   {{ data.get_category_display }}
-                </button>
+                </button> -->
+                <span class="badge bg-success mt-n2 cat">
+                  {{ data.get_category_display }}
+                </span>
                 {% if data.rating > 3.9 %}
-                <button class="disabled text-muted mt-n2 sub">
+                <span class="badge bg-danger mt-n2 sub">
                   {{data.subtext}}
-                </button>
+                </span>
                 {% else %}
-                <button class="disabled text-muted mt-n2 sub">
+                <span class="badge bg-primary mt-n2 sub">
                   People also visited
-                </button>
+                </span>
                 {% endif %}
               </section>
-              <p class="card-text py-4 px-3" style="height: 250px">
+              <p class="card-text py-4 mb-4 px-3" style="height: 250px">
                 {{data.description}}
               </p>
             </div>
