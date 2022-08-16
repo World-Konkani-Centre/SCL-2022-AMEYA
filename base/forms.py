@@ -1,7 +1,8 @@
+from email import message
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserChangeForm,PasswordChangeForm,PasswordResetForm, SetPasswordForm
-from .models import Profile
+from .models import Profile,Subscribers,MailMessage
 
 
 
@@ -54,4 +55,16 @@ class PasswordResetingForm(SetPasswordForm):
         model=User
         fields = ['new_password1','new_password2']
         
+class SubscribersForm(forms.ModelForm):
+    email = forms.EmailField(label='Email', widget=forms.EmailInput(attrs={'class': 'form-control my-2','placeholder': 'Enter your Email','type': 'email','name': 'email'}))
+    class Meta:
+        model=Subscribers
+        fields=['email',]
 
+
+class MailMessageForm(forms.ModelForm):
+    title = forms.CharField(label='Title', widget=forms.TextInput(attrs={'class': 'form-control my-2','placeholder': 'Enter your Title','type': 'title','name': 'title'}))
+    message = forms.CharField(label='Enter the message', widget=forms.TextInput(attrs={'class': 'form-control my-2','placeholder': 'Message goes here','type': 'message','name': 'message'}))
+    class Meta:
+        model = MailMessage
+        fields = '__all__'
