@@ -1,0 +1,18 @@
+body{
+    color: rgb(34, 83, 180);
+}
+
+.heading{
+    justify-content: center;
+    text-align: center;
+    font-size: 35px;
+    font-family: 'Times New Roman', Times, serif;
+    color: rgb(34, 83, 180);
+}
+
+.card{
+    width: 120%;
+    position: relative;
+    right: 30px;
+    margin-top: 40px;
+}

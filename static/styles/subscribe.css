@@ -1,0 +1,15 @@
+body{
+    color: rgb(34, 83, 180);
+}
+
+.card{
+    position: relative;
+    right: 80px;
+    margin-top: 10px;
+}
+
+.sub-text{
+    font-size: 35px;
+    font-family: 'Times New Roman', Times, serif;
+    color: rgb(34, 83, 180);
+}
