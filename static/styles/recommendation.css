@@ -1,4 +1,3 @@
-
 /* Common CSS properties for the page */
 body {
   background-color: #e2e2e291;
@@ -183,6 +182,10 @@ a:active {
 }
 
 @media only screen and (min-width: 601px) and (max-width: 767px){
+  .card{
+    position: relative;
+    right: 100px !important;
+  }
   .card-body{
     height: 160px !important;
   }
@@ -192,8 +195,9 @@ a:active {
    }
    .card-text{
     position: relative;
-    bottom: 100px !important;
-    font-size: 10px;
+    bottom: 90px !important;
+    font-size: 12px;
+    width: 400px;
    }
    .avg-price{
     position: relative;
@@ -256,10 +260,60 @@ a:active {
     }
   }
 
+  @media only screen and (max-width: 258px) and (min-width:245px){
+      .price{
+        margin-left: 100px !important;
+      }
+      .card{
+        position: relative;
+        left: 5px !important;
+      }
+  }
+
+  @media only screen and (max-width: 172px) and (min-width:161px){
+    .price{
+      margin-left: 100px !important;
+    }
+    .card{
+      position: relative;
+      left: 20px !important;
+    }
+    .btn-group{
+      position: relative;
+      left: -70px !important;
+    }
+    .avg-price{
+      position: relative;
+      top: 60px !important;
+    }
+  }
+
+  @media only screen and (max-width: 370px) and (min-width:321px){
+    .price{
+      margin-left: 100px !important;
+    }
+    .card{
+      position: relative;
+      left: 30px !important;
+    }
+    .btn-group{
+      position: relative;
+      right: 60px !important;
+    }
+
+  }
+
   @media only screen and (max-width: 245px){
     .card{
       width: 300% !important;
     }
+  }
+
+  /* Large devices */
+  @media only screen and (min-width: 1200px){
+     .card-text{
+      width: 400px !important;
+     }
   }
 
   @media only screen and (max-width: 160px){
@@ -279,7 +333,8 @@ a:active {
  /* Ipad Air */
  @media all and (device-width: 820px) and (device-height: 1180px) and (orientation:portrait){
     .card{
-      width: 130% !important;
+      position: relative;
+      right: 60px !important;
     }
     .sub-header{
       position: relative;
@@ -293,10 +348,16 @@ a:active {
  /* Ipad Mini */
  @media all and (device-width: 768px) and (device-height: 1024px) and (orientation:portrait){
   .card{
-    width: 140% !important;
+    position: relative;
+    right: 25px !important;
+    height: 350px !important;
   }
   .card-body{
     height: 100px !important;
+  }
+  .card-img{
+    object-fit: cover;
+    height: 350px;
   }
   .sub-header{
     position: relative;
@@ -304,15 +365,17 @@ a:active {
   }
   .card-text{
     position: relative;
-    top: -40px !important;
+    top: -25px !important;
     font-size: 11px;
+    margin-bottom: 2px !important;
   }
  }
 
  /*  Surface Pro 7 */
  @media all and (device-width: 912px) and (device-height: 1368px) and (orientation:portrait){
   .card{
-    width: 140% !important;
+    position: relative;
+    right: 100px !important;
   }
   .card-text{
     font-size: 11px;
@@ -328,12 +391,16 @@ a:active {
  @media all and (device-width: 1024px) and (device-height: 600px) and (orientation:portrait){
   .card-text{
     position: relative;
-    bottom: 3px !important;
+    bottom: 3px !important;  
   }
  }
 
  @media all and (device-width: 360px) and (device-height: 740px) and (orientation:portrait){
   .price{
     margin-left: 90px !important;
+  }
+  .card{
+    position: relative;
+    left: -2px !important;
   }
  }
