@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 from asyncio.windows_events import NULL
+=======
+>>>>>>> 42de065 (home page updates)
 from django.shortcuts import render,redirect
 from django.http import JsonResponse
 from django.core.serializers import serialize

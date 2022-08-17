@@ -32,9 +32,12 @@ body {
     height: 95vh;
     min-height: 300px;
   }
+<<<<<<< HEAD
   .carousel-item > img {
     object-fit: cover;
   }
+=======
+>>>>>>> 42de065 (home page updates)
   .carousel-caption {
     bottom: 350px;
     z-index: 2;
