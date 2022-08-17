@@ -20,7 +20,7 @@ const editPanel=document.querySelector(".edit-tour-panel");
 
 // Map Initialization:
 var map = L.map("map").setView(curLatLang, 13);
-L.tileLayer("https://tile.osm.ch/sswitzerland/{z}/{x}/{y}.png", {
+L.tileLayer("https://tile.osm.ch/switzerland/{z}/{x}/{y}.png", {
   maxZoom: 19,
   attribution:
     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -174,14 +174,19 @@ function addDestinationMarker(latlng, id) {
     .then((data) => {
       data = JSON.parse(data);
       data = data[0].fields;
+      data.id=id;
+      data.category='destination';
+      data.image="/media/"+data.image;
       tourData = data;
+      recommendations['destination'] = [tourData];
+      tourRouteData.push({ cat: 'destination', id: id });
       m = new L.marker(latlng, {
         icon: new LeafIcon({
           iconUrl: `${window.location.origin}/static/icons/map/marker.png`,
         }),
       })
         .bindPopup(
-          `<div class="map-popup dest-popup"><div class="map-popup-header"><h3>${data.name}</h3><p class="map-popup-rating">Rating: ${data.rating} <img width="18px" src=${starIcon} alt="stars"/></p></div><img class="map-popup-image" src="/media/${data.image}"/><p>${data.description}</p></div>`
+          `<div class="map-popup dest-popup"><div class="map-popup-header"><h3>${data.name}</h3><p class="map-popup-rating">Rating: ${data.rating} <img width="18px" src=${starIcon} alt="stars"/></p></div><img class="map-popup-image" src="${data.image}"/><p>${data.description}</p></div>`
         )
         .addTo(map);
       navigator.permissions &&
@@ -240,6 +245,7 @@ function addRouteMarkers() {
   let m;
   removeMarkers(routeMarkers);
   tourRouteData.forEach((e) => {
+    if(e.cat === 'destination') return;
     let item = recommendations[e.cat].find((i) => i.id == e.id);
     if (item) {
       m = addMarkerWithPopup(item);
@@ -321,6 +327,7 @@ function createRecWaypoints(cat, id) {
     mapAlert("Geolocation is not supported by this browser.", "danger");
   }
 }
+
 // Create a new waypoint route for the add to tour button:
 function createAddWaypoints(lat, lng, cat, id) {
   // Check whether the cat and id exist in the in tourRouteData array:
@@ -369,10 +376,14 @@ function createAddWaypoints(lat, lng, cat, id) {
 function recalculateRoute() {
   if (routing) map.removeControl(routing);
   if (recRouting) map.removeControl(recRouting);
+  if (recMarker) map.removeLayer(recMarker);
   mapAlert("Finding best route...", "info");
   addRouteMarkers();
+  let latLngArr = tourCoordinates;
+  latLngArr = latLngArr.map((l) => L.latLng(...l));
+  // Create a route:
   routing = L.Routing.control({
-    waypoints: tourCoordinates,
+    waypoints: latLngArr,
     lineOptions: {
       styles: [{ color: "#65b5ff", opacity: 1, weight: 5 }],
     },
@@ -399,8 +410,8 @@ function updateEditPanel(tourRouteData) {
     let item = recommendations[e.cat].find((i) => i.id == e.id);
     if (item) {
       editPanel.insertAdjacentHTML(
-        "beforeend",
-        `<div class="drop_card">
+        "afterbegin",
+        `<div class="drop_card"  data-cat="${item.category}" data-id="${item.id}">
         <div class="drop_data">
             <img src="${
               item.type ? item.banner : item.image
@@ -408,13 +419,10 @@ function updateEditPanel(tourRouteData) {
 
             <div>
                 <h1 class="drop_name">${item.name}</h1>
-                <span class="drop_profession">${item.category}</span>
+                <span class="drop_profession">${item.category.charAt(0).toUpperCase()+item.category.slice(1)}</span>
             </div>
         </div>
-
-        <div>
-            <img src="/static/icons/map/delete_btn.png" alt="delete" class="et-delete" data-cat="${item.category}" data-id="${item.id}" onclick="removeTour('${item.category}','${item.id}');">
-        </div>
+            ${item.category !=="destination" ? `<div><img src="/static/icons/map/delete_btn.png" alt="delete" class="et-delete" onclick="removeTour('${item.category}','${item.id}');" /></div>`:""}
     </div>`);
     }
   }
@@ -507,6 +515,13 @@ function showRecPanel() {
   if (screen.width < 768) recPanel.classList.add("slide-rec-panel");
 }
 
+// Save Tour Btn handler:
+document.querySelector(".et-save").addEventListener("click", (e) => {
+  saveTour();
+}
+);
+
+
 // MAP API:
 
 // Get tour data by id:
@@ -595,7 +610,9 @@ function getRecommendations(cat) {
   })
     .then((res) => res.json())
     .then((data) => {
-      recommendations[cat] = data;
+      if(recommendations[cat]) 
+        recommendations[cat].push(...data);
+      else recommendations[cat] = data;
       tab.innerHTML = "";
       if (data.length === 0) {
         tab.innerHTML = `<div class="rec-not-found">
@@ -673,39 +690,66 @@ function addToWishlist(option) {
     .catch((err) => mapAlert(err.message, "danger"));
 }
 
+// POST request to save tour:
+function saveTour() { 
+  const url = `${baseURL}/tour/save/`;
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ tourId,tourCoords: tourCoordinates,tourRoute: tourRouteData }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.status === "success") {
+        mapAlert("Tour saved", "success");
+      } else {
+        mapAlert("Something went wrong", "danger");
+      }
+    })
+    .catch((err) => mapAlert(err.message, "danger"));
+}
+
 // Edit Tour Panel sortable:
-const dropItems = document.getElementById('drop-items')
+const dropItems = document.getElementById('drop-items');
 
 new Sortable(dropItems, {
     animation: 300,
     chosenClass: "sortable-chosen",
-    dragClass: "sortable-drag"
+    dragClass: "sortable-drag",
+    // Update event:
+    onUpdate: reArrangeRoute,
 });
 
-// Observer for edit tour panel cards:
-var target = document.querySelector('#drop-items');
-
-// create an observer instance
-var observer = new MutationObserver(function(mutations) {
-  mutations.forEach(function(mutation) {
-    if(mutation.type === 'attributes') {
+function reArrangeRoute(){
       let sortedRouteData = [];
       document.querySelectorAll(".drop_card").forEach(card => {
         let item={ cat: card.getAttribute("data-cat") , id: card.getAttribute("data-id") };
         sortedRouteData.push(item);
       }
       );
+      console.log(sortedRouteData);
       tourRouteData = sortedRouteData;
+      reCreateTourCoordinates();
       recalculateRoute();
-    }
-  });    
-});
+}
 
-// configuration of the observer:
-var config = { attributes: true, childList: true, characterData: true };
-
-// pass in the target node, as well as the observer options
-observer.observe(target, config);
-
-// later, you can stop observing
-// observer.disconnect();
+function reCreateTourCoordinates(){
+  let newtourCoordinates = [];
+  // get current location:
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition((position) => {
+      currLoc=[position.coords.latitude, position.coords.longitude];
+      newtourCoordinates.push(currLoc);
+      tourRouteData.forEach(item => {
+        let data= recommendations[item.cat].find(d => d.id == item.id);
+        newtourCoordinates.push([data.lat, data.lng]);
+      });
+      tourCoordinates = newtourCoordinates;
+    });
+  }
+  else{
+    mapAlert("Geolocation is not supported by this browser.", "danger");
+  }
+}

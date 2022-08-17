@@ -1,9 +1,8 @@
-from asyncio.windows_events import NULL
 from django.shortcuts import render,redirect
 from django.http import JsonResponse
 from django.core.serializers import serialize
 from django.contrib import messages
-from .models import RegisteredBusiness,Tour,Business,TourReviews,Wishlist,Profile
+from .models import RegisteredBusiness,Tour,Business,TourReviews,Wishlist,Profile,SavedTour
 from haversine import haversine,Unit
 from django.template.defaulttags import register
 from django.views.decorators.csrf import csrf_exempt
@@ -428,7 +427,26 @@ def getBusiness(request,id):
     business=RegisteredBusiness.objects.get(id=id)
     data=serialize('json',[business])
     return JsonResponse(data,safe=False)
-    
+
+# method to save tour to SaveTour table:
+@login_required
+@csrf_exempt
+def saveTour(request):
+    body=json.loads(request.body.decode('utf-8'))
+    tourId=body['tourId']
+    tourCoords=body['tourCoords']
+    tourRoute=body['tourRoute']
+    tour=Tour.objects.get(id=tourId)
+    if SavedTour.objects.filter(tour=tour,user=request.user).exists():
+        savedTour=SavedTour.objects.get(tour=tour,user=request.user)
+        savedTour.tourCoords=tourCoords
+        savedTour.tourRoute=tourRoute
+        savedTour.save()
+    else:
+        saveTour=SavedTour(tour=tour,user=request.user,tourCoords=tourCoords,tourRoute=tourRoute)
+        saveTour.save()
+    return JsonResponse({"status":"success"},safe=False)
+
 # method to handle a tour to wishlist:
 @csrf_exempt
 @login_required
@@ -452,8 +470,6 @@ def handleWishlist(request):
 # Error page:
 def error_404(request,exception):
     return render(request,'base/errorPages/404.html')
-
-
 
 #delete user profile
 

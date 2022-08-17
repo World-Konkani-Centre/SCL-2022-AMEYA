@@ -135,3 +135,15 @@ class RegisteredBusiness(models.Model):
     def __str__(self):
         return self.name
 
+# Saved Tour model:
+class SavedTour(models.Model):
+    id=models.BigAutoField(primary_key=True)
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    tour=models.ForeignKey(Tour,on_delete=models.CASCADE)
+    tourCoords=models.CharField(max_length=2000)
+    tourRoute=models.CharField(max_length=2000)
+    createadAt=models.DateTimeField(auto_now_add=True)
+    updateAt=models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return str(self.id)
