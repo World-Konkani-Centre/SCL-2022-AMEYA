@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 from django.shortcuts import render,redirect
 from django.http import JsonResponse
 from django.core.serializers import serialize
@@ -133,8 +132,23 @@ def aboutUs(request):
     return render(request,"base/aboutUs.html",context)
 
 def contact(request):
-    context={}
-    return render(request,"base/contact.html",context)
+    if request.method =="POST":
+        contact_name = request.POST['contact-name']
+        contact_email = request.POST['contact-email']
+        contact_message = request.POST['contact-message']
+        # send email
+        send_mail(
+            'Message from ' + contact_name + ', regarding Yatra Mitra', # subject
+            contact_message, # message
+            contact_email, # From mail 
+            ['yatramitra.app@gmail.com'], # To email
+        )
+        messages.add_message(request, messages.INFO, 'Your message has been sent successfully.')
+        return redirect('/')
+   
+    else:
+        context={}
+        return render(request,"base/contact.html",context)
 
 def tourDetails(request,id):
     tour=Tour.objects.get(id=id)
