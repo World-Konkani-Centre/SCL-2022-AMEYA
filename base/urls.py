@@ -7,6 +7,8 @@ from .forms import UserPasswordResetForm,PasswordResetingForm
 
 urlpatterns = [
     path('', views.home,name='home'),
+    path('subscribe/',views.subscribe,name='subscribe'),
+    path('mail/',views.mail,name='mail'),
     path('map/',views.map,name='map'),
     path('aboutUs/',views.aboutUs,name='aboutUs'),
     path('contact/',views.contact,name='contact'),

@@ -2,23 +2,24 @@ from django.shortcuts import render,redirect
 from django.http import JsonResponse
 from django.core.serializers import serialize
 from django.contrib import messages
-from .models import RegisteredBusiness,Tour,Business,TourReviews,Wishlist,Profile,SavedTour
+from .models import RegisteredBusiness,Tour,Business,TourReviews,Wishlist,Profile,Subscribers,SavedTour
 from haversine import haversine,Unit
 from django.template.defaulttags import register
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout,update_session_auth_hash
-from .forms import UserUpdateForm, ProfileUpdateForm , PasswordChangingForm
+from .forms import UserUpdateForm, ProfileUpdateForm , PasswordChangingForm,SubscribersForm,MailMessageForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
-from django.core.mail import EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives,send_mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.conf import settings
 from .serializers import BusinessSerializer,RegisteredBusinessSerializer
 from rest_framework.response import Response
 from django.core.paginator import Paginator
+from django_pandas.io import read_frame
 import datetime
 
 # Create your views here.
@@ -131,8 +132,23 @@ def aboutUs(request):
     return render(request,"base/aboutUs.html",context)
 
 def contact(request):
-    context={}
-    return render(request,"base/contact.html",context)
+    if request.method =="POST":
+        contact_name = request.POST['contact-name']
+        contact_email = request.POST['contact-email']
+        contact_message = request.POST['contact-message']
+        # send email
+        send_mail(
+            'Message from ' + contact_name + ', regarding Yatra Mitra', # subject
+            contact_message, # message
+            contact_email, # From mail 
+            ['yatramitra.app@gmail.com'], # To email
+        )
+        messages.add_message(request, messages.INFO, 'Your message has been sent successfully.')
+        return redirect('/')
+   
+    else:
+        context={}
+        return render(request,"base/contact.html",context)
 
 def tourDetails(request,id):
     tour=Tour.objects.get(id=id)
@@ -497,3 +513,44 @@ def deleteUser(request,username,id):
         else:
             messages.add_message(request, messages.ERROR, 'Please enter correct password!')
     return render(request,"base/deleteUser.html",context)
+
+
+
+def subscribe(request):
+    if request.method=='POST':
+        form=SubscribersForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request,'Subscription Successful')
+            return redirect('/subscribe')
+    else:
+        form=SubscribersForm()
+    context={
+        'form':form
+    }
+    return render(request,'base/subscribe.html',context)
+
+
+def mail(request):
+    emails=Subscribers.objects.all()
+    df=read_frame(emails,fieldnames=['email'])
+    mail_list=df['email'].values.tolist()
+    if request.method=='POST':
+       form=MailMessageForm(request.POST)
+       if form.is_valid():
+        form.save()
+        title=form.cleaned_data.get('title')
+        message=form.cleaned_data.get('message')
+        send_mail(
+        title,
+        message,
+        '',
+        mail_list,
+        fail_silently=False,
+    )
+        messages.success(request,"Your message has been sent successfully to the mail list!")
+        return redirect('/mail')
+    else:
+        form=MailMessageForm()
+    context={'form':form}
+    return render(request,"base/mail.html",context)
