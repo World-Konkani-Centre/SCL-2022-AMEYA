@@ -1,0 +1,35 @@
+{% extends 'main.html' %}
+{% load static %} 
+{% block styles %}
+<!-- Replace {name} with the respective css file -->
+<link rel="stylesheet" href="{% static 'styles/subscribe.css' %}" />
+{% endblock %}
+
+{% load crispy_forms_tags %}
+{% block content %} 
+<!-- Add code from body here -->
+<div class="container">
+    <div class="row mt-5 pt-5">
+        <div class="col-md-4 offset-md-4">
+            {% for message in messages %}
+            <div class="alert alert-success">
+            {{ message }}
+            </div>
+            {% endfor %}
+            <div class="card" style="width:150%; justify-content:center; align-items:center;">
+                <div class="card-body">
+                    <h3 class="sub-text">Subscribe to Newsletter</h3>
+                    <hr>
+                    <form method="POST">
+                        {% csrf_token %}
+                         {{form|crispy }}
+                        <input class="btn btn-success btn-block mt-5" type="submit" value="Subscribe">
+                        <!-- <input class="btn btn-danger btn-block mt-5" type="submit" value="Unsubscribe"> -->
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
