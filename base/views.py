@@ -12,7 +12,7 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 from .forms import UserUpdateForm, ProfileUpdateForm , PasswordChangingForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
-from django.core.mail import EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives,send_mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.conf import settings
@@ -131,8 +131,23 @@ def aboutUs(request):
     return render(request,"base/aboutUs.html",context)
 
 def contact(request):
-    context={}
-    return render(request,"base/contact.html",context)
+    if request.method =="POST":
+        contact_name = request.POST['contact-name']
+        contact_email = request.POST['contact-email']
+        contact_message = request.POST['contact-message']
+        # send email
+        send_mail(
+            'Message from ' + contact_name + ', regarding Yatra Mitra', # subject
+            contact_message, # message
+            contact_email, # From mail 
+            ['yatramitra.app@gmail.com'], # To email
+        )
+        messages.add_message(request, messages.INFO, 'Your message has been sent successfully.')
+        return redirect('/')
+   
+    else:
+        context={}
+        return render(request,"base/contact.html",context)
 
 def tourDetails(request,id):
     tour=Tour.objects.get(id=id)
