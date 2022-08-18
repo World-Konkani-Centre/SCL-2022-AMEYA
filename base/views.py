@@ -2,21 +2,25 @@ from django.shortcuts import render,redirect
 from django.http import JsonResponse
 from django.core.serializers import serialize
 from django.contrib import messages
-from .models import RegisteredBusiness,Tour,Business,TourReviews,Wishlist,Profile
+from .models import RegisteredBusiness,Tour,Business,TourReviews,Wishlist,Profile,Subscribers,MailMessage
 from haversine import haversine,Unit
+from django.template.defaulttags import register
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout,update_session_auth_hash
-from .forms import UserUpdateForm, ProfileUpdateForm , PasswordChangingForm
+from .forms import UserUpdateForm, ProfileUpdateForm , PasswordChangingForm,SubscribersForm,MailMessageForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
-from django.core.mail import EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives,send_mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.conf import settings
 from .serializers import BusinessSerializer,RegisteredBusinessSerializer
 from rest_framework.response import Response
+from django.core.paginator import Paginator
+from django_pandas.io import read_frame
+import datetime
 
 # Create your views here.
 
@@ -39,6 +43,7 @@ def map(request):
 
 def getTour(request,id):
     tour=Tour.objects.get(id=id)
+    tour.calc_avg_rating()
     data=serialize('json',[tour])
     return JsonResponse(data,safe=False)
 
@@ -61,9 +66,9 @@ def signup(request):
             user = User.objects.create(email=email, username=username, password=make_password(password))
             user.save() 
             auth_login(request, user)    
-            html_content = render_to_string('base/email/email.html',{'title':'Welcome to Tourist Guide','message':'Welcome to Tourist Guide. Thank you for signing up.','name':username})
+            html_content = render_to_string('base/email/email.html',{'title':'Welcome to Yatra Mitra App','message':'Welcome to  Yatra Mitra app. Thank you for signing up.','name':username})
             text_content = strip_tags(html_content)
-            email_content = EmailMultiAlternatives('Welcome to Tourist Guide', text_content, settings.EMAIL_HOST_USER, [email])
+            email_content = EmailMultiAlternatives('Welcome to Yatra Mitra App', text_content, settings.EMAIL_HOST_USER, [email])
             email_content.attach_alternative(html_content, "text/html")
             email_content.send()
             messages.add_message(request, messages.INFO, 'You have successfully signed up.')
@@ -93,32 +98,83 @@ def logout(request):
     return redirect('/')
 
 def recommendations(request):
+    tour_data=Tour.objects.get_queryset()
     if request.method=='POST':
-        contents=Tour.objects.all()
-        category1= request.POST['category']  #Retrieves the category entered by the user
-        category2=request.POST['place']
-        
-        tourData = Tour.objects.all().filter(category=category1,place=category2).order_by('-rating').values()
-            #Filter by highest rating
-        context={
-            'tourData':tourData
-        }
-        return render(request,"base/recommendations.html",context)
-    else:
-       tourData=Tour.objects.all().order_by('-rating').values()
-       context={'tourData':tourData}
-       return render(request,"base/recommendations.html",context)
+        category1= request.POST['category']  
+        category2=request.POST['place'] 
+        start_date=request.POST['startdate']
+        end_date=request.POST['enddate']
+        datem1 = datetime.datetime.strptime(start_date, "%Y-%m-%d")
+        datem2 = datetime.datetime.strptime(end_date, "%Y-%m-%d")
+        start_month=datem1.month
+        end_month=datem2.month
+        tour_data = tour_data.filter(category=category1,place=category2)
+        if(start_month>end_month):
+            start_month=1
+        for i in range(start_month,end_month+1):
+            tour_data=tour_data.filter(date__icontains=i)
+
+        if not tour_data:
+            messages.error(request,"Sorry! We couldn't find recommmendations of your choice!")
+            return render(request,"base/tourForm.html")
+    
+    for tour in tour_data:
+        tour.calc_avg_rating()
+    tour_data=tour_data.order_by('-rating')
+    paginator = Paginator(tour_data, 5) 
+    page = request.GET.get('page')
+    tour_data = paginator.get_page(page)
+    context={'tour_data':tour_data}
+    return render(request,"base/recommendations.html",context)
 
 def aboutUs(request):
     context={}
     return render(request,"base/aboutUs.html",context)
 
 def contact(request):
-    context={}
-    return render(request,"base/contact.html",context)
+    if request.method =="POST":
+        contact_name = request.POST['contact-name']
+        contact_email = request.POST['contact-email']
+        contact_message = request.POST['contact-message']
+        # send email
+        send_mail(
+            'Message from ' + contact_name + ', regarding Yatra Mitra', # subject
+            contact_message, # message
+            contact_email, # From mail 
+            ['yatramitra.app@gmail.com'], # To email
+        )
+        messages.add_message(request, messages.INFO, 'Your message has been sent successfully.')
+        return redirect('/')
+   
+    else:
+        context={}
+        return render(request,"base/contact.html",context)
 
-def tourDetails(request):
+def tourDetails(request,id):
+    tour=Tour.objects.get(id=id)
+    tourData=Tour.objects.filter(id=id).values()[0]
     context={}
+    # Open hours:
+    hours=tourData['hours_open']
+    tourData['hours_open']=hours.split(',')
+    # Avg rating:
+    tourData['rating']=tour.get_avg_rating()
+    context['data']=tourData
+    # Wishlist:
+    if request.user.is_authenticated:
+        user=request.user
+        if Wishlist.objects.filter(user=user,tour=tour).exists():
+            wishlist=True
+        else:
+            wishlist=False
+        context['wishlist']=wishlist
+    # Reviews:
+    reviews=TourReviews.objects.filter(tour=tour).order_by('-rating')
+    # Reviews pagination:
+    paginator = Paginator(reviews, 5) # Show 5 reviews per page
+    page = request.GET.get('page')
+    reviews = paginator.get_page(page)
+    context['reviews']=reviews
     return render(request,"base/tourDetails.html",context)
 
 def tourForm(request):
@@ -128,16 +184,46 @@ def tourForm(request):
 @login_required
 def tourReview(request,id):
     tour=Tour.objects.get(id=id)
+    tour.calc_avg_rating()
+    context={'tour':tour}
+    user=request.user
+    # Submit review:
     if request.method=='POST':
         rating=request.POST.get('rating')
         review=request.POST.get('review')
-        user=request.user
         if(rating==None): rating=1
-        rev=TourReviews(rating=float(rating),review=review,tour=tour,user=user)
-        rev.save()
-        messages.add_message(request, messages.SUCCESS, 'Your Review has been submitted successfully!')
-    context={'tour':tour}
+        if(TourReviews.objects.filter(user=user,tour=tour).exists()):
+            rev=TourReviews.objects.get(user=user,tour=tour)
+            rev.rating=rating
+            rev.review=review
+            rev.save()
+            messages.add_message(request, messages.INFO, 'Your Review has been updated.')
+        else:
+            TourReviews.objects.create(user=user,tour=tour,rating=rating,review=review)
+            messages.add_message(request, messages.SUCCESS, 'Your Review has been submitted.')
+        return redirect('tourDetails',id=id)
+    # Review already in database:
+    if TourReviews.objects.filter(tour=tour,user=user).exists():
+        review=TourReviews.objects.get(tour=tour,user=user)
+        context['review']=review
+        messages.add_message(request, messages.INFO, 'You have already submitted a review for this tour.')
     return render(request,"base/tourReview.html",context)
+
+def teamProfile(request):
+    context={}
+    return render(request,"base/teamProfile.html",context)
+
+# Delete review:
+@login_required
+def deleteTourReview(request,id):
+    user=request.user
+    tourId=NULL
+    if TourReviews.objects.filter(id=id,user=user).exists():
+        rev=TourReviews.objects.get(id=id,user=user)
+        tourId=rev.tour.id
+        rev.delete()
+        messages.add_message(request, messages.INFO, 'You have successfully deleted your review.')
+    return redirect('tourDetails',id=tourId)
 
 def trip(request):
     context={}
@@ -151,10 +237,14 @@ def trips(request):
 def userProfile(request):
     if request.method == 'POST':
         u_form =UserUpdateForm(request.POST, instance=request.user)
-        p_form = ProfileUpdateForm(request.POST,request.FILES, instance=request.user.profile)
+        p_form = ProfileUpdateForm(request.POST,request.FILES, instance=request.user.profile)          
 
         if u_form.is_valid() and p_form.is_valid():
-            print(p_form.cleaned_data)
+            # Delete previous image from file system:
+            prev_img=p_form.cleaned_data.get('image')
+            profile=Profile.objects.get(user=request.user)
+            if prev_img!=profile.image:
+                profile.image.delete(save=False)
             u_form.save()
             p_form.save()
             messages.add_message(request, messages.SUCCESS, 'Your account has been Updated')
@@ -172,10 +262,17 @@ def userProfile(request):
     return render(request, "base/userProfile.html",context)
 
 # wishlist view function:
+@csrf_exempt
 @login_required
 def userWishlist(request):
     user=request.user
-    wishlist=Wishlist.objects.filter(user=user)
+    if request.method=='POST':
+        body=json.loads(request.body.decode('utf-8'))
+        id=body['id']
+        wishlistDel=Wishlist.objects.get(id=id,user=user)
+        wishlistDel.delete()
+        return JsonResponse({'status':'success'})
+    wishlist=Wishlist.objects.filter(user=user).order_by("-createadAt")
     context={
         'wishlist':wishlist
     }
@@ -201,11 +298,13 @@ def updatePassword(request):
     else:
         return redirect('login')
        
-@login_required
+# @login_required
 def registerBusiness(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
     id=request.GET.get('id')
     if id!=None:
-        business=RegisteredBusiness.objects.get(id=id)
+        business=RegisteredBusiness.objects.get(id=id,user=request.user)
         context={'business':business}
     else:
         context={'business':None}
@@ -222,7 +321,7 @@ def registerBusiness(request):
         lng=request.POST.get('longitude')
         logo=request.FILES.get('logo')
         banner=request.FILES.get('banner')
-        business=RegisteredBusiness(name=name,address=address,zipcode=zipcode,phone=phone,email=email,category=category,description=description,lat=lat,lng=lng,logo=logo,banner=banner,website=website)
+        business=RegisteredBusiness(user=request.user,name=name,address=address,zipcode=zipcode,phone=phone,email=email,category=category,description=description,lat=lat,lng=lng,logo=logo,banner=banner,website=website)
         business.save()
         html_content = render_to_string('base/email/email.html',{'title':'Your Business has been regisered','message':'Your Business has been regisered. Thank you.','name':name})
         text_content = strip_tags(html_content)
@@ -244,8 +343,14 @@ def registerBusiness(request):
         business.lat=request.POST.get('latitude')
         business.lng=request.POST.get('longitude')
         if request.FILES.get('logo')!=None:
+            # Delete the old logo from files system and save the new one:
+            if business.logo!=None:
+                business.logo.delete(save=False)
             business.logo=request.FILES.get('logo')
         if request.FILES.get('banner')!=None:
+            # Delete the old banner from files system and save the new one:
+            if business.banner!=None:
+                business.banner.delete(save=False)
             business.banner=request.FILES.get('banner')
         business.save()
         context={'business':business}
@@ -253,11 +358,28 @@ def registerBusiness(request):
 
     return render(request,"base/registerBusiness.html",context)
 
-
-# view to get registered business details by id:
-def getBusinessDetails(request,id):
-    business=RegisteredBusiness.objects.get(id=id)
-    return render(request,"base/businessDetails.html",{'business':business})
+#Delete registered business:
+@login_required
+def deleteBusiness(request):
+    id=request.GET.get('id')
+    business=RegisteredBusiness.objects.get(id=id,user=request.user)
+    context={'business':business}
+    if request.method=='POST':
+        business=RegisteredBusiness.objects.get(id=id)
+        password=request.POST.get('password')
+        if request.user.check_password(password):
+            business.delete()
+            # Send mail:
+            html_content = render_to_string('base/email/email.html',{'title':'Your Business has been deleted','message':'Your Business has been deleted. Thank you.','name':business.name})
+            text_content = strip_tags(html_content)
+            email_content = EmailMultiAlternatives('Your Business has been deleted successfully', text_content, settings.EMAIL_HOST_USER, [business.email])
+            email_content.attach_alternative(html_content, "text/html")
+            email_content.send()
+            messages.add_message(request, messages.SUCCESS, 'Your Business has been deleted successfully!')
+            return redirect('home')
+        else:
+            messages.add_message(request, messages.ERROR, 'Please enter correct password!')
+    return render(request,"base/deleteRegBiz.html",context)
 
 # method to get nearby restaurants,hotels and repair shops:
 @csrf_exempt
@@ -271,7 +393,7 @@ def getNearby(request,cat):
     # Calculate radius of center:
     radius=10
     if len(tourCoords)>0:
-        radius=haversine((centerCoord[0],centerCoord[1]),(tourCoords[0][0],tourCoords[0][1]))+50
+        radius=haversine((centerCoord[0],centerCoord[1]),(tourCoords[0][0],tourCoords[0][1]))+3
     query1=RegisteredBusiness.objects.all().filter(category=cat)
     query2=Business.objects.all().filter(category=cat)
 
@@ -280,12 +402,12 @@ def getNearby(request,cat):
     if len(routeCoords)>0:
         for item in locFiltered1:
             for route in routeCoords:
-                if haversine((item.lat,item.lng),(route["lat"],route["lng"]),unit=Unit.KILOMETERS)<=3:
+                if haversine((item.lat,item.lng),(route["lat"],route["lng"]),unit=Unit.KILOMETERS)<=2:
                     nearbyVerified.append(item)
                     break
         for item in locFiltered2:
             for route in routeCoords:
-                if haversine((item.lat,item.lng),(route["lat"],route["lng"]),unit=Unit.KILOMETERS)<=3:
+                if haversine((item.lat,item.lng),(route["lat"],route["lng"]),unit=Unit.KILOMETERS)<=2:
                     nearbyUnverified.append(item)
                     break
     else:
@@ -338,11 +460,80 @@ def handleWishlist(request):
         wishlist.save()
         return JsonResponse({'status':'success'})
     if option=='remove':
-        wishlist=Wishlist.objects.get(user=user,tour=tour)
-        if wishlist:
-            wishlist.delete()
+        if Wishlist.objects.filter(user=user,tour=tour).exists():
+            Wishlist.objects.get(user=user,tour=tour).delete()
         return JsonResponse({'status':'deleted'})
     
 # Error page:
 def error_404(request,exception):
     return render(request,'base/errorPages/404.html')
+
+
+
+#delete user profile
+
+def deleteUser(request,username,id):    
+    profile = User.objects.get(username = username)
+    context={'profile':profile}
+    if request.method=='POST':
+        profile=User.objects.get(id=id, email=request.user.email)
+        userEmail=request.user.email
+        password1=request.POST.get('password')
+        if request.user.check_password(password1):
+            # Clear user files:
+            user_profile=Profile.objects.get(user=request.user)
+            if user_profile.image != None:
+                user_profile.image.delete(save=True)
+            profile.delete()
+            # Send mail:
+            html_content = render_to_string('base/email/email.html',{'title':'Your account has been deleted','message':'Your account has been deleted successfully. Thank you.','username':User.username})
+            text_content = strip_tags(html_content)
+            email_content = EmailMultiAlternatives('Your account has been deleted successfully', text_content, settings.EMAIL_HOST_USER, [userEmail])
+            email_content.attach_alternative(html_content, "text/html")
+            email_content.send()
+            messages.add_message(request, messages.SUCCESS, 'Your account has been deleted successfully!')
+            return redirect('home')
+        else:
+            messages.add_message(request, messages.ERROR, 'Please enter correct password!')
+    return render(request,"base/deleteUser.html",context)
+
+
+
+def subscribe(request):
+    if request.method=='POST':
+        form=SubscribersForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request,'Subscription Successful')
+            return redirect('/subscribe')
+    else:
+        form=SubscribersForm()
+    context={
+        'form':form
+    }
+    return render(request,'base/subscribe.html',context)
+
+
+def mail(request):
+    emails=Subscribers.objects.all()
+    df=read_frame(emails,fieldnames=['email'])
+    mail_list=df['email'].values.tolist()
+    if request.method=='POST':
+       form=MailMessageForm(request.POST)
+       if form.is_valid():
+        form.save()
+        title=form.cleaned_data.get('title')
+        message=form.cleaned_data.get('message')
+        send_mail(
+        title,
+        message,
+        '',
+        mail_list,
+        fail_silently=False,
+    )
+        messages.success(request,"Your message has been sent successfully to the mail list!")
+        return redirect('/mail')
+    else:
+        form=MailMessageForm()
+    context={'form':form}
+    return render(request,"base/mail.html",context)

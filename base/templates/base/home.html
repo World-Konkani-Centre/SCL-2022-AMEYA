@@ -2,76 +2,247 @@
 <!-- Replace {name} with the respective css file -->
 <link rel="stylesheet" href="{% static 'styles/home.css' %}" />
 {% endblock %} {% block content %}
-<!--  -->
-{% include 'base/alertMessages/messages.html' %}
 
-<body class="main-layout">
-  <section>
-    <div class="banner-main">
-      <img src="{% static 'images/home/banner.jpg' %}" alt="#" width="100%" />
-      <div class="container">
-        <div class="text-bg">
-          <h1>Yatra Mitra<br /><strong class="white">Amazing Tour</strong></h1>
-          <div class="button_section">
-            <a class="main_bt" href="#">Read More</a>
+<body>
+  <!--Carousel start-->
+  <div id="carouselExampleDark" class="carousel  carousel-dark slide carousel-fade" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active"
+        aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
+      <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="3" aria-label="Slide 4"></button>
+    </div>
+
+    <div class="carousel-inner">
+      <div class="carousel-item active" data-bs-interval="10000">
+        {% include 'base/alertMessages/messages.html' %}
+        <img src="{% static 'images/home/main_banner.png' %}" class="d-block w-100 h-100" alt="#" />
+        <div class="carousel-caption">
+          <h5 class="text-dark">YATRA <span class="auto-type"></span></h5>
+          {% if user.is_authenticated %}
+          <a href="#tourist" class="btn btn-warning mt-3">Learn More</a></span>
+          {% else %}
+          <span><a href="{% url 'signup' %}" class="btn btn-success mt-3">Get Started</a>
+            <a href="#tourist" class="btn btn-warning mt-3">Learn More</a></span>
+          {% endif %}
+        </div>
+      </div>
+      <div class="carousel-item" data-bs-interval="5000">
+        <img src="{% static 'images/home/main_cover.jpg' %}" class="d-block w-100 h-100" alt="...">
+        <div class="carousel-caption">
+          <h5 style="color:#1e1e1e;">BEST <span class="auto-type1"></span></h5>
+          {% if user.is_authenticated %}
+          <a href="#tourist" class="btn btn-warning mt-3">Learn More</a></span>
+          {% else %}
+          <span><a href="{% url 'signup' %}" class="btn btn-success mt-3">Get Started</a>
+            <a href="#tourist" class="btn btn-warning mt-3">Learn More</a></span>
+          {% endif %}
+        </div>
+      </div>
+      <div class="carousel-item" data-bs-interval="5000">
+        <img src="{% static 'images/home/main_cover1.jpg' %}" class="d-block w-100 h-100" alt="...">
+        <div class="carousel-caption">
+          <h5 style="color:#1e1e1e;">BEST <span class="auto-type2"></span></h5>
+          {% if user.is_authenticated %}
+          <a href="#tourist" class="btn btn-warning mt-3">Learn More</a></span>
+          {% else %}
+          <span><a href="{% url 'signup' %}" class="btn btn-success mt-3">Get Started</a>
+            <a href="#tourist" class="btn btn-warning mt-3">Learn More</a></span>
+          {% endif %}
+        </div>
+      </div>
+      <div class="carousel-item" data-bs-interval="5000">
+        <img src="{% static 'images/home/main_cover2.jpg' %}" class="d-block w-100 h-100" alt="...">
+        <div class="carousel-caption">
+          <div>
+            <h5 style="color:#1e1e1e;">BEST <span class="auto-type3"></span></h5>
+            {% if user.is_authenticated %}
+            <a href="#tourist" class="btn btn-warning mt-3">Learn More</a></span>
+            {% else %}
+            <span><a href="{% url 'signup' %}" class="btn btn-success mt-3">Get Started</a>
+              <a href="#tourist" class="btn btn-warning mt-3">Learn More</a></span>
+            {% endif %}
           </div>
         </div>
       </div>
     </div>
-  </section>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
 
-  <!-- traveling -->
-  <div id="travel" class="traveling">
+  <!-- Basic Intro about website -->
+  <div class="container">
+    <p class="first-text">WELCOME TO</p>
+    <p class="second-text">YATRA MITRA</p>
+    <hr class="border">
+    <p class="about-text">
+      Lorem ipsum dolor sit, amet consectetur adipisicing elit. Harum nesciunt ratione reprehenderit dignissimos placeat mollitia hic sit eligendi numquam molestias at architecto perferendis aliquid quaerat laboriosam nam voluptas amet cumque rem, eius velit suscipit. Fuga at mollitia vel quidem vero consectetur amet? Nostrum inventore id modi nobis dolorum laudantium animi earum laboriosam dignissimos eum assumenda illum iusto culpa totam expedita optio odit fuga cumque laborum, magnam repellendus, magni adipisci. Animi quod, quo mollitia facilis iusto expedita cumque aperiam molestias necessitatibus natus harum ut officia nostrum unde debitis! Reiciendis earum dicta, maiores ex placeat aperiam voluptate tempore harum eveniet voluptas explicabo.
+    </p>
+  </div>
+
+  <!-- Newsletter -->
+  <div class="tm-section-2">
+    <div class="container">
+        <div class="row">
+            <div class="col text-center">
+                <h2 class="tm-section-title">We are here to help you?</h2>
+                <p class="tm-color-white tm-section-subtitle">Subscribe to get our newsletters</p>
+                <a href="{% url 'subscribe' %}" class="tm-color-white tm-btn-white-bordered">Subscribe Newsletters
+                </a>
+            </div>                
+        </div>
+    </div>        
+</div>
+
+
+
+<div class="tm-section tm-position-relative">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none" class="tm-section-down-arrow">
+      <polygon fill="#ee5057" points="0,0  100,0  50,60"></polygon>                   
+  </svg> 
+  <div class="container tm-pt-5 tm-pb-4">
+      <div class="row text-center">
+          <article class="col-sm-12 col-md-4 col-lg-4 col-xl-4 tm-article">                            
+              <i class="fa tm-fa-6x fa-legal tm-color-primary tm-margin-b-20"></i>
+              <h3 class="tm-color-primary tm-article-title-1">Level HTML Template by Tooplate website</h3>
+              <p>You are allowed to download, edit and use this template for your business or client websites.</p>
+          </article>
+          <article class="col-sm-12 col-md-4 col-lg-4 col-xl-4 tm-article">                            
+              <i class="fa tm-fa-6x fa-plane tm-color-primary tm-margin-b-20"></i>
+              <h3 class="tm-color-primary tm-article-title-1">Original Website Template Producer</h3>
+              <p>You are NOT allowed to re-distribute the downloadable template ZIP file on any website.</p>                          
+          </article>
+          <article class="col-sm-12 col-md-4 col-lg-4 col-xl-4 tm-article">                           
+              <i class="fa tm-fa-6x fa-life-saver tm-color-primary tm-margin-b-20"></i>
+              <h3 class="tm-color-primary tm-article-title-1">Contact us if you have any question</h3>
+              <p>If you see this template being distributed on any other site, that is an illegal copy.</p>                         
+          </article>
+      </div>        
+  </div>
+</div>
+
+  <!-- about section Ends -->
+  <!-- tourist section Starts -->
+  <section class="tourist section-padding" id="tourist">
     <div class="container">
       <div class="row">
-        <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
-          <div class="traveling-box">
-            <i
-              ><img src="{% static 'images/home/travel-icon.png' %}" alt="icon"
-            /></i>
-            <h3>Different Countrys</h3>
-            <p>going to use a passage of Lorem Ipsum, you need to be</p>
-          </div>
-        </div>
-        <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
-          <div class="traveling-box">
-            <i
-              ><img
-                src="{% static 'images/home/travel-icon2.png' %}"
-                alt="icon"
-            /></i>
-            <h3>Mountains Tours</h3>
-            <p>going to use a passage of Lorem Ipsum, you need to be</p>
-          </div>
-        </div>
-        <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
-          <div class="traveling-box">
-            <i
-              ><img
-                src="{% static 'images/home/travel-icon3.png' %}"
-                alt="icon"
-            /></i>
-            <h3>Bus Tours</h3>
-            <p>going to use a passage of Lorem Ipsum, you need to be</p>
-          </div>
-        </div>
-        <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12">
-          <div class="traveling-box">
-            <i
-              ><img
-                src="{% static 'images/home/travel-icon4.png' %}"
-                alt="icon"
-            /></i>
-            <h3>Summer Rest</h3>
-            <p>going to use a passage of Lorem Ipsum, you need to be</p>
+        <div class="col-md-12" data-aos="fade-down" data-aos-delay="150">
+          <div class="section-header text-center pb-5">
+            <h1 class="second-text">Best Tourist Attractions</h1>
+            <p class="subtext">Below are some of our best recommended places.</p>
           </div>
         </div>
       </div>
+
+
+      <div class="row">
+        <div class="col-12 col-md-6 col-lg-4" data-aos="fade-down" data-aos-delay="150">
+          <div class="card hover01">
+            <img src="{% static 'images/user/nature.jpg'%}" class="img-fluid" alt="..." />
+            <div class="card-body">
+              <h3 class="card-title">Best place</h3>
+              <p class="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci eligendi modi temporibus
+                alias iste. Accusantium?</p>
+              <p><a href="#" class="btn btn-warning mt-3">Read More</a></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 data-aos=" fade-down" data-aos-delay="150"">
+          <div class="card hover01">
+          <img src="{% static 'images/user/nature.jpg'%}" class="img-fluid" alt="..." />
+          <div class="card-body">
+            <h3 class="card-title">Best place</h3>
+            <p class="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci eligendi modi temporibus
+              alias iste. Accusantium?</p>
+            <p><a href="#" class="btn btn-warning mt-3">Read More</a></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-md-6 col-lg-4 data-aos=" fade-down" data-aos-delay="250"">
+                <div class="card hover01">
+        <img src="{% static 'images/user/nature.jpg'%}" class="img-fluid" alt="..." />
+        <div class="card-body">
+          <h3 class="card-title">Best place</h3>
+          <p class="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci eligendi modi temporibus
+            alias iste. Accusantium?</p>
+          <p><a href="#" class="btn btn-warning mt-3">Read More</a></p>
+        </div>
+      </div>
     </div>
+    </div>
+    </div>
+  </section>
+  <!-- tourist section Ends -->
+
+
+  <!-- Marketing messaging and featurettes
+  ================================================== -->
+  <!-- Wrap the rest of the page in another container to center all the content. -->
+
+  <div class="container marketing">
+    <!-- START THE FEATURETTES -->
+    <hr class="featurette-divider">
+    <h1 class="text-center">Features</h1>
+    <hr class="featurette-divider">
+
+    <div class="row featurette">
+      <div class="col-md-7">
+        <h2 class="featurette-heading fw-normal lh-1">First featurette heading. <span class="text-muted">It’ll blow your
+            mind.</span></h2>
+        <p class="lead">Some great placeholder content for the first featurette here. Imagine some exciting prose here.
+        </p>
+      </div>
+      <div class="col-md-5">
+        <img src="{% static 'images/user/nature.jpg'%}" class="img-fluid" alt="...">
+      </div>
+    </div>
+
+    <hr class="featurette-divider">
+
+    <div class="row featurette">
+      <div class="col-md-7 order-md-2">
+        <h2 class="featurette-heading fw-normal lh-1">Oh yeah, it’s that good. <span class="text-muted">See for
+            yourself.</span></h2>
+        <p class="lead">Another featurette? Of course. More placeholder content here to give you an idea of how this
+          layout would work with some actual real-world content in place.</p>
+      </div>
+      <div class="col-md-5 order-md-1">
+        <img src="{% static 'images/user/nature.jpg'%}" class="img-fluid" alt="...">
+      </div>
+    </div>
+
+    <hr class="featurette-divider">
+
+    <div class="row featurette">
+      <div class="col-md-7">
+        <h2 class="featurette-heading fw-normal lh-1">And lastly, this one. <span class="text-muted">Checkmate.</span>
+        </h2>
+        <p class="lead">And yes, this is the last block of representative placeholder content. Again, not really
+          intended to be actually read, simply here to give you a better view of what this would look like with some
+          actual content. Your content.</p>
+      </div>
+      <div class="col-md-5">
+        <img src="{% static 'images/user/nature.jpg'%}" class="img-fluid" alt="...">
+      </div>
+    </div>
+
+    <hr class="featurette-divider">
+    <h5 class="float-end"><a href="#">Back to top</a></h5>
+    <br />
+    <br />
   </div>
-  <!-- end traveling -->
+
+  <!-- /END THE FEATURETTES -->
 
   <!-- footer -->
+
   <footer>
     <div id="contact" class="footer">
       <div class="container">
@@ -80,8 +251,10 @@
             <div class="Follow">
               <h3>ADDITIONAL LINKS</h3>
               <ul class="link">
-                <li><a href="#">About us</a></li>
-                <li><a href="#">Terms and conditions</a></li>
+                <li><a href="{% url 'aboutUs' %}">About us</a></li>
+                <li>
+                  <a href="{% url 'registerBusiness' %}">Register Business</a>
+                </li>
                 <li><a href="#"> Privacy policy</a></li>
                 <li><a href="#">News</a></li>
                 <li><a href="#"> Contact us</a></li>
@@ -91,20 +264,24 @@
           <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12">
             <div class="Follow">
               <h3>Contact</h3>
-              <div class="row">
-                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
-                  <input class="Newsletter" placeholder="Name" type="text" />
+              <form action="{% url 'contact' %}" method="POST">
+                {% csrf_token %}
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                    <input class="form-control Newsletter" name="contact-name" placeholder="Name" type="text" />
+                  </div>
+                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                    <input class="form-control Newsletter" name="contact-email" placeholder="Email" type="text" />
+                  </div>
+                </div>  
+                <div class="row">
+                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                    <textarea  name="contact-message" class="form-control Newsletter" placeholder="Comment" type="text"></textarea>            
+                  </div>
                 </div>
-                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
-                  <input class="Newsletter" placeholder="Email" type="text" />
-                </div>
-                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                  <textarea class="textarea" placeholder="comment" type="text">
-Comment</textarea
-                  >
-                </div>
-              </div>
-              <button class="Subscribe">Submit</button>
+              
+                <button class="Subscribe" type="submit">Submit</button>
+              </form>
             </div>
           </div>
         </div>
@@ -119,8 +296,36 @@ Comment</textarea
       </div>
     </div>
   </footer>
-  <!-- end footer -->
+  <!--End Of Footer-->
+  <script>
+    var typed = new Typed(".auto-type", {
+      strings: ["MITRA"],
+      typeSpeed: 200,
+      backSpeed: 170,
+      loop: true
+    })
+    var typed = new Typed(".auto-type1", {
+      strings: ["PLACES"],
+      typeSpeed: 200,
+      backSpeed: 170,
+      loop: true
+    })
+    var typed = new Typed(".auto-type2", {
+      strings: ["TOURS"],
+      typeSpeed: 180,
+      backSpeed: 150,
+      loop: true
+    })
+    var typed = new Typed(".auto-type3", {
+      strings: ["RECOMMENDATIONS"],
+      typeSpeed: 250,
+      backSpeed: 220,
+      loop: true
+    })
+  </script>
   {% include 'base/alertMessages/msgTimeOut.html' %}
   <!--  -->
   {% endblock %}
+
+
 </body>

@@ -211,6 +211,7 @@
             </div>
             {% if business %}
             <button type="submit" class="btn btn-primary">Update</button>
+            <a href="{% url 'deleteBusiness' %}?id={{business.id}}"><button type="button" class="btn btn-danger">Delete</button></a>
             {% else %}
             <button type="submit" class="btn btn-primary">Register</button>
             {% endif %}

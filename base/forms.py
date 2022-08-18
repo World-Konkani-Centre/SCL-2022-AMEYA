@@ -1,7 +1,8 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserChangeForm,PasswordChangeForm,PasswordResetForm, SetPasswordForm
-from .models import Profile
+from .models import Profile,Subscribers,MailMessage
+
 
 
 class UserUpdateForm(forms.ModelForm):
@@ -16,12 +17,10 @@ class UserUpdateForm(forms.ModelForm):
     
 
 class ProfileUpdateForm(forms.ModelForm):
-    phone =forms.CharField(max_length=10, min_length=10, widget=forms.TextInput(attrs={ 'class' : 'form-control my-2','placeholder':'phone number','type':'number'}))
-    DOB =forms.DateField(label='DOB', widget=forms.DateInput(attrs={ 'class' : 'form-control my-2','placeholder':'DD-MM-YYYY','type':'date','autoclose': True}))
+    phone =forms.CharField(max_length=10, min_length=10, widget=forms.TextInput(attrs={ 'class' : 'form-control my-2','placeholder':'phone number','type':'number'}), required=False)
+    DOB =forms.DateField(label='DOB', widget=forms.DateInput(attrs={ 'class' : 'form-control my-2','placeholder':'DD-MM-YYYY','type':'date','autoclose': True}), required=False)
     gender_choices=[('1','Male'),('2','Female'),('3','Dont want to specify')]
-    role_choices=[('1','User'),('2','Business')]
     gender =forms.ChoiceField(choices=gender_choices , widget=forms.Select(attrs={'class': 'form-control my-2'}))
-    #role =forms.ChoiceField(choices=role_choices , widget=forms.Select(attrs={'class': 'form-control my-1'}))
     image=forms.ImageField(widget=forms.ClearableFileInput(attrs={'class': 'custom-file-input my-1'}), required=False)
 
     class Meta:
@@ -54,4 +53,23 @@ class PasswordResetingForm(SetPasswordForm):
     class Meta:
         model=User
         fields = ['new_password1','new_password2']
+
+
+
+class SubscribersForm(forms.ModelForm):
+    email = forms.EmailField(label='Email', widget=forms.EmailInput(attrs={'class': 'form-control my-2','placeholder': 'Enter your Email','type': 'email','name': 'email'}))
+    class Meta:
+        model=Subscribers
+        fields=['email',]
+
+
+class MailMessageForm(forms.ModelForm):
+    title = forms.CharField(label='Title', widget=forms.TextInput(attrs={'class': 'form-control my-2','placeholder': 'Enter your Title','type': 'title','name': 'title'}))
+    message = forms.CharField(label='Enter the message', widget=forms.TextInput(attrs={'class': 'form-control my-2','placeholder': 'Message goes here','type': 'message','name': 'message'}))
+    class Meta:
+        model = MailMessage
+        fields = '__all__'
+
+
         
+

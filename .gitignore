@@ -7,3 +7,4 @@ base/migrations/__pycache__
 YatraMitra/__pycache__
 media/
 staticfiles/
+.vercel

@@ -6,10 +6,23 @@
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
 }
+html {
+  scroll-behavior: smooth;
+}
 body {
   background-color: #e2e2e291;
+  font-size: 14px;
+  line-height: 1.80857;
+  font-weight: normal;
+  overflow-x: hidden;
 }
-
+a {
+  text-decoration: none;
+  color: #000;
+}
+.btn {
+  border-radius: 25px !important;
+}
 /* Standard styling for navbar*/
 nav {
   padding: 20px;
@@ -105,14 +118,6 @@ nav {
     opacity: 1;
   }
 }
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
 @keyframes fadeOut {
   from {
     opacity: 1;
@@ -128,14 +133,16 @@ nav {
   }
 }
 
-#dropdown-menu{
+#dropdown-menu {
   margin-right: 10px;
 }
 
-#dropdown-menu,#dropdown-item{
+#dropdown-menu,
+#dropdown-item {
   background-color: #1e1e1e;
 }
 
-#dropdown-menu:hover,#dropdown-item:hover{
+#dropdown-menu:hover,
+#dropdown-item:hover {
   color: #ffffff;
 }

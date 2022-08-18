@@ -1,10 +1,12 @@
+import profile
 from django.db import models
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.db.models import Avg
+from django.core.validators import MaxValueValidator, MinValueValidator,validate_comma_separated_integer_list
 from django.contrib.auth.models import User
 from PIL import Image
 # Tour model:
 class Tour(models.Model):
-    category_choices=[('1','Adventure'),('2','Trekking'),('3','Hiking')]
+    category_choices=[('1','Adventure'),('2','Trekking'),('3','Hiking'),('4','Historical'),('5','Wildlife'),('6','Religious'),('7','Relaxation')]
     category_choices1=[('1','Bangalore'),('2','Dakshina Kannada'),('3','Udupi'),('4','Uttara Kannada')]
     id=models.BigAutoField(primary_key=True)
     name=models.CharField(max_length=100)
@@ -13,7 +15,6 @@ class Tour(models.Model):
     website=models.CharField(max_length=50,blank=True,default='')
     category=models.CharField(max_length=1,choices=category_choices,default='1')
     rating=models.FloatField(default=5,validators=[MinValueValidator(1),MaxValueValidator(5)])
-    # rating_count=
     avg_fare=models.FloatField(default=0)
     address=models.CharField(max_length=700)
     contact=models.CharField(max_length=10,blank=True,default='')
@@ -26,19 +27,34 @@ class Tour(models.Model):
     updateAt=models.DateTimeField(auto_now=True)
     image=models.ImageField(upload_to='images/recommendation',null=True,blank=True)
     subtext=models.CharField(max_length=200,default='')
+    date = models.CharField(validators=[validate_comma_separated_integer_list],max_length=200, blank=True, null=True,default='')
+
+    # Calculate the average rating of the tour from TourReview model:
+    def get_avg_rating(self):
+        rating=TourReviews.objects.filter(tour=self).aggregate(Avg('rating'))['rating__avg']
+        if rating:
+            return round(rating,1)
+        else:
+            return 1.0
+    
+    def calc_avg_rating(self):
+        rating=TourReviews.objects.filter(tour=self).aggregate(Avg('rating'))['rating__avg']
+        if rating:
+            self.rating=round(rating,1)
+        else:
+            self.rating=1.0
+        self.save()
 
     def __str__(self):
         return self.name
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
-    id=models.BigAutoField(primary_key=True)
-    role_choices=[('1','User'),('2','Business')]
     gender_choices=[('1','Male'),('2','Female'),('3','Dont want to specify')]
+    id=models.BigAutoField(primary_key=True)
+    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     gender=models.CharField(max_length=1,choices=gender_choices,default='1')
     phone=models.CharField(blank=True, max_length=10,default='')
     DOB=models.DateField(null=True)
-    role=models.CharField(max_length=1,choices=role_choices,default='1')
     image=models.ImageField(blank=True,upload_to='images/user', height_field=None, width_field=None, max_length=100,null=True)
 
     def __str__(self):
@@ -46,7 +62,7 @@ class Profile(models.Model):
 
     def save(self, *args, **kwargs):
         super(Profile, self).save(*args, **kwargs)
-        
+
         if(self.image):
             img= Image.open(self.image.path)    
             if img.height > 300 or img.width > 300:
@@ -58,7 +74,7 @@ class Profile(models.Model):
 class TourReviews(models.Model):
     id=models.BigAutoField(primary_key=True)
     tour=models.ForeignKey(Tour,on_delete=models.CASCADE)
-    # user=models.ForeignKey(User,on_delete=models.CASCADE)
+    user=models.ForeignKey(User,on_delete=models.CASCADE,default="")
     rating=models.IntegerField(default=5,validators=[MinValueValidator(1),MaxValueValidator(5)])
     review=models.CharField(max_length=500)
     createadAt=models.DateTimeField(auto_now_add=True)
@@ -98,6 +114,7 @@ class Business(models.Model):
 class RegisteredBusiness(models.Model):
     category_choices=[('restaurant','Restaurant'),('hotel','Hotel'),('repair','Repair'),('transport','Transport'),('shoping','Shoping'),('gas','Gas'),('parking','Parking'),('bank','Bank')]
     id=models.BigAutoField(primary_key=True)
+    user=models.ForeignKey(User,on_delete=models.CASCADE,default='')
     name=models.CharField(max_length=100)
     type=models.BooleanField(default=True)
     address=models.CharField(max_length=700)
@@ -117,4 +134,19 @@ class RegisteredBusiness(models.Model):
 
     def __str__(self):
         return self.name
+
+#Newsletter
+class Subscribers(models.Model):
+    email=models.EmailField(null=True)
+    date=models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.email
+
+class MailMessage(models.Model):
+    title=models.CharField(max_length=100)
+    message=models.TextField(null=True)
+
+    def __str__(self):
+        return self.title
 

@@ -31,9 +31,11 @@
 
     <!-- Iconify -->
     <script src="https://code.iconify.design/2/2.2.1/iconify.min.js"></script>
-    <link rel="stylesheet" href="{% static 'styles/styles.css' %}" />
+    <!--Type Script-->
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
     <!-- Scripts -->
     {% block styles %} {% endblock %}
+    <link rel="stylesheet" href="{% static 'styles/styles.css' %}" />
 
     <title>Yatra Mitra</title>
   </head>
@@ -62,8 +64,24 @@
                 <a
                   class="nav-link items"
                   aria-current="page"
+                  href="{% url 'home' %}"
+                  ><button><span>Home</span></button></a
+                >
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link items"
+                  aria-current="page"
                   href="{% url 'recommendations' %}"
                   ><button><span>Recommendations</span></button></a
+                >
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link items"
+                  aria-current="page"
+                  href="{% url 'tourForm' %}"
+                  ><button><span>Find Trips</span></button></a
                 >
               </li>
               <li class="nav-item">
@@ -72,13 +90,15 @@
                 >
               </li>
               {% if user.is_authenticated %}
-              <li class="nav-item">
-                <a class="nav-link items" href="{% url 'trips' %}"
-                  ><button><span>Your trips</span></button></a
-                >
-              </li>
               <li class="nav-item dropdown nav-profile">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <a
+                  class="nav-link dropdown-toggle"
+                  href="#"
+                  id="navbarDropdown"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
                   {% if user.profile.image %}
                   <span
                     class="iconify-inline navbar-toggler-icon mx-4 my-2 fa-lg"
@@ -105,11 +125,45 @@
                   </span>
                   {% endif %}
                 </a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown" width="20px" id="dropdown-menu">
-                  <li><a class="dropdown-item" href="#" id="dropdown-item">Action</a></li>
-                  <li><a class="dropdown-item" href="{% url 'userProfile' %}" id="dropdown-item">My profile</a></li>
-                  <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="{% url 'logout' %}" id="dropdown-item">Log-out</a></li>
+                <ul
+                  class="dropdown-menu dropdown-menu-end"
+                  aria-labelledby="navbarDropdown"
+                  width="20px"
+                  id="dropdown-menu"
+                >
+                  <li>
+                    <a
+                      class="dropdown-item"
+                      href="{% url 'userProfile' %}"
+                      id="dropdown-item"
+                      >My profile</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      class="dropdown-item"
+                      href="{% url 'trips' %}"
+                      id="dropdown-item"
+                      >My Trips</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      class="dropdown-item"
+                      href="{% url 'userWishlist' %}"
+                      id="dropdown-item"
+                      >My Wishlist</a
+                    >
+                  </li>
+                  <li><hr class="dropdown-divider" /></li>
+                  <li>
+                    <a
+                      class="dropdown-item"
+                      href="{% url 'logout' %}"
+                      id="dropdown-item"
+                      >Logout</a
+                    >
+                  </li>
                 </ul>
               </li>
               {% else %}

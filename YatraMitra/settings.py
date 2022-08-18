@@ -24,11 +24,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-_plp$en#$v54v^z)jprl1(67wx$++3u-*%1&@rklif2g@@vhn%'
 
+# Max request body size
+DATA_UPLOAD_MAX_MEMORY_SIZE = 5242880
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 # DEBUG = False
 
-ALLOWED_HOSTS = ['https://yatra-mitra.herokuapp.com','127.0.0.1','localhost']
+ALLOWED_HOSTS = ['https://yatra-mitra.herokuapp.com','127.0.0.1','localhost','.vercel.app']
 
 
 # Application definition
@@ -78,6 +80,8 @@ WSGI_APPLICATION = 'YatraMitra.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
+
+
 
 DATABASES = {
     'default': {

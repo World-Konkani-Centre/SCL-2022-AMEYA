@@ -1,55 +1,139 @@
-{% extends 'main.html' %}
-
-{% load static %}
-
-{% block styles %}
+{% extends 'main.html' %} {% load static %} {% block styles %}
 <!-- Replace {name} with the respective css file -->
 <link rel="stylesheet" href="{% static 'styles/recommendation.css' %}" />
-{% endblock %}
-
-{% block content %}
-
-<br><br><br>
-{% for data in tourData %}
-<br><br>
-<div  class="container shadow p-3 mb-5 bg-white rounded">
-    <section class="card hover01">
-            <div class="row no-gutters">
-              <div class="col-md-4">
-                <img src='/media/{{data.image}}' class="card-img" style="height:250px;" alt="{{data.name}}">
-              </div>
-              <div class="col-md-8">
-                <div class="card-body">
-                  <h5 class="card-title">{{data.name}}</h5>
-                  <section>
-                    <span class="hidden-text">{{data.rating}}</span>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <span class="rating-star">
-                      <!-- By default the star is full else it is empty otherwise it is half -->
-                          <i class="fa fa-star{% if data.rating < 0.5%}-o{% elif data.rating >= 0.5 and data.rating < 1 %}-half-o{% endif %}" style="color:#f1d554;" aria-hidden="true"></i>
-                          <i class="fa fa-star{% if data.rating < 1.5%}-o{% elif data.rating >= 1.5 and data.rating < 2 %}-half-o{% endif %}" style="color:#f1d554;" aria-hidden="true"></i>
-                          <i class="fa fa-star{% if data.rating < 2.5%}-o{% elif data.rating >= 2.5 and data.rating < 3 %}-half-o{% endif %}" style="color:#f1d554;" aria-hidden="true"></i>
-                          <i class="fa fa-star{% if data.rating < 3.5%}-o{% elif data.rating >= 3.5 and data.rating < 4 %}-half-o{% endif %}" style="color:#f1d554;" aria-hidden="true"></i>
-                          <i class="fa fa-star{% if data.rating < 4.5%}-o{% elif data.rating >= 4.5 and data.rating < 5 %}-half-o{% endif %}" style="color:#f1d554;" aria-hidden="true"></i>
-                    </span>
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    {% if data.rating > 3.9 %}
-                    <span class="info-1">{{data.subtext}}</span>
-                    {% else %}
-                    <span class="info-1">People also visited</span>
-                    {% endif %}
-                  </section>
-                  <p class="card-text py-4">
-                    {{data.description}}
-                  <p class="card-text"><a href="www.google.com"><small class="text-muted">See more..</small></a></p>
-                </div>
-              </div>
-          </div>
-    </section>
+{% endblock %} {% block content %} 
+<div class="container" style="margin-top: 60px;">
+  <!-- Center aligned h3 bootstrap -->
+  <div class="row">
+    <div class="col-md-12">
+      <h3 class="text-center">Recommendations</h3>
     </div>
-
+  </div>
+{% for data in tour_data %}
+<div class="rec-container">
+  <div class="container rounded-3">
+    <section class="card hover01">
+      <div class="row no-gutters span6">
+        <div class="col-md-4">
+          <img
+            src="/media/{{data.image}}"
+            class="card-img"
+            alt="{{data.name}}"
+          />
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 class="card-title">{{data.name}}</h5>
+            <section
+              style="display: inline; padding-left: 20px"
+              class="rating-class"
+            >
+              <span class="hidden-text">{{data.rating}}</span>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <span class="rating-star">
+                <!-- By default the star is full else it is empty otherwise it is half -->
+                <i
+                  class="fa fa-star{% if data.rating < 0.5%}-o{% elif data.rating >= 0.5 and data.rating < 1 %}-half-o{% endif %}"
+                  style="color: #f1d554"
+                  aria-hidden="true"
+                ></i>
+                <i
+                  class="fa fa-star{% if data.rating < 1.5%}-o{% elif data.rating >= 1.5 and data.rating < 2 %}-half-o{% endif %}"
+                  style="color: #f1d554"
+                  aria-hidden="true"
+                ></i>
+                <i
+                  class="fa fa-star{% if data.rating < 2.5%}-o{% elif data.rating >= 2.5 and data.rating < 3 %}-half-o{% endif %}"
+                  style="color: #f1d554"
+                  aria-hidden="true"
+                ></i>
+                <i
+                  class="fa fa-star{% if data.rating < 3.5%}-o{% elif data.rating >= 3.5 and data.rating < 4 %}-half-o{% endif %}"
+                  style="color: #f1d554"
+                  aria-hidden="true"
+                ></i>
+                <i
+                  class="fa fa-star{% if data.rating < 4.5%}-o{% elif data.rating >= 4.5 and data.rating < 5 %}-half-o{% endif %}"
+                  style="color: #f1d554"
+                  aria-hidden="true"
+                ></i>
+              </span>
+            </section>
+          </div>
+          <div class="row row-cols-2">
+            <div class="col-md-7">
+              <section style="display: inline" class="sub-header">
+                <!-- <button class="disabled text-muted mt-n2 cat">
+                  {{ data.get_category_display }}
+                </button> -->
+                <span class="badge bg-success mt-n2 cat">
+                  {{ data.get_category_display }}
+                </span>
+                {% if data.rating > 3.9 %}
+                <span class="badge bg-danger mt-n2 sub">
+                  {{data.subtext}}
+                </span>
+                {% else %}
+                <span class="badge bg-primary mt-n2 sub">
+                  People also visited
+                </span>
+                {% endif %}
+              </section>
+              <p class="card-text py-4 mb-4 px-3" style="height: 250px">
+                {{data.description}}
+              </p>
+            </div>
+            <div class="col-md-5">
+              <p class="avg-price">Average Fair</p>
+              <button class="disabled price">
+                <p class="fare-price">&#x20B9;{{data.avg_fare}}</p>
+                <p class="text-muted">per person</p>
+              </button>
+              <div class="btn-group">
+                <a href="{% url 'map' %}?id={{data.id}}"
+                  ><button class="More-info my-5">View Tour</button></a
+                >
+                <a href="{% url 'tourDetails' data.id %}"
+                  ><button class="More-info mx-4 my-5">Details</button></a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
 {% endfor %}
+</div>
 
+{% if tour_data.paginator.num_pages > 1 %}
+<div class="container recommendation-pagination d-flex align-items-center justify-content-center">
+<nav aria-label="Page navigation example">
+  <ul class="pagination">
+    {% if tour_data.has_previous %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ tour_data.previous_page_number }}" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+        <span class="sr-only">Previous</span>
+      </a>
+    </li>
+    {% endif %}
+    {% for page in tour_data.paginator.page_range %}
+        <li class="page-item {% if tour_data.number == page %}active{% endif %}">
+        <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+        </li>
+    {% endfor %}
+    {% if tour_data.has_next %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ tour_data.next_page_number }}" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+        <span class="sr-only">Next</span>
+      </a>
+    </li>
+    {% endif %}
+  </ul>
+</nav>
+</div>
+{% endif %}
 {% endblock %}

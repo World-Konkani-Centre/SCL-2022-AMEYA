@@ -1,123 +1,286 @@
-{% extends 'main.html' %}
-{% load static %} 
-{% block styles %}
-<!-- Replace {name} with the respective css file -->
-<link rel="stylesheet" href="{% static 'styles/{tourdetails.css}' %}" />
-{% endblock %}
-
-{% block content %} 
-<!-- Add code from body here -->
-<!--container-->
-<div class="container rounded-end">
-  <div class="row">
-    <div class="col-md-7 border-right">
-      <div class="col my-3 rounded-end">
-        <img src="iskon - Copy.jpg" height="40%" width="100%" border="2px rounded">
-      </div>
-      <div class="mx-2 my-2 align-text-center">
-        <h5></h6>
-          <h5>Best time to visit: 7:30AM to 8:30PM</h6>
-      </div>
-    </div>
-
-    <div class="col-md-5 border-right">
-      <div class="mx-2 my-3 rounded-end">
-        <div>
-          <h2>ISKCON TEMPLE</h2>
-          <div>
-            <font size="5">
-              <a href="https://goo.gl/maps/ZW2gPWE673a7v7618" text-decoration="none">
-                <span class="red">&star;</span>
-                <span class="red"">&star;</span>
-            <span class=" red"">&star;</span>
-                <span class="red"">&star;</span>             
-            <span class=" black"">&star;</span>
-              </a>
-              <span><img src="customer.jpg" width="30" height="30"></span>
-            </font>
+{% extends 'main.html' %} {% load static %} {% block styles %}
+<link rel="stylesheet" href="{% static 'styles/tourDetails.css' %}" />
+{% endblock %} {% block content %}
+<div class="container-md tour-details-container">
+  {% include 'base/alertMessages/messages.html' %}
+  <div class="container tour-datails-card">
+    <div class="row">
+      <div class="col-12 px-5">
+          <div class="tour-datails-header">
+                <p class="card-title">{{data.name}}</p>
+                {% if user.is_authenticated %} {% if wishlist %}
+                <button
+                  class="btn-wishlist"
+                  data-wishlist="remove"
+                  title="Wishlist"
+                >
+                  <img
+                    src="{% static 'icons/map/wishlist_added.png' %}"
+                    alt="wishlist"
+                    class="btn-wishlist float-right"
+                    data-wishlist="remove"
+                  />
+                </button>
+                {% else %}
+                <button class="btn-wishlist" data-wishlist="add" title="Wishlist">
+                  <img
+                    src="{% static 'icons/map/wishlist_add2.png' %}"
+                    alt="wishlist"
+                    class="btn-wishlist float-right"
+                    data-wishlist="add"
+                  />
+                </button>
+                {% endif %} {% endif %}
           </div>
-        </div><br>
-
-        <div class="align-content-center">
           <div>
-            <h5>Sri Radha-Krishna Chandra temple is one of the largest Hindu temple in the world. It is located at
-              Rajajinagar, in north bengalore in the Indian state of Karntaka.</h5>
+                <font size="3">
+                  <div>
+                    <span class="hidden-text">{{data.rating}}</span>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span class="rating-star">
+                      <!-- By default the star is full else it is empty otherwise it is half -->
+                      <i
+                        class="fa fa-star{% if data.rating < 0.5%}-o{% elif data.rating >= 0.5 and data.rating < 1 %}-half-o{% endif %}"
+                        style="color: #f1d554"
+                        aria-hidden="true"
+                      ></i>
+                      <i
+                        class="fa fa-star{% if data.rating < 1.5%}-o{% elif data.rating >= 1.5 and data.rating < 2 %}-half-o{% endif %}"
+                        style="color: #f1d554"
+                        aria-hidden="true"
+                      ></i>
+                      <i
+                        class="fa fa-star{% if data.rating < 2.5%}-o{% elif data.rating >= 2.5 and data.rating < 3 %}-half-o{% endif %}"
+                        style="color: #f1d554"
+                        aria-hidden="true"
+                      ></i>
+                      <i
+                        class="fa fa-star{% if data.rating < 3.5%}-o{% elif data.rating >= 3.5 and data.rating < 4 %}-half-o{% endif %}"
+                        style="color: #f1d554"
+                        aria-hidden="true"
+                      ></i>
+                      <i
+                        class="fa fa-star{% if data.rating < 4.5%}-o{% elif data.rating >= 4.5 and data.rating < 5 %}-half-o{% endif %}"
+                        style="color: #f1d554"
+                        aria-hidden="true"
+                      ></i>
+                    </span>
+                  </div>
+                </font>
+          </div>
+      </div>
+      <div class="col-md-7">
+        <div class="col my-3">
+          <img
+            src="/media/{{data.image}}"
+            class="card-img"
+            alt="{{data.name}}"
+            height="40%"
+            width="90%"
+          />
+        </div>
+        <div class="align-content-center">
+          <div class="p1" style="text-align: justify">
+            {{data.description}}
           </div>
         </div>
-        <div class="my-3">
-          <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">Hours</th>
-                <th scope="col">Contact</th>
-              </tr>
-            </thead>
+      </div>
 
-            <tbody>
-              <td>
-                Sunday 7:15AM-8PM
-              </td>
-              <td>
-                Hare Krishna Hill
-              </td>
-              </tr>
-              <tr>
-                <td>
-                  Monday 7:15AM-1PM & 4PM-8PM
-                </td>
-                <td>
-                  Chord Rd
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Tuesday 7:15AM-1PM & 4PM-8PM
-                </td>
-                <td>
-                  1st R block
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Wednesday 7:15AM-1PM & 4PM-8PM
-                </td>
-                <td>
-                  Rajajinagar,
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Thursday 7:15AM-1PM & 4PM-8PM
-                </td>
-                <td>
-                  Karnataka
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Friday 7:15AM-1PM & 4PM-8PM
-                </td>
-                <td>
-                  India
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Saturday 7:15AM-1PM & 4PM-8PM
-                </td>
-                <td>
-                  +91 80 2347 1956
-                </td>
-              </tr>
-            </tbody>
-          </table>
+      <div class="col-md-5">
+            <div class="container tour-details-table">
+              <div class="row">
+                <div class="col-sm-7">
+                  <strong>Open Hours</strong>
+                  <hr />
+                  {% for hour in data.hours_open %}
+                  <p style="display: block;">{{hour}}</p>
+                  {% endfor %}
+                </div>
+                <div class="col-sm-5">
+                  <strong>Contact</strong>
+                  <hr />
+                    {{data.address}} {% if data.contact %}
+                    <br />Phone: {{data.contact}} {% endif %}
+                    <!--  -->
+                    {% if data.website %}
+                    <br /><a href="{{data.website}}">Website</a>
+                    {% endif %}
+                </div>
+              </div>
+            </div>
+      </div>
+      <div class="col-12 my-2">
+        <div class="row">
+        <div class="col-md-8 avg-fare">
+          <p>
+          <span class="avg-lable">Average Fair : </span><span>&nbsp; &nbsp; &#x20B9;{{data.avg_fare}} / per person</span></p>
+        </div>
+        <div class="col-md-4">
+          <a href="{% url 'map' %}?id={{data.id}}"
+            ><button class="btn btn-primary btn-view">View tour</button></a
+          >
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+  <!-- Reviews -->
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="mx-2 my-3 rounded-end">
+          <div class="tour-datails-header">
+            <p class="card-title">Reviews</p>
+            <a href="{% url 'tourReview' data.id %}"
+            ><button class="btn btn-primary btn-view">Add review</button></a
+          >
+          </div>
+          <div class="align-content-center">
+            <div class="p1" style="text-align: justify">
+              {% if reviews.object_list.count == 0 %}
+              <p>This tour has no reviews yet.</p>
+              {% endif %}
+              {% for review in reviews %}
+              <div class="row review-card">
+                <div class="col-md-2 card-img-cont">
+                  <img
+                    src="{% if review.user.profile.image %}{{review.user.profile.image.url}}{% else %}{% static 'images/user/default.jpg' %}{% endif %}"
+                    class="card-img"
+                    alt="{{review.user.username}}"
+                    height="40%"
+                    width="90%"
+                  />
+                </div>
+                <div class="col-md-10">
+                  <div class="row review-body">
+                    <div class="col-md-12">
+                      <p class="review-user">
+                        {% if review.user.first_name %}
+                        {{review.user.first_name}}
+                        <!--  -->
+                        {% if review.user.last_name %} {{review.user.last_name}}
+                        {% endif %}
+                        <!--  -->
+                        {% else %} {{review.user.username}} {% endif %}
+                      </p>
+                    </div>
+
+                    <div class="col-md-12 review-data">
+                      <div>
+                        <p style="display: inline">
+                          {{review.rating}}&nbsp;&nbsp;
+                          <span class="rating-star">
+                            <i
+                              class="fa fa-star{% if review.rating < 0.5%}-o{% elif review.rating >= 0.5 and review.rating < 1 %}-half-o{% endif %}"
+                              style="color: #f1d554"
+                              aria-hidden="true"
+                            ></i>
+                            <i
+                              class="fa fa-star{% if review.rating < 1.5%}-o{% elif review.rating >= 1.5 and review.rating < 2 %}-half-o{% endif %}"
+                              style="color: #f1d554"
+                              aria-hidden="true"
+                            ></i>
+                            <i
+                              class="fa fa-star{% if review.rating < 2.5%}-o{% elif review.rating >= 2.5 and review.rating < 3 %}-half-o{% endif %}"
+                              style="color: #f1d554"
+                              aria-hidden="true"
+                            ></i>
+                            <i
+                              class="fa fa-star{% if review.rating < 3.5%}-o{% elif review.rating >= 3.5 and review.rating < 4 %}-half-o{% endif %}"
+                              style="color: #f1d554"
+                              aria-hidden="true"
+                            ></i>
+                            <i
+                              class="fa fa-star{% if review.rating < 4.5%}-o{% elif review.rating >= 4.5 and review.rating < 5 %}-half-o{% endif %}"
+                              style="color: #f1d554"
+                              aria-hidden="true"
+                            ></i>
+                          </span>
+                          {% if request.user == review.user %}
+                          <a href="{% url 'tourReview' data.id %}">
+                            <img style="width: 16px; margin: 0 25px;" src="{% static 'icons/tour/edit.png' %}" alt="edit_review" title="Edit Review">
+                          </a>
+                          {% endif %}
+                        </p>
+                      </div>
+                      <p>{{review.review}}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+              {% if reviews.paginator.num_pages > 1 %}
+                <nav aria-label="Page navigation example" class="review-pagination">
+                  <ul class="pagination">
+                    {% if reviews.has_previous %}
+                    <li class="page-item">
+                      <a class="page-link" href="?page={{ reviews.previous_page_number }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                      </a>
+                    </li>
+                    {% endif %}
+                    {% for page in reviews.paginator.page_range %}
+                    <li class="page-item {% if reviews.number == page %}active{% endif %}">
+                      <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+                    </li>
+                    {% endfor %}
+                    {% if reviews.has_next %}
+                    <li class="page-item">
+                      <a class="page-link" href="?page={{ reviews.next_page_number }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                      </a>
+                    </li>
+                    {% endif %}
+                  </ul>
+                </nav>
+              {% endif %}
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-
 </div>
-<div class="my-5">
-</div>
-
+<script>
+  const baseURL = `${window.location.origin}/api/v1`;
+  document.querySelector(".btn-wishlist").addEventListener("click", (e) => {
+    option = e.target.getAttribute("data-wishlist");
+    addToWishlist("{{data.id}}", option);
+  });
+  // POST request to add tour to wishlist:
+  function addToWishlist(tourId, option) {
+    const url = `${baseURL}/tour/addToWishlist/`;
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ tourId, option }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status === "success") {
+          document
+            .querySelector(".btn-wishlist")
+            .setAttribute("data-wishlist", "remove");
+          document.querySelector(
+            ".btn-wishlist"
+          ).innerHTML = `<img src="/static/icons/map/wishlist_added.png" alt="wishlist" class="btn-wishlist" data-wishlist="remove"/>`;
+          mapAlert("Tour added to wishlist", "success");
+        } else {
+          document
+            .querySelector(".btn-wishlist")
+            .setAttribute("data-wishlist", "add");
+          document.querySelector(
+            ".btn-wishlist"
+          ).innerHTML = `<img src="/static/icons/map/wishlist_add2.png" alt="wishlist" class="btn-wishlist" data-wishlist="add"/>`;
+          mapAlert("Tour removed from wishlist", "success");
+        }
+      })
+      .catch((err) => mapAlert(err.message, "danger"));
+  }
+</script>
+{% include 'base/alertMessages/msgTimeOut.html' %}
 {% endblock %}
