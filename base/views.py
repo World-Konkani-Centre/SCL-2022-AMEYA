@@ -488,10 +488,18 @@ def deleteUser(request,username,id):
 def subscribe(request):
     if request.method=='POST':
         form=SubscribersForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request,'Subscription Successful')
-            return redirect('/subscribe')
+        if 'subscribe' in request.POST:
+            if form.is_valid():
+               form.save()
+               messages.success(request,'Subscription Successful')
+               return redirect('/subscribe')
+        elif 'unsubscribe' in request.POST:
+            if form.is_valid():
+                email=request.POST['email']
+                if Subscribers.objects.filter(email=email).exists():
+                   Subscribers.objects.filter(email=email).delete()
+                   messages.success(request,"Your subscription has been cancelled successfully!")
+                   return redirect('/subscribe')
     else:
         form=SubscribersForm()
     context={
@@ -510,13 +518,8 @@ def mail(request):
         form.save()
         title=form.cleaned_data.get('title')
         message=form.cleaned_data.get('message')
-        send_mail(
-        title,
-        message,
-        '',
-        mail_list,
-        fail_silently=False,
-    )
+        msg = EmailMultiAlternatives(title,message,'',bcc=mail_list)
+        msg.send()
         messages.success(request,"Your message has been sent successfully to the mail list!")
         return redirect('/mail')
     else:

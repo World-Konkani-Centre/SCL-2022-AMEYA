@@ -95,11 +95,14 @@ body {
   
   /* Thin out the marketing headings */
   .featurette-heading {
-    font-weight: 300;
+    font-weight: 600;
     line-height: 1;
-    /* rtl:remove */
     letter-spacing: -.05rem;
+	color: #ee5057;
+	font-size: 40px;
+	font-family:sans-serif;
   }
+
   
 /* Responsive CSS*/
 @media (min-width: 768px) and (max-width: 991px) {
@@ -676,7 +679,7 @@ select.tm-select.form-control:not([size]):not([multiple]) { height: 100%; }
 	font-size: 30px;
 	text-align: center;
 	margin-top: 30px;
-    color: #cc3301;
+    color: #ee5057;
     line-height: 1.25;
     text-transform: uppercase;
 }
@@ -697,11 +700,12 @@ select.tm-select.form-control:not([size]):not([multiple]) { height: 100%; }
     border: dotted #9be2e2 10px;
     border-bottom: none;
     width: 10%;
-    margin: 100px auto 100px auto;
+    /* margin: 100px auto 100px auto; */
+	margin: 50px auto 50px auto;
 }
 
 .subtext{
-	color: #cc3301;
+	color:#ee5057;
 	font-size: 1.2rem;
 	font-weight: 600px;
 }
@@ -728,3 +732,59 @@ select.tm-select.form-control:not([size]):not([multiple]) { height: 100%; }
 	-webkit-transform: scale(1.01);
 	transform: scale(1.01);
   }
+
+.card-title{
+	color:#ee5057;
+}
+
+.read-more{
+	color: #efecda;
+}
+
+.text-muted{
+	display: flex;
+	font-size: 22px;
+	padding-top:15px;
+	font-family: sans-serif;
+	color: #535353;
+	font-weight: 400;
+}
+
+.lead{
+	padding-top: 30px;
+	color:#535353;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+.registerbtn{
+	background-color:#ee5057 !important;
+}
+
+.registerbtn:hover{
+	background-color:#f83e47 !important;
+}
+
+.text{
+	color: #fff;
+}
+
+.text:hover{
+	color: #fff;
+}
+
+.reg-img{
+	height: 60%;
+	margin-left: 100px;
+}
+
+.map-pic{
+	position: relative;
+	bottom: 100px !important;
+	padding-right: 20px;
+	right: 30px !important;
+}
+
+.tour-img{
+	height: 50% !important;
+	margin-left: 100px !important;
+}

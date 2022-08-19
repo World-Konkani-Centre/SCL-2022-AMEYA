@@ -16,15 +16,17 @@
             {{ message }}
             </div>
             {% endfor %}
-            <div class="card" style="width:150%; justify-content:center; align-items:center;">
+            <div class="card hover01" style="width:150%; justify-content:center; align-items:center;">
                 <div class="card-body">
+                    <img src="{% static 'images/newsletter/newsletter.png' %}" class="newsletter">
                     <h3 class="sub-text">Subscribe to Newsletter</h3>
+                    <p class="below-text">Subscribe to our newsletter and stay updated!</p>
                     <hr>
                     <form method="POST">
                         {% csrf_token %}
                          {{form|crispy }}
-                        <input class="btn btn-success btn-block mt-5" type="submit" value="Subscribe">
-                        <!-- <input class="btn btn-danger btn-block mt-5" type="submit" value="Unsubscribe"> -->
+                        <input class="btn btn-success btn-block mt-5 subscribe" name="subscribe" type="submit" value="Subscribe">
+                        <input class="btn btn-danger btn-block mt-5 unsubscribe" name="unsubscribe" type="submit" value="Unsubscribe">
                     </form>
                 </div>
             </div>

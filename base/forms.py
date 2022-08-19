@@ -55,7 +55,6 @@ class PasswordResetingForm(SetPasswordForm):
         fields = ['new_password1','new_password2']
 
 
-
 class SubscribersForm(forms.ModelForm):
     email = forms.EmailField(label='Email', widget=forms.EmailInput(attrs={'class': 'form-control my-2','placeholder': 'Enter your Email','type': 'email','name': 'email'}))
     class Meta:
@@ -65,7 +64,7 @@ class SubscribersForm(forms.ModelForm):
 
 class MailMessageForm(forms.ModelForm):
     title = forms.CharField(label='Title', widget=forms.TextInput(attrs={'class': 'form-control my-2','placeholder': 'Enter your Title','type': 'title','name': 'title'}))
-    message = forms.CharField(label='Enter the message', widget=forms.TextInput(attrs={'class': 'form-control my-2','placeholder': 'Message goes here','type': 'message','name': 'message'}))
+    message = forms.CharField(label='Enter the message', widget=forms.Textarea(attrs={'class': 'form-control my-2','placeholder': 'Message goes here','type': 'message','name': 'message'}))
     class Meta:
         model = MailMessage
         fields = '__all__'
