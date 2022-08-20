@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 from django.shortcuts import render,redirect
 from django.http import JsonResponse
 from django.core.serializers import serialize
@@ -41,6 +40,13 @@ def map(request):
             wishlist=False
         context['wishlist']=wishlist
     return render(request,"base/map.html",context)
+
+def viewSavedTour(request,id):
+    savedTour=SavedTour.objects.filter(user=request.user,id=id).values()[0]
+    tour=Tour.objects.get(id=savedTour['tour_id'])
+    tourCoords=savedTour['tourCoords']
+    context={'tour':tour,'tourCoords':tourCoords,'tourId':savedTour['tour_id'],'saved':True}
+    return render(request,'base/map.html',context)
 
 def getTour(request,id):
     tour=Tour.objects.get(id=id)

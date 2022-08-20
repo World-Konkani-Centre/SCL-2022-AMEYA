@@ -25,6 +25,7 @@ urlpatterns = [
     path('tourForm/',views.tourForm,name='tourForm'),
     path('tour/review/<int:id>/',views.tourReview,name='tourReview'),
     path('tour/review/delete/<int:id>',views.deleteTourReview,name='deleteTourReview'),
+    path('tour/saved/map/<int:id>',views.viewSavedTour,name='viewSavedTour'),
     path('business/register/',views.registerBusiness,name='registerBusiness'),
     path('business/profile/',views.registerBusiness,name='profileBusiness'),
     path('business/delete/',views.deleteBusiness,name='deleteBusiness'),

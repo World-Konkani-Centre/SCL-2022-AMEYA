@@ -15,8 +15,7 @@ const baseURL = `${window.location.origin}/api/v1`;
 starIcon = `${window.location.origin}/static/icons/map/star.png`;
 // Selectors:
 const recPanel = document.getElementById("recommendation-panel");
-const editPanel=document.querySelector(".edit-tour-panel");
-
+const editPanel = document.querySelector(".edit-tour-panel");
 
 // Map Initialization:
 var map = L.map("map").setView(curLatLang, 13);
@@ -174,12 +173,12 @@ function addDestinationMarker(latlng, id) {
     .then((data) => {
       data = JSON.parse(data);
       data = data[0].fields;
-      data.id=id;
-      data.category='destination';
-      data.image="/media/"+data.image;
+      data.id = id;
+      data.category = "destination";
+      data.image = "/media/" + data.image;
       tourData = data;
-      recommendations['destination'] = [tourData];
-      tourRouteData.push({ cat: 'destination', id: id });
+      recommendations["destination"] = [tourData];
+      tourRouteData.push({ cat: "destination", id: id });
       m = new L.marker(latlng, {
         icon: new LeafIcon({
           iconUrl: `${window.location.origin}/static/icons/map/marker.png`,
@@ -245,7 +244,7 @@ function addRouteMarkers() {
   let m;
   removeMarkers(routeMarkers);
   tourRouteData.forEach((e) => {
-    if(e.cat === 'destination') return;
+    if (e.cat === "destination") return;
     let item = recommendations[e.cat].find((i) => i.id == e.id);
     if (item) {
       m = addMarkerWithPopup(item);
@@ -256,15 +255,25 @@ function addRouteMarkers() {
 }
 
 // Create Waypoints route:
-function createWaypoints(latLngArr, id) {
+function createWaypoints(latLngArr, destCoords, id) {
   tourId = id;
-  m = addDestinationMarker(latLngArr, tourId);
+  m = addDestinationMarker(destCoords, tourId);
   if ("geolocation" in navigator) {
     navigator.geolocation.getCurrentPosition(function (pos) {
       // Create an array of start and end points:
       curLatLang = [pos.coords.latitude, pos.coords.longitude];
-      latLngArr = [curLatLang, [...latLngArr]];
+      // convert array stored as string to array:
+      if (typeof latLngArr === "string") {
+        latLngArr = latLngArr.replace(/&#x27;/g, "'");
+        latLngArr = latLngArr.replace(/^"|"$/g, "");
+        latLngArr = latLngArr.replace(/'/g, '"');
+        latLngArr = JSON.parse(latLngArr);
+        latLngArr = [curLatLang, ...latLngArr];
+      } else {
+        latLngArr = [curLatLang, [...latLngArr]];
+      }
       tourCoordinates = latLngArr;
+      console.log(tourCoordinates);
       latLngArr = latLngArr.map((l) => L.latLng(...l));
       // Create a route:
       mapAlert("Finding best route...", "info");
@@ -334,7 +343,7 @@ function createAddWaypoints(lat, lng, cat, id) {
   let exists = tourRouteData.find((e) => e.cat == cat && e.id == id);
   if (exists) {
     mapAlert("You have already added this to your tour.", "danger");
-    return; 
+    return;
   }
   if ("geolocation" in navigator) {
     navigator.geolocation.getCurrentPosition(function (pos) {
@@ -400,7 +409,6 @@ function recalculateRoute() {
   document.getElementById("pills-directions").appendChild(dirTab);
 }
 
-
 // Update edit panel with current tour data:
 function updateEditPanel(tourRouteData) {
   // Clear previous data:
@@ -411,26 +419,34 @@ function updateEditPanel(tourRouteData) {
     if (item) {
       editPanel.insertAdjacentHTML(
         "afterbegin",
-        `<div class="drop_card"  data-cat="${item.category}" data-id="${item.id}">
+        `<div class="drop_card"  data-cat="${item.category}" data-id="${
+          item.id
+        }">
         <div class="drop_data">
-            <img src="${
-              item.type ? item.banner : item.image
-            }" alt="${item.name}" class="drop_img">
+            <img src="${item.type ? item.banner : item.image}" alt="${
+          item.name
+        }" class="drop_img">
 
             <div>
                 <h1 class="drop_name">${item.name}</h1>
-                <span class="drop_profession">${item.category.charAt(0).toUpperCase()+item.category.slice(1)}</span>
+                <span class="drop_profession">${
+                  item.category.charAt(0).toUpperCase() + item.category.slice(1)
+                }</span>
             </div>
         </div>
-            ${item.category !=="destination" ? `<div><img src="/static/icons/map/delete_btn.png" alt="delete" class="et-delete" onclick="removeTour('${item.category}','${item.id}');" /></div>`:""}
-    </div>`);
+            ${
+              item.category !== "destination"
+                ? `<div><img src="/static/icons/map/delete_btn.png" alt="delete" class="et-delete" onclick="removeTour('${item.category}','${item.id}');" /></div>`
+                : ""
+            }
+    </div>`
+      );
     }
-  }
-  );
+  });
 }
 
 // Remove tour from side panel:
-function removeTour(cat,id) {
+function removeTour(cat, id) {
   let index = tourRouteData.findIndex((e) => e.cat == cat && e.id == id);
   if (index > -1) {
     tourRouteData.splice(index, 1);
@@ -438,8 +454,10 @@ function removeTour(cat,id) {
   }
   // Delete coordinates from tourCoordinates array:
   let item = recommendations[cat].find((i) => i.id == id);
-  let latLng = [item.lat,item.lng];
-  let index2 = tourCoordinates.findIndex((e) => e[0] == latLng[0] && e[1] == latLng[1]);
+  let latLng = [item.lat, item.lng];
+  let index2 = tourCoordinates.findIndex(
+    (e) => e[0] == latLng[0] && e[1] == latLng[1]
+  );
   if (index2 > -1) {
     tourCoordinates.splice(index2, 1);
   }
@@ -518,9 +536,7 @@ function showRecPanel() {
 // Save Tour Btn handler:
 document.querySelector(".et-save").addEventListener("click", (e) => {
   saveTour();
-}
-);
-
+});
 
 // MAP API:
 
@@ -610,8 +626,7 @@ function getRecommendations(cat) {
   })
     .then((res) => res.json())
     .then((data) => {
-      if(recommendations[cat]) 
-        recommendations[cat].push(...data);
+      if (recommendations[cat]) recommendations[cat].push(...data);
       else recommendations[cat] = data;
       tab.innerHTML = "";
       if (data.length === 0) {
@@ -691,14 +706,18 @@ function addToWishlist(option) {
 }
 
 // POST request to save tour:
-function saveTour() { 
+function saveTour() {
   const url = `${baseURL}/tour/save/`;
   fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ tourId,tourCoords: tourCoordinates,tourRoute: tourRouteData }),
+    body: JSON.stringify({
+      tourId,
+      tourCoords: tourCoordinates.slice(1),
+      tourRoute: tourRouteData,
+    }),
   })
     .then((res) => res.json())
     .then((data) => {
@@ -712,44 +731,44 @@ function saveTour() {
 }
 
 // Edit Tour Panel sortable:
-const dropItems = document.getElementById('drop-items');
+const dropItems = document.getElementById("drop-items");
 
 new Sortable(dropItems, {
-    animation: 300,
-    chosenClass: "sortable-chosen",
-    dragClass: "sortable-drag",
-    // Update event:
-    onUpdate: reArrangeRoute,
+  animation: 300,
+  chosenClass: "sortable-chosen",
+  dragClass: "sortable-drag",
+  // Update event:
+  onUpdate: reArrangeRoute,
 });
 
-function reArrangeRoute(){
-      let sortedRouteData = [];
-      document.querySelectorAll(".drop_card").forEach(card => {
-        let item={ cat: card.getAttribute("data-cat") , id: card.getAttribute("data-id") };
-        sortedRouteData.push(item);
-      }
-      );
-      console.log(sortedRouteData);
-      tourRouteData = sortedRouteData;
-      reCreateTourCoordinates();
-      recalculateRoute();
+function reArrangeRoute() {
+  let sortedRouteData = [];
+  document.querySelectorAll(".drop_card").forEach((card) => {
+    let item = {
+      cat: card.getAttribute("data-cat"),
+      id: card.getAttribute("data-id"),
+    };
+    sortedRouteData.push(item);
+  });
+  tourRouteData = sortedRouteData;
+  reCreateTourCoordinates();
+  recalculateRoute();
 }
 
-function reCreateTourCoordinates(){
+function reCreateTourCoordinates() {
   let newtourCoordinates = [];
   // get current location:
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition((position) => {
-      currLoc=[position.coords.latitude, position.coords.longitude];
+      currLoc = [position.coords.latitude, position.coords.longitude];
       newtourCoordinates.push(currLoc);
-      tourRouteData.forEach(item => {
-        let data= recommendations[item.cat].find(d => d.id == item.id);
+      tourRouteData.forEach((item) => {
+        let data = recommendations[item.cat].find((d) => d.id == item.id);
         newtourCoordinates.push([data.lat, data.lng]);
       });
       tourCoordinates = newtourCoordinates;
     });
-  }
-  else{
+  } else {
     mapAlert("Geolocation is not supported by this browser.", "danger");
   }
 }

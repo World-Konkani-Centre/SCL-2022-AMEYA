@@ -53,10 +53,10 @@
       const editContainer = document.querySelector(".drop_container");
       if (screen.width > 768) {
         editContainer.style.height =
-        window.innerHeight - navHeight - recNavHeight - 70 + "px";
+          window.innerHeight - navHeight - recNavHeight - 70 + "px";
       } else {
         editContainer.style.height =
-        window.innerHeight * 0.7 - navHeight - recNavHeight - 85 + "px";
+          window.innerHeight * 0.7 - navHeight - recNavHeight - 85 + "px";
       }
     }, 500);
   };
@@ -78,6 +78,18 @@
     }
   };
   getCurrLoc();
-  createWaypoints(["{{tour.lat}}", "{{tour.lng}}"], "{{tour.id}}");
+  if ("{{saved}}" == "True") {
+    createWaypoints(
+      "{{tourCoords}}",
+      ["{{tour.lat}}", "{{tour.lng}}"],
+      "{{tourId}}"
+    );
+  } else {
+    createWaypoints(
+      ["{{tour.lat}}", "{{tour.lng}}"],
+      ["{{tour.lat}}", "{{tour.lng}}"],
+      "{{tour.id}}"
+    );
+  }
 </script>
 {% include 'base/alertMessages/msgTimeOut.html' %} {% endblock %}
