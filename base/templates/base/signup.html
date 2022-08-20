@@ -2,9 +2,9 @@
 <!-- Replace {name} with the respective css file -->
 <link rel="stylesheet" href="{% static 'styles/signup.css' %}" />
 {% endblock %} {% block content %}
-<br>
-<br>
-<br>
+<br />
+<br />
+<br />
 <div class="container">
   {% include 'base/alertMessages/messages.html' %}
   <form action="{% url 'signup' %}" method="POST" class="form-container">
@@ -16,6 +16,7 @@
         id="username"
         placeholder="Enter Username"
         name="username"
+        required
       />
       <div class="underline"></div>
     </div>
@@ -25,6 +26,7 @@
         id="email"
         placeholder="Enter Your Email"
         name="email"
+        required
       />
       <div class="underline"></div>
     </div>
@@ -34,6 +36,7 @@
         id="password"
         placeholder="Enter Your Password"
         name="password"
+        required
       />
       <div class="underline"></div>
     </div>

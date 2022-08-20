@@ -147,6 +147,7 @@ class SavedTour(models.Model):
 
     def __str__(self):
         return str(self.id)
+        
 #Newsletter
 class Subscribers(models.Model):
     email=models.EmailField(null=True)

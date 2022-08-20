@@ -1,205 +1,89 @@
-{% extends 'main.html' %}
-{% load static %} 
-{% block styles %}
+{% extends 'main.html' %} {% load static %} {% block styles %}
 <!-- Replace {name} with the respective css file -->
 <link rel="stylesheet" href="{% static 'styles/trips.css' %}" />
-{% endblock %}
-
-{% block content %}
-{% comment %} {% for data in yourtrips%}  {% endcomment %}
-<div class="container mt-5 p-5">
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-        <div class="col">
-            <div class="card h-100">
-                <img src="{% static 'images/user/nature.jpg'%}" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <section class="stars">
-                        <span class="hidden-text">{{data.rating}}</span>&nbsp;
-                        <span class="fa fa-star checked"></span>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    </section>
-                    {% comment %} <h5 class="card-title">{{data.name}}</h5> {% endcomment %}
-                    <p class="card-text">{{data.category}}Category will be displayed</p>
-                </div>
-                <div class="card-footer">
-                    <small class="text-muted"></small>
-                </div>
-            </div>
+<link rel="stylesheet" href="{% static 'styles/wishlist.css' %}" />
+{% endblock %} {% block content %}
+<div class="container mt-5 p-5" id="tripsCont">
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    {% if savedTour is not empty %} {% for item in savedTour %}
+    <div class="col">
+      <div class="tc-card h-100">
+        <img src="{{item.tour.image.url}}" class="tc-card-img-top" alt="..." />
+        <div class="tc-card-body">
+          <div class="tc-card-header">
+            <h5 class="tc-card-title">{{item.tour.name}}</h5>
+            <section class="stars">
+              <span class="hidden-text">{{item.tour.get_avg_rating}}</span
+              >&nbsp;
+              <span class="fa fa-star checked" style="color: #fdcc0d"></span>
+            </section>
+          </div>
+          <p class="tc-card-text tc-card-category">
+            <span>{{ item.tour.get_category_display }}</span>
+          </p>
+          <p class="tc-card-desc">{{item.tour.description}}</p>
         </div>
-        <div class="col">
-            <div class="card h-100">
-                <img src="{% static 'images/user/nature.jpg'%}" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <section class="stars">
-                        <span class="hidden-text">{{data.rating}}</span>&nbsp;
-                        <span class="fa fa-star checked"></span>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    </section>
-                    {% comment %} <h5 class="card-title">{{data.name}}</h5> {% endcomment %}
-                    <p class="card-text">{{data.category}}Category will be displayed</p>
-                </div>
-                <div class="card-footer">
-                    <small class="text-muted"></small>
-                </div>
-            </div>
+        <div class="tc-card-footer">
+          <button
+            class="btn btn-primary btn-remove-trip"
+            title="Remove from Saved Tours"
+            data-id="{{item.id}}"
+          >
+            Remove
+          </button>
+          <a href="{% url 'tourDetails' item.tour.id %}"
+            ><button class="btn btn-primary" title="View Tour">View</button></a
+          >
         </div>
-        <div class="col">
-            <div class="card h-100">
-                <img src="{% static 'images/user/nature.jpg'%}" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <section class="stars">
-                        <span class="hidden-text">{{data.rating}}</span>&nbsp;
-                        <span class="fa fa-star checked"></span>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    </section>
-                    {% comment %} <h5 class="card-title">{{data.name}}</h5> {% endcomment %}
-                    <p class="card-text">{{data.category}}Category will be displayed</p>
-                </div>
-                <div class="card-footer">
-                    <small class="text-muted"></small>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card h-100">
-                <img src="{% static 'images/user/nature.jpg'%}" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <section class="stars">
-                        <span class="hidden-text">{{data.rating}}</span>&nbsp;
-                        <span class="fa fa-star checked"></span>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    </section>
-                    {% comment %} <h5 class="card-title">{{data.name}}</h5> {% endcomment %}
-                    <p class="card-text">{{data.category}}Category will be displayed</p>
-                </div>
-                <div class="card-footer">
-                    <small class="text-muted"></small>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card h-100">
-                <img src="{% static 'images/user/nature.jpg'%}" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <section class="stars">
-                        <span class="hidden-text">{{data.rating}}</span>&nbsp;
-                        <span class="fa fa-star checked"></span>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    </section>
-                    {% comment %} <h5 class="card-title">{{data.name}}</h5> {% endcomment %}
-                    <p class="card-text">{{data.category}}Category will be displayed</p>
-                </div>
-                <div class="card-footer">
-                    <small class="text-muted"></small>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card h-100">
-                <img src="{% static 'images/user/nature.jpg'%}" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <section class="stars">
-                        <span class="hidden-text">{{data.rating}}</span>&nbsp;
-                        <span class="fa fa-star checked"></span>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    </section>
-                    {% comment %} <h5 class="card-title">{{data.name}}</h5> {% endcomment %}
-                    <p class="card-text">{{data.category}}Category will be displayed</p>
-                </div>
-                <div class="card-footer">
-                    <small class="text-muted"></small>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card h-100">
-                <img src="{% static 'images/user/nature.jpg'%}" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <section class="stars">
-                        <span class="hidden-text">{{data.rating}}</span>&nbsp;
-                        <span class="fa fa-star checked"></span>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    </section>
-                    {% comment %} <h5 class="card-title">{{data.name}}</h5> {% endcomment %}
-                    <p class="card-text">{{data.category}}Category will be displayed</p>
-                </div>
-                <div class="card-footer">
-                    <small class="text-muted"></small>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card h-100">
-                <img src="{% static 'images/user/nature.jpg'%}" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <section class="stars">
-                        <span class="hidden-text">{{data.rating}}</span>&nbsp;
-                        <span class="fa fa-star checked"></span>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    </section>
-                    {% comment %} <h5 class="card-title">{{data.name}}</h5> {% endcomment %}
-                    <p class="card-text">{{data.category}}Category will be displayed</p>
-                </div>
-                <div class="card-footer">
-                    <small class="text-muted"></small>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card h-100">
-                <img src="{% static 'images/user/nature.jpg'%}" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <section class="stars">
-                        <span class="hidden-text">{{data.rating}}</span>&nbsp;
-                        <span class="fa fa-star checked"></span>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    </section>
-                    {% comment %} <h5 class="card-title">{{data.name}}</h5> {% endcomment %}
-                    <p class="card-text">{{data.category}}Category will be displayed</p>
-                </div>
-                <div class="card-footer">
-                    <small class="text-muted"></small>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card h-100">
-                <img src="{% static 'images/user/nature.jpg'%}" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <section class="stars">
-                        <span class="hidden-text">{{data.rating}}</span>&nbsp;
-                        <span class="fa fa-star checked"></span>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    </section>
-                    {% comment %} <h5 class="card-title">{{data.name}}</h5> {% endcomment %}
-                    <p class="card-text">{{data.category}}Category will be displayed</p>
-                </div>
-                <div class="card-footer">
-                    <small class="text-muted"></small>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
+    {% endfor %} {% endif %} {% if savedTour.count == 0 %}
+    <div class="col">
+      <h5>You do not have any tour saved</h5>
+      <h6>
+        Lets us recommend you something
+        <a href="{% url 'tourForm' %}"> Recommendations</a>
+      </h6>
+    </div>
+    {% endif %}
+  </div>
 </div>
-{% comment %} {% endfor %} {% endcomment %}
-{% endblock %}
+<script>
+  function wishlistAlert(msg, type) {
+    document
+      .getElementById("tripsCont")
+      .insertAdjacentHTML(
+        "afterbegin",
+        `<div class="alert alert-${type} map-alert alert-message" role="alert">${msg}</div>`
+      );
+  }
+  const baseURL = `${window.location.origin}`;
+  document.querySelectorAll(".btn-remove-trip").forEach((btn) => {
+    btn.addEventListener("click", function (e) {
+      e.preventDefault();
+      let btn = e.target;
+      let id = btn.getAttribute("data-id");
+      let url = `${baseURL}/api/v1/tour/saved/delete/`;
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: id,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status == "success") {
+            wishlistAlert("Tour removed from Saved", "success");
+            btn.parentElement.parentElement.parentElement.remove();
+          }
+        })
+        .catch((err) => {
+          wishlistAlert(err.message, "danger");
+        });
+    });
+  });
+</script>
+{% include 'base/alertMessages/msgTimeOut.html' %} {% endblock %}

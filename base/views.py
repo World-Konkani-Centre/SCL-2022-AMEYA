@@ -54,6 +54,12 @@ def signup(request):
         username=request.POST['username']
         email=request.POST['email']
         password=request.POST['password']
+        email=email.rstrip()
+
+        if email == '' or password == '' or username == '':
+            messages.error(request,"Please fill all the fields.")
+            return render(request,"base/signup.html")
+        
         if User.objects.filter(username=username).exists(): 
             messages.add_message(request, messages.INFO, 'Username already exists.')
             return render(request,"base/signup.html")
@@ -229,8 +235,10 @@ def trip(request):
     context={}
     return render(request,"base/trip.html",context)
 
+@login_required
 def trips(request):
-    context={}
+    savedTours=SavedTour.objects.filter(user=request.user)
+    context={'savedTour':savedTours}
     return render(request,"base/trips.html",context)
 
 @login_required
@@ -463,6 +471,16 @@ def saveTour(request):
         saveTour.save()
     return JsonResponse({"status":"success"},safe=False)
 
+# method to delete saved tour:
+@login_required
+@csrf_exempt
+def deleteSavedTour(request):
+    body=json.loads(request.body.decode('utf-8'))
+    id=body['id']
+    savedTour=SavedTour.objects.get(id=id,user=request.user)
+    savedTour.delete()
+    return JsonResponse({"status":"success"},safe=False)
+
 # method to handle a tour to wishlist:
 @csrf_exempt
 @login_required
@@ -513,8 +531,6 @@ def deleteUser(request,username,id):
         else:
             messages.add_message(request, messages.ERROR, 'Please enter correct password!')
     return render(request,"base/deleteUser.html",context)
-
-
 
 def subscribe(request):
     if request.method=='POST':
