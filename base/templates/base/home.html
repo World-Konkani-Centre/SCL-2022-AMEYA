@@ -17,7 +17,7 @@
     <div class="carousel-inner">
       <div class="carousel-item active" data-bs-interval="10000">
         {% include 'base/alertMessages/messages.html' %}
-        <img src="{% static 'images/home/main_banner.png' %}" class="d-block w-100 h-100" alt="#" />
+        <img src="{% static 'images/home/tour-1.jpg' %}" class="d-block w-100 h-100" alt="#" />
         <div class="carousel-caption">
           <h5 class="text-dark">YATRA <span class="auto-type"></span></h5>
           {% if user.is_authenticated %}
@@ -29,7 +29,7 @@
         </div>
       </div>
       <div class="carousel-item" data-bs-interval="5000">
-        <img src="{% static 'images/home/main_cover.jpg' %}" class="d-block w-100 h-100" alt="...">
+        <img src="{% static 'images/home/tour-2.jpg' %}" class="d-block w-100 h-100" alt="...">
         <div class="carousel-caption">
           <h5 style="color:#1e1e1e;">BEST <span class="auto-type1"></span></h5>
           {% if user.is_authenticated %}
@@ -41,7 +41,7 @@
         </div>
       </div>
       <div class="carousel-item" data-bs-interval="5000">
-        <img src="{% static 'images/home/main_cover1.jpg' %}" class="d-block w-100 h-100" alt="...">
+        <img src="{% static 'images/home/tour-2.jpg' %}" class="d-block w-100 h-100" alt="...">
         <div class="carousel-caption">
           <h5 style="color:#1e1e1e;">BEST <span class="auto-type2"></span></h5>
           {% if user.is_authenticated %}
@@ -150,7 +150,7 @@
               <h3 class="card-title">Best place</h3>
               <p class="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci eligendi modi temporibus
                 alias iste. Accusantium?</p>
-              <p><a href="#" class="btn btn-warning mt-3">Read More</a></p>
+              <p class="read-more"><a href="#" class="btn btn-warning mt-3">Read More</a></p>
             </div>
           </div>
         </div>
@@ -188,55 +188,48 @@
 
   <div class="container marketing">
     <!-- START THE FEATURETTES -->
-    <hr class="featurette-divider">
-    <h1 class="text-center">Features</h1>
-    <hr class="featurette-divider">
-
-    <div class="row featurette">
+    <hr class="border">
+    <h1 class="text-center second-text">Features</h1>
+    <hr class="border">
+    <div class="row featurette hover01">
       <div class="col-md-7">
-        <h2 class="featurette-heading fw-normal lh-1">First featurette heading. <span class="text-muted">It’ll blow your
-            mind.</span></h2>
-        <p class="lead">Some great placeholder content for the first featurette here. Imagine some exciting prose here.
+        <h2 class="featurette-heading fw-normal lh-1 mt-3">Register your Business <span class="text-muted">Register now to stand at the top of the recommendation searches!</span></h2>
+        <p class="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores quaerat, eligendi alias nulla facilis sit temporibus possimus, quis, culpa consequuntur quam neque. Impedit assumenda, eos harum est eum quisquam natus.
         </p>
+        <button class="btn registerbtn mt-5">
+          <a href="{% url 'registerBusiness' %}" class="text">Register Now</a>
+        </button>
       </div>
       <div class="col-md-5">
-        <img src="{% static 'images/user/nature.jpg'%}" class="img-fluid" alt="...">
+        <img src="{% static 'images/home/register.png'%}" class="img-fluid reg-img" alt="...">
       </div>
     </div>
 
-    <hr class="featurette-divider">
+    <!-- <hr class="border"> -->
 
-    <div class="row featurette">
+    <div class="row featurette hover01">
       <div class="col-md-7 order-md-2">
-        <h2 class="featurette-heading fw-normal lh-1">Oh yeah, it’s that good. <span class="text-muted">See for
+        <h2 class="featurette-heading fw-normal lh-1">Find the best route to travel <span class="text-muted">See for
             yourself.</span></h2>
-        <p class="lead">Another featurette? Of course. More placeholder content here to give you an idea of how this
-          layout would work with some actual real-world content in place.</p>
+        <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quasi quis in mollitia quaerat, quidem explicabo, iste officiis dolor harum laudantium, quam id? Tempora explicabo incidunt facere repellendus est doloribus pariatur.</p>
       </div>
       <div class="col-md-5 order-md-1">
-        <img src="{% static 'images/user/nature.jpg'%}" class="img-fluid" alt="...">
+        <img src="{% static 'images/home/map-pic.png'%}" class="img-fluid map-pic" alt="...">
       </div>
     </div>
 
-    <hr class="featurette-divider">
+    <hr class="border">
 
-    <div class="row featurette">
+    <div class="row featurette hover01">
       <div class="col-md-7">
-        <h2 class="featurette-heading fw-normal lh-1">And lastly, this one. <span class="text-muted">Checkmate.</span>
+        <h2 class="featurette-heading fw-normal lh-1">Recommendation Form<span class="text-muted">Checkmate.</span>
         </h2>
-        <p class="lead">And yes, this is the last block of representative placeholder content. Again, not really
-          intended to be actually read, simply here to give you a better view of what this would look like with some
-          actual content. Your content.</p>
+        <p class="lead">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Accusamus, quisquam ullam? Nostrum tenetur, reiciendis repellat magni animi veniam numquam commodi est et officiis minima distinctio ad tempora? Nisi, est incidunt!</p>
       </div>
       <div class="col-md-5">
-        <img src="{% static 'images/user/nature.jpg'%}" class="img-fluid" alt="...">
+        <img src="{% static 'images/home/tourform.png'%}" class="img-fluid tour-img" alt="...">
       </div>
     </div>
-
-    <hr class="featurette-divider">
-    <h5 class="float-end"><a href="#">Back to top</a></h5>
-    <br />
-    <br />
   </div>
 
   <!-- /END THE FEATURETTES -->
@@ -264,24 +257,18 @@
           <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12">
             <div class="Follow">
               <h3>Contact</h3>
-              <form action="{% url 'contact' %}" method="POST">
-                {% csrf_token %}
-                <div class="row">
-                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
-                    <input class="form-control Newsletter" name="contact-name" placeholder="Name" type="text" />
-                  </div>
-                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
-                    <input class="form-control Newsletter" name="contact-email" placeholder="Email" type="text" />
-                  </div>
-                </div>  
-                <div class="row">
-                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                    <textarea  name="contact-message" class="form-control Newsletter" placeholder="Comment" type="text"></textarea>            
-                  </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                  <input class="Newsletter" placeholder="Name" type="text" />
                 </div>
-              
-                <button class="Subscribe" type="submit">Submit</button>
-              </form>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                  <input class="Newsletter" placeholder="Email" type="text" />
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                  <textarea class="textarea" placeholder="  Comment" type="text"></textarea>
+                </div>
+              </div>
+              <button class="Subscribe">Submit</button>
             </div>
           </div>
         </div>
