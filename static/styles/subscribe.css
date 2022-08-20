@@ -5,11 +5,219 @@ body{
 .card{
     position: relative;
     right: 80px;
-    margin-top: 10px;
+    bottom: 15px;
+    border-radius: 10px;
 }
+
+.hover01 {
+	-webkit-transform: scale(1);
+	transform: scale(1);
+	-webkit-transition: 0.3s ease-in-out;
+	transition: 0.3s ease-in-out;
+  }
+  
+  .hover01:hover {
+	-webkit-transform: scale(1.01);
+	transform: scale(1.01);
+  }
 
 .sub-text{
     font-size: 35px;
     font-family: 'Times New Roman', Times, serif;
     color: rgb(34, 83, 180);
+    text-align: center;
+    justify-content: center;
+}
+
+.unsubscribe{
+    width: 100%;
+    position: relative;
+    bottom: 40px;
+}
+
+.newsletter{
+    width: 20%;
+    height: 20%;
+    margin-top: 20px;
+    margin-left: 180px;
+    margin-bottom: 25px;
+}
+
+.below-text{
+    justify-content: center;
+    text-align: center;
+}
+
+.combine-btn{
+    justify-content: center;
+    text-align: center;
+}
+
+.subscribe{
+    width: 100%;
+}
+
+.subscribe:hover{
+    background-color: rgb(41, 112, 14);
+}
+
+.unsubscribe:hover{
+    background-color: rgb(198, 28, 28);
+}
+
+/* Media queries */
+
+/* All mobile phones */
+@media all and (max-width:600px){
+    .card{
+        height: 100%;
+        position: relative;
+        left: 15px !important;
+        width: 90% !important;
+     }
+     .newsletter{
+        position: relative;
+        right: 60px !important;
+        width: 80px;
+     }
+}
+
+
+/* Iphone XR */
+@media all and (device-width: 414px) and (device-height: 896px) and (orientation:portrait){
+    .card{
+        height: 110% !important;
+        margin-top: 60px;
+    }
+    .newsletter{
+        width: 100px;
+    }
+}
+
+/* Iphone 12 Pro */
+@media all and (device-width: 390px) and (device-height: 844px) and (orientation:portrait){
+   .card{
+    margin-top: 60px;
+   }
+   .newsletter{
+    width: 100px;
+   }
+}
+
+/* Pixel 5 */
+@media all and (device-width: 393px) and (device-height: 851px) and (orientation:portrait){
+    .card{
+        margin-top: 60px;
+    }
+    .newsletter{
+        width: 100px;
+    }
+}
+
+/* Samsung Galaxy S8+ */
+@media all and (device-width: 360px) and (device-height: 740px) and (orientation:portrait){
+    .card{
+        margin-top: 10px;
+    }
+    .newsletter{
+        width: 90px;
+    }
+}
+
+/* Samsung Galaxy S20 Ultra */
+@media all and (device-width: 412px) and (device-height: 915px) and (orientation:portrait){
+    .card{
+        height: 100%;
+        margin-top: 70px;
+        margin-left: 3px;
+    }
+    .newsletter{
+        width: 100px;
+    }
+}
+
+/* Ipad Air */
+@media all and (device-width: 820px) and (device-height: 1180px) and (orientation:portrait){
+    .card{
+        height: 80%;
+        margin-top: 220px;
+        width: 300% !important;
+        position: relative;
+        right: 220px;
+    }
+    .newsletter{
+        position: relative;
+        right: 50px !important;
+        width: 80px;
+    }
+}
+
+/* Ipad Mini */
+@media all and (device-width: 768px) and (device-height: 1024px) and (orientation:portrait){
+    .card{
+        height: 80%;
+        margin-top: 150px;
+        width: 300% !important;
+        position: relative;
+        right: 220px;
+    }
+    .newsletter{
+        position: relative;
+        right: 50px !important;
+        width: 80px;
+    }
+}
+
+/* Surface pro 7 */
+@media all and (device-width: 912px) and (device-height: 1368px) and (orientation:portrait){
+    .card{
+        height: 70%;
+        margin-top: 300px;
+        width: 320% !important;
+        position: relative;
+        right: 240px;
+    }
+    .newsletter{
+        position: relative;
+        right: 50px !important;
+        width: 80px;
+    }
+}
+
+/* Surface Duo */
+@media all and (device-width: 540px) and (device-height: 720px) and (orientation:portrait){
+    .card{
+        margin-top: 30px;
+        margin-left: 10px;
+    }
+    .newsletter{
+        width: 90px !important;
+    }
+}
+
+/* Galaxy fold */
+@media all and (device-width: 280px) and (device-height: 653px) and (orientation:portrait){
+   .card{
+    width:120% !important;
+    margin-top: 20px;
+   }
+}
+
+/* Samsung galaxy A51/71 */
+@media all and (device-width: 412px) and (device-height: 914px) and (orientation:portrait){
+   .card{
+    margin-top: 75px;
+    margin-left: 3px;
+    position: relative;
+    right: 75px !important;
+   }
+
+}
+
+/* Nest Hub Max */
+@media all and (device-width: 1280px) and (device-height: 800px) and (orientation:portrait){
+     .card{
+        position: relative;
+        top: 60px !important;
+     }
 }
