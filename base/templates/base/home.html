@@ -1,9 +1,8 @@
 {% extends 'main.html' %} {% load static %} {% block styles %}
 <!-- Replace {name} with the respective css file -->
 <link rel="stylesheet" href="{% static 'styles/home.css' %}" />
-{% endblock %} {% block content %}
-
-<body>
+{% endblock %}
+{% block content %}
   <!--Carousel start-->
   <div id="carouselExampleDark" class="carousel  carousel-dark slide carousel-fade" data-bs-ride="carousel">
     <div class="carousel-indicators">
@@ -78,12 +77,12 @@
   </div>
 
   <!-- Basic Intro about website -->
-  <div class="container">
+  <div class="container" id="welcome">
     <p class="first-text">WELCOME TO</p>
     <p class="second-text">YATRA MITRA</p>
     <hr class="border">
     <p class="about-text">
-      Lorem ipsum dolor sit, amet consectetur adipisicing elit. Harum nesciunt ratione reprehenderit dignissimos placeat mollitia hic sit eligendi numquam molestias at architecto perferendis aliquid quaerat laboriosam nam voluptas amet cumque rem, eius velit suscipit. Fuga at mollitia vel quidem vero consectetur amet? Nostrum inventore id modi nobis dolorum laudantium animi earum laboriosam dignissimos eum assumenda illum iusto culpa totam expedita optio odit fuga cumque laborum, magnam repellendus, magni adipisci. Animi quod, quo mollitia facilis iusto expedita cumque aperiam molestias necessitatibus natus harum ut officia nostrum unde debitis! Reiciendis earum dicta, maiores ex placeat aperiam voluptate tempore harum eveniet voluptas explicabo.
+      Whether it is a one day trip or a long vacattion, a solo ride or an adventurous trek we provide you with the best recommendations and help you plan your your trip with all the information that you need to know.
     </p>
   </div>
 
@@ -99,34 +98,34 @@
             </div>                
         </div>
     </div>        
-</div>
-
-
-
-<div class="tm-section tm-position-relative">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none" class="tm-section-down-arrow">
-      <polygon fill="#ee5057" points="0,0  100,0  50,60"></polygon>                   
-  </svg> 
-  <div class="container tm-pt-5 tm-pb-4">
-      <div class="row text-center">
-          <article class="col-sm-12 col-md-4 col-lg-4 col-xl-4 tm-article">                            
-              <i class="fa tm-fa-6x fa-legal tm-color-primary tm-margin-b-20"></i>
-              <h3 class="tm-color-primary tm-article-title-1">Level HTML Template by Tooplate website</h3>
-              <p>You are allowed to download, edit and use this template for your business or client websites.</p>
-          </article>
-          <article class="col-sm-12 col-md-4 col-lg-4 col-xl-4 tm-article">                            
-              <i class="fa tm-fa-6x fa-plane tm-color-primary tm-margin-b-20"></i>
-              <h3 class="tm-color-primary tm-article-title-1">Original Website Template Producer</h3>
-              <p>You are NOT allowed to re-distribute the downloadable template ZIP file on any website.</p>                          
-          </article>
-          <article class="col-sm-12 col-md-4 col-lg-4 col-xl-4 tm-article">                           
-              <i class="fa tm-fa-6x fa-life-saver tm-color-primary tm-margin-b-20"></i>
-              <h3 class="tm-color-primary tm-article-title-1">Contact us if you have any question</h3>
-              <p>If you see this template being distributed on any other site, that is an illegal copy.</p>                         
-          </article>
-      </div>        
   </div>
-</div>
+
+
+
+  <div class="tm-section tm-position-relative">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none" class="tm-section-down-arrow">
+        <polygon fill="#ee5057" points="0,0  100,0  50,60"></polygon>                   
+    </svg> 
+    <div class="container tm-pt-5 tm-pb-4">
+        <div class="row text-center">
+            <article class="col-sm-12 col-md-4 col-lg-4 col-xl-4 tm-article">                            
+                <i class="fa tm-fa-6x fa-legal tm-color-primary tm-margin-b-20" id="icon"></i>
+                <h3 class="tm-color-primary tm-article-title-1">Level HTML Template by Tooplate website</h3>
+                <p>You are allowed to download, edit and use this template for your business or client websites.</p>
+            </article>
+            <article class="col-sm-12 col-md-4 col-lg-4 col-xl-4 tm-article">                            
+                <i class="fa tm-fa-6x fa-plane tm-color-primary tm-margin-b-20" id="icon"></i>
+                <h3 class="tm-color-primary tm-article-title-1">Original Website Template Producer</h3>
+                <p>You are NOT allowed to re-distribute the downloadable template ZIP file on any website.</p>                          
+            </article>
+            <article class="col-sm-12 col-md-4 col-lg-4 col-xl-4 tm-article">                           
+                <i class="fa tm-fa-6x fa-life-saver tm-color-primary tm-margin-b-20" id="icon"></i>
+                <h3 class="tm-color-primary tm-article-title-1">Contact us if you have any question</h3>
+                <p>If you see this template being distributed on any other site, that is an illegal copy.</p>                         
+            </article>
+        </div>        
+    </div>
+  </div>
 
   <!-- about section Ends -->
   <!-- tourist section Starts -->
@@ -135,8 +134,10 @@
       <div class="row">
         <div class="col-md-12" data-aos="fade-down" data-aos-delay="150">
           <div class="section-header text-center pb-5">
+            <hr class="featurette-divider">
             <h1 class="second-text">Best Tourist Attractions</h1>
             <p class="subtext">Below are some of our best recommended places.</p>
+            <hr class="featurette-divider">
           </div>
         </div>
       </div>
@@ -189,7 +190,7 @@
   <div class="container marketing">
     <!-- START THE FEATURETTES -->
     <hr class="featurette-divider">
-    <h1 class="text-center">Features</h1>
+    <h1 class="text-center" id="Features">Features</h1>
     <hr class="featurette-divider">
 
     <div class="row featurette">
@@ -326,6 +327,3 @@
   {% include 'base/alertMessages/msgTimeOut.html' %}
   <!--  -->
   {% endblock %}
-
-
-</body>
