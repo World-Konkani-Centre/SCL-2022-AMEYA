@@ -13,8 +13,9 @@
           <div class="tc-card-header">
             <h5 class="tc-card-title">{{item.tour.name}}</h5>
             <section class="stars">
-              <span class="hidden-text">{{item.tour.get_avg_rating}}</span>&nbsp;
-              <span class="fa fa-star checked"></span>
+              <span class="hidden-text">{{item.tour.get_avg_rating}}</span
+              >&nbsp;
+              <span class="fa fa-star checked" style="color: #fdcc0d"></span>
             </section>
           </div>
           <p class="tc-card-text tc-card-category">
@@ -63,7 +64,6 @@
       let btn = e.target;
       let id = btn.getAttribute("data-id");
       let url = `${baseURL}/user/wishlist`;
-      console.log(url);
       fetch(url, {
         method: "POST",
         headers: {
