@@ -1,8 +1,9 @@
+from asyncio.windows_events import NULL
 from django.shortcuts import render,redirect
 from django.http import JsonResponse
 from django.core.serializers import serialize
 from django.contrib import messages
-from .models import RegisteredBusiness,Tour,Business,TourReviews,Wishlist,Profile,Subscribers,MailMessage
+from .models import RegisteredBusiness,Tour,Business,TourReviews,Wishlist,Profile,Subscribers,SavedTour
 from haversine import haversine,Unit
 from django.template.defaulttags import register
 from django.views.decorators.csrf import csrf_exempt
@@ -54,6 +55,12 @@ def signup(request):
         username=request.POST['username']
         email=request.POST['email']
         password=request.POST['password']
+        email=email.rstrip()
+
+        if email == '' or password == '' or username == '':
+            messages.error(request,"Please fill all the fields.")
+            return render(request,"base/signup.html")
+        
         if User.objects.filter(username=username).exists(): 
             messages.add_message(request, messages.INFO, 'Username already exists.')
             return render(request,"base/signup.html")
@@ -229,8 +236,10 @@ def trip(request):
     context={}
     return render(request,"base/trip.html",context)
 
+@login_required
 def trips(request):
-    context={}
+    savedTours=SavedTour.objects.filter(user=request.user)
+    context={'savedTour':savedTours}
     return render(request,"base/trips.html",context)
 
 @login_required
@@ -443,7 +452,36 @@ def getBusiness(request,id):
     business=RegisteredBusiness.objects.get(id=id)
     data=serialize('json',[business])
     return JsonResponse(data,safe=False)
-    
+
+# method to save tour to SaveTour table:
+@login_required
+@csrf_exempt
+def saveTour(request):
+    body=json.loads(request.body.decode('utf-8'))
+    tourId=body['tourId']
+    tourCoords=body['tourCoords']
+    tourRoute=body['tourRoute']
+    tour=Tour.objects.get(id=tourId)
+    if SavedTour.objects.filter(tour=tour,user=request.user).exists():
+        savedTour=SavedTour.objects.get(tour=tour,user=request.user)
+        savedTour.tourCoords=tourCoords
+        savedTour.tourRoute=tourRoute
+        savedTour.save()
+    else:
+        saveTour=SavedTour(tour=tour,user=request.user,tourCoords=tourCoords,tourRoute=tourRoute)
+        saveTour.save()
+    return JsonResponse({"status":"success"},safe=False)
+
+# method to delete saved tour:
+@login_required
+@csrf_exempt
+def deleteSavedTour(request):
+    body=json.loads(request.body.decode('utf-8'))
+    id=body['id']
+    savedTour=SavedTour.objects.get(id=id,user=request.user)
+    savedTour.delete()
+    return JsonResponse({"status":"success"},safe=False)
+
 # method to handle a tour to wishlist:
 @csrf_exempt
 @login_required
@@ -467,8 +505,6 @@ def handleWishlist(request):
 # Error page:
 def error_404(request,exception):
     return render(request,'base/errorPages/404.html')
-
-
 
 #delete user profile
 
@@ -497,15 +533,21 @@ def deleteUser(request,username,id):
             messages.add_message(request, messages.ERROR, 'Please enter correct password!')
     return render(request,"base/deleteUser.html",context)
 
-
-
 def subscribe(request):
     if request.method=='POST':
         form=SubscribersForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request,'Subscription Successful')
-            return redirect('/subscribe')
+        if 'subscribe' in request.POST:
+            if form.is_valid():
+               form.save()
+               messages.success(request,'Subscription Successful')
+               return redirect('/subscribe')
+        elif 'unsubscribe' in request.POST:
+            if form.is_valid():
+                email=request.POST['email']
+                if Subscribers.objects.filter(email=email).exists():
+                   Subscribers.objects.filter(email=email).delete()
+                   messages.success(request,"Your subscription has been cancelled successfully!")
+                   return redirect('/subscribe')
     else:
         form=SubscribersForm()
     context={
@@ -524,13 +566,8 @@ def mail(request):
         form.save()
         title=form.cleaned_data.get('title')
         message=form.cleaned_data.get('message')
-        send_mail(
-        title,
-        message,
-        '',
-        mail_list,
-        fail_silently=False,
-    )
+        msg = EmailMultiAlternatives(title,message,'',bcc=mail_list)
+        msg.send()
         messages.success(request,"Your message has been sent successfully to the mail list!")
         return redirect('/mail')
     else:

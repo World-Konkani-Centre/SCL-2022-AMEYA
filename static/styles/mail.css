@@ -14,5 +14,153 @@ body{
     width: 120%;
     position: relative;
     right: 30px;
-    margin-top: 40px;
+}
+
+.hover01 {
+	-webkit-transform: scale(1);
+	transform: scale(1);
+	-webkit-transition: 0.3s ease-in-out;
+	transition: 0.3s ease-in-out;
+  }
+  
+  .hover01:hover {
+	-webkit-transform: scale(1.01);
+	transform: scale(1.01);
+  }
+
+.send-img{
+    width: 20%;
+    height: 20%;
+    position: relative;
+    left: 250px;
+}
+
+.submit{
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+/* Media queries */
+@media all and (max-width:600px){
+    .card{
+        width: 90% !important;
+        margin-left: 50px;
+        margin-bottom: 5px;
+    }
+    .send-img{
+        position: relative !important;
+        left: 130px !important;
+    }
+}
+
+/* Iphone XR */
+@media all and (device-width: 414px) and (device-height: 896px) and (orientation:portrait){
+   .card{
+    margin-top: 70px;
+   }
+}
+
+/* Iphone 12 Pro */
+@media all and (device-width: 390px) and (device-height: 844px) and (orientation:portrait){
+    .card{
+     margin-top: 50px;
+    }
+}
+
+/* Pixel 5 */
+@media all and (device-width: 393px) and (device-height: 851px) and (orientation:portrait){
+    .card{
+        margin-top: 50px;
+    }
+}
+
+/* Samsung Galaxy S20 Ultra */
+@media all and (device-width: 412px) and (device-height: 915px) and (orientation:portrait){
+    .card{
+        margin-top: 80px;
+    }
+}
+
+/* Ipad Air */
+@media all and (device-width: 820px) and (device-height: 1180px) and (orientation:portrait){
+    .card{
+        margin-top: 180px;
+        width: 200%;
+        position: relative;
+        right: 170px;
+    }
+}
+
+/* Ipad Mini */
+@media all and (device-width: 768px) and (device-height: 1024px) and (orientation:portrait){
+    .card{
+        margin-top: 100px;
+        width: 200%;
+        position: relative;
+        right: 170px;
+    }
+}
+
+/* Surface pro 7 */
+@media all and (device-width: 912px) and (device-height: 1368px) and (orientation:portrait){
+    .card{
+        margin-top: 260px;
+        width: 200%;
+        position: relative;
+        right: 170px;
+        height: 80%;
+    }
+    .submit{
+        margin-top: 40px !important;
+    }
+    .send-img{
+        position: relative;
+        left: 270px !important;
+    }
+}
+
+/* Surface Duo */
+@media all and (device-width: 540px) and (device-height: 720px) and (orientation:portrait){
+    .send-img{
+        position: relative;
+        left: 180px !important;
+    }
+    .card{
+        position: relative;
+        bottom: 15px !important;
+    }
+}
+
+/* Galaxy Fold */
+@media all and (device-width: 280px) and (device-height: 653px) and (orientation:portrait){
+    .send-img{
+        position: relative;
+        left: 90px !important;
+    }
+    .card{
+        position: relative;
+        right: 40px;
+        bottom: 10px;
+    }
+    .heading{
+        font-size: 28px;
+    }
+}
+
+/* Samsung Galaxy A51/71 */
+@media all and (device-width: 412px) and (device-height: 914px) and (orientation:portrait){
+    .card{
+        position: relative;
+        top: 80px;
+    }
+}
+
+/* NestHub */
+@media all and (device-width: 1024px) and (device-height: 600px) and (orientation:portrait){
+    .send-img{
+    width: 20%;
+    height: 20%;
+    position: relative;
+    left: 220px;
+    }
 }
