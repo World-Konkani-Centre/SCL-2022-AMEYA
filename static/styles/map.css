@@ -285,7 +285,7 @@
   top: 30vh !important;
 }
 /* Edit tour panel */
-.btn-edit-tour {
+.btn-edit-tour{
   display: none;
 }
 /*===== DRAG and DROP =====*/
