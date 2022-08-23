@@ -1,7 +1,8 @@
 {% extends 'main.html' %} {% load static %} {% block styles %}
 <!-- Replace {name} with the respective css file -->
 <link rel="stylesheet" href="{% static 'styles/home.css' %}" />
-{% endblock %} {% block content %}
+{% endblock %}
+{% block content %}
   <!--Carousel start-->
   <div id="carouselExampleDark" class="carousel carousel-dark slide carousel-fade" data-bs-ride="carousel">
     <div class="carousel-indicators">
@@ -11,11 +12,11 @@
       <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
       <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="3" aria-label="Slide 4"></button>
     </div>
-
+    <img>
     <div class="carousel-inner">
       <div class="carousel-item active" data-bs-interval="5000">
         {% include 'base/alertMessages/messages.html' %}
-        <img src="{% static 'images/home/tour-1.jpg' %}" class="d-block w-100 h-100" alt="#" />
+        <img src="{% static 'images/home/tour-2.jpg' %}" class="d-block w-100 h-100" alt="#" />
         <div class="carousel-caption">
           <h5 class="text-dark">YATRA <span class="auto-type"></span></h5>
           {% if user.is_authenticated %}
@@ -27,9 +28,9 @@
         </div>
       </div>
       <div class="carousel-item" data-bs-interval="5000">
-        <img src="{% static 'images/home/tour-2.jpg' %}" class="d-block w-100 h-100" alt="...">
+        <img src="{% static 'images/home/tour-1.jpg' %}" class="d-block w-100 h-100" alt="...">
         <div class="carousel-caption">
-          <h5 style="color:#1e1e1e;">BEST <span class="auto-type1"></span></h5>
+          <h5 style="color:#0f3d3e;">BEST <span class="auto-type1"></span></h5>
           {% if user.is_authenticated %}
           <a href="#tourist" class="btn btn-warning mt-3">Learn More</a></span>
           {% else %}
@@ -76,12 +77,12 @@
   </div>
 
   <!-- Basic Intro about website -->
-  <div class="container">
+  <div class="container" id="welcome">
     <p class="first-text">WELCOME TO</p>
     <p class="second-text">YATRA MITRA</p>
     <hr class="border">
     <p class="about-text">
-      Lorem ipsum dolor sit, amet consectetur adipisicing elit. Harum nesciunt ratione reprehenderit dignissimos placeat mollitia hic sit eligendi numquam molestias at architecto perferendis aliquid quaerat laboriosam nam voluptas amet cumque rem, eius velit suscipit. Fuga at mollitia vel quidem vero consectetur amet? Nostrum inventore id modi nobis dolorum laudantium animi earum laboriosam dignissimos eum assumenda illum iusto culpa totam expedita optio odit fuga cumque laborum, magnam repellendus, magni adipisci. Animi quod, quo mollitia facilis iusto expedita cumque aperiam molestias necessitatibus natus harum ut officia nostrum unde debitis! Reiciendis earum dicta, maiores ex placeat aperiam voluptate tempore harum eveniet voluptas explicabo.
+      Whether it is a one day trip or a long vacattion, a solo ride or an adventurous trek we provide you with the best recommendations and help you plan your trip with all the informations that you need to know.
     </p>
   </div>
 
@@ -97,34 +98,34 @@
             </div>                
         </div>
     </div>        
-</div>
-
-
-
-<div class="tm-section tm-position-relative">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none" class="tm-section-down-arrow">
-      <polygon fill="#ee5057" points="0,0  100,0  50,60"></polygon>                   
-  </svg> 
-  <div class="container tm-pt-5 tm-pb-4">
-      <div class="row text-center">
-          <article class="col-sm-12 col-md-4 col-lg-4 col-xl-4 tm-article">                            
-              <i class="fa tm-fa-6x fa-legal tm-color-primary tm-margin-b-20"></i>
-              <h3 class="tm-color-primary tm-article-title-1">Level HTML Template by Tooplate website</h3>
-              <p>You are allowed to download, edit and use this template for your business or client websites.</p>
-          </article>
-          <article class="col-sm-12 col-md-4 col-lg-4 col-xl-4 tm-article">                            
-              <i class="fa tm-fa-6x fa-plane tm-color-primary tm-margin-b-20"></i>
-              <h3 class="tm-color-primary tm-article-title-1">Original Website Template Producer</h3>
-              <p>You are NOT allowed to re-distribute the downloadable template ZIP file on any website.</p>                          
-          </article>
-          <article class="col-sm-12 col-md-4 col-lg-4 col-xl-4 tm-article">                           
-              <i class="fa tm-fa-6x fa-life-saver tm-color-primary tm-margin-b-20"></i>
-              <h3 class="tm-color-primary tm-article-title-1">Contact us if you have any question</h3>
-              <p>If you see this template being distributed on any other site, that is an illegal copy.</p>                         
-          </article>
-      </div>        
   </div>
-</div>
+
+
+
+  <div class="tm-section tm-position-relative">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none" class="tm-section-down-arrow">
+        <polygon fill="#ee5057" points="0,0  100,0  50,60"></polygon>                   
+    </svg> 
+    <div class="container tm-pt-5 tm-pb-4">
+        <div class="row text-center">
+            <article class="col-sm-12 col-md-4 col-lg-4 col-xl-4 tm-article">                            
+                <i class="fa tm-fa-6x fa-legal tm-color-primary tm-margin-b-20" id="icon"></i>
+                <h3 class="tm-color-primary tm-article-title-1">Level HTML Template by Tooplate website</h3>
+                <p>You are allowed to download, edit and use this template for your business or client websites.</p>
+            </article>
+            <article class="col-sm-12 col-md-4 col-lg-4 col-xl-4 tm-article">                            
+                <i class="fa tm-fa-6x fa-plane tm-color-primary tm-margin-b-20" id="icon"></i>
+                <h3 class="tm-color-primary tm-article-title-1">Original Website Template Producer</h3>
+                <p>You are NOT allowed to re-distribute the downloadable template ZIP file on any website.</p>                          
+            </article>
+            <article class="col-sm-12 col-md-4 col-lg-4 col-xl-4 tm-article">                           
+                <i class="fa tm-fa-6x fa-life-saver tm-color-primary tm-margin-b-20" id="icon"></i>
+                <h3 class="tm-color-primary tm-article-title-1">Contact us if you have any question</h3>
+                <p>If you see this template being distributed on any other site, that is an illegal copy.</p>                         
+            </article>
+        </div>        
+    </div>
+  </div>
 
   <!-- about section Ends -->
   <!-- tourist section Starts -->
@@ -133,8 +134,10 @@
       <div class="row">
         <div class="col-md-12" data-aos="fade-down" data-aos-delay="150">
           <div class="section-header text-center pb-5">
+            <hr class="featurette-divider">
             <h1 class="second-text">Best Tourist Attractions</h1>
             <p class="subtext">Below are some of our best recommended places.</p>
+            <hr class="featurette-divider">
           </div>
         </div>
       </div>
@@ -186,10 +189,12 @@
 
   <div class="container marketing">
     <!-- START THE FEATURETTES -->
+    <hr class="featurette-divider">
     <hr class="border">
     <h1 class="text-center second-text">Features</h1>
     <hr class="border">
-    <div class="row featurette hover01">
+    <hr class="featurette-divider">
+    <div class="row featurette hover01" id="Register">
       <div class="col-md-7">
         <h2 class="featurette-heading fw-normal lh-1 mt-3">Register your Business <span class="text-muted">Register now to stand at the top of the recommendation searches!</span></h2>
         <p class="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores quaerat, eligendi alias nulla facilis sit temporibus possimus, quis, culpa consequuntur quam neque. Impedit assumenda, eos harum est eum quisquam natus.
@@ -309,5 +314,4 @@
     })
   </script>
   {% include 'base/alertMessages/msgTimeOut.html' %}
-  <!--  -->
   {% endblock %}

@@ -3,11 +3,12 @@ body {
   background-color: #e2e2e291;
   overflow-x: hidden;
 }
-.rec-container{
-  margin-top: 10px;
-}
+/* .rec-container{
+  margin: 10px;
+
+} */
 .card {
-  margin: 0 auto; /* Added */
+  margin-top: 20px;
   float: none; /* Added */
   margin-bottom: 10px; /* Added */
   border-radius: 30px 5px;
