@@ -165,6 +165,7 @@ function addMarkersWithPopup(data, icon) {
   fitMarkers(markers);
   return markers;
 }
+
 // Add tour details popup marker to map:
 function addDestinationMarker(latlng, id) {
   const url = `${baseURL}/tour/${+id}`;
@@ -273,7 +274,6 @@ function createWaypoints(latLngArr, destCoords, id) {
         latLngArr = [curLatLang, [...latLngArr]];
       }
       tourCoordinates = latLngArr;
-      console.log(tourCoordinates);
       latLngArr = latLngArr.map((l) => L.latLng(...l));
       // Create a route:
       mapAlert("Finding best route...", "info");
@@ -529,6 +529,7 @@ document.querySelectorAll("#pills-tour-reco .nav-link").forEach((btn) => {
 function hideRecPanel() {
   if (screen.width < 768) recPanel.classList.remove("slide-rec-panel");
 }
+
 function showRecPanel() {
   if (screen.width < 768) recPanel.classList.add("slide-rec-panel");
 }
@@ -723,6 +724,30 @@ function saveTour() {
     .then((data) => {
       if (data.status === "success") {
         mapAlert("Tour saved", "success");
+      } else {
+        mapAlert("Something went wrong", "danger");
+      }
+    })
+    .catch((err) => mapAlert(err.message, "danger"));
+}
+
+// Fetch Saved Tour data:
+function getSavedTour(id) {
+  const overlay = document.querySelector(".overlay");
+  overlay.style.display = "flex";
+  const url = `${baseURL}/tour/getSavedTour/`;
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ id }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      overlay.style.display = "none";
+      if (data.status === "success") {
+        console.log(data);
       } else {
         mapAlert("Something went wrong", "danger");
       }

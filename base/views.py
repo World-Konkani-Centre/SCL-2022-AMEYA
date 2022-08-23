@@ -20,6 +20,7 @@ from .serializers import BusinessSerializer,RegisteredBusinessSerializer
 from rest_framework.response import Response
 from django.core.paginator import Paginator
 from django_pandas.io import read_frame
+from ast import literal_eval
 import datetime
 
 # Create your views here.
@@ -41,11 +42,17 @@ def map(request):
         context['wishlist']=wishlist
     return render(request,"base/map.html",context)
 
+@login_required
 def viewSavedTour(request,id):
+    user=request.user
     savedTour=SavedTour.objects.filter(user=request.user,id=id).values()[0]
     tour=Tour.objects.get(id=savedTour['tour_id'])
     tourCoords=savedTour['tourCoords']
-    context={'tour':tour,'tourCoords':tourCoords,'tourId':savedTour['tour_id'],'saved':True}
+    context={'tour':tour,'tourCoords':tourCoords,'tourId':savedTour['tour_id'],'id':savedTour['id'],'saved':True}
+    if Wishlist.objects.filter(user=user,tour=tour).exists():
+        context['wishlist']=True
+    else:
+        context['wishlist']=False
     return render(request,'base/map.html',context)
 
 def getTour(request,id):
@@ -507,7 +514,18 @@ def handleWishlist(request):
         if Wishlist.objects.filter(user=user,tour=tour).exists():
             Wishlist.objects.get(user=user,tour=tour).delete()
         return JsonResponse({'status':'deleted'})
-    
+
+# method to get savedTour by id:
+@login_required
+@csrf_exempt
+def getSavedTour(request):
+    body=json.loads(request.body.decode('utf-8'))
+    id=body['id']
+    savedTour=SavedTour.objects.filter(id=id,user=request.user).values()[0]
+    tourRoute=literal_eval(savedTour['tourRoute'])
+    print(tourRoute[0])
+    return JsonResponse({"status":"success"},safe=False)
+
 # Error page:
 def error_404(request,exception):
     return render(request,'base/errorPages/404.html')

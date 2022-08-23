@@ -35,6 +35,7 @@ urlpatterns = [
     path('api/v1/tour/addToWishlist/',views.handleWishlist,name='handleWishlist'),
     path('api/v1/tour/save/',views.saveTour,name='saveTour'),
     path('api/v1/tour/saved/delete/',views.deleteSavedTour,name='deleteSavedTour'),
+    path('api/v1/tour/getSavedTour/',views.getSavedTour,name='getSavedTour'),
     path('tour/details/<int:id>',views.tourDetails,name='tourDetails'),
     path('updatePassword/',views.updatePassword ,name='updatePassword'),
     path('reset_password/',auth_views.PasswordResetView.as_view(template_name='base/passwordReset/password_reset_form.html', form_class=UserPasswordResetForm), name='reset_password'),
