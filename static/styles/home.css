@@ -24,6 +24,13 @@ body {
     margin-bottom: 4rem;
   }*/
 /* Since positioning the image, we need to help out the caption */
+  
+  /* Declare heights because of positioning of img element */
+  .carousel-item {
+    margin-top: 50px;
+    height: 95vh;
+    min-height: 300px;
+  }
 
 /* Declare heights because of positioning of img element */
 .carousel-item {
