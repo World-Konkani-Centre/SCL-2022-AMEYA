@@ -16,7 +16,7 @@
     <div class="carousel-inner">
       <div class="carousel-item active" data-bs-interval="5000">
         {% include 'base/alertMessages/messages.html' %}
-        <img src="{% static 'images/home/tour-1.jpg' %}" class="d-block w-100 h-100" alt="#" />
+        <img src="{% static 'images/home/tour-2.jpg' %}" class="d-block w-100 h-100" alt="#" />
         <div class="carousel-caption">
           <h5 class="text-dark">YATRA <span class="auto-type"></span></h5>
           {% if user.is_authenticated %}
@@ -28,9 +28,9 @@
         </div>
       </div>
       <div class="carousel-item" data-bs-interval="5000">
-        <img src="{% static 'images/home/tour-2.jpg' %}" class="d-block w-100 h-100" alt="...">
+        <img src="{% static 'images/home/tour-1.jpg' %}" class="d-block w-100 h-100" alt="...">
         <div class="carousel-caption">
-          <h5 style="color:#1e1e1e;">BEST <span class="auto-type1"></span></h5>
+          <h5 style="color:#0f3d3e;">BEST <span class="auto-type1"></span></h5>
           {% if user.is_authenticated %}
           <a href="#tourist" class="btn btn-warning mt-3">Learn More</a></span>
           {% else %}
@@ -82,7 +82,7 @@
     <p class="second-text">YATRA MITRA</p>
     <hr class="border">
     <p class="about-text">
-      Whether it is a one day trip or a long vacattion, a solo ride or an adventurous trek we provide you with the best recommendations and help you plan your your trip with all the information that you need to know.
+      Whether it is a one day trip or a long vacattion, a solo ride or an adventurous trek we provide you with the best recommendations and help you plan your trip with all the informations that you need to know.
     </p>
   </div>
 
@@ -189,18 +189,12 @@
 
   <div class="container marketing">
     <!-- START THE FEATURETTES -->
-<<<<<<< HEAD
     <hr class="featurette-divider">
-    <h1 class="text-center" id="Features">Features</h1>
-    <hr class="featurette-divider">
-
-    <div class="row featurette">
-=======
     <hr class="border">
     <h1 class="text-center second-text">Features</h1>
     <hr class="border">
-    <div class="row featurette hover01">
->>>>>>> 427d8836586ebc4207b85b6962dc2fe71f72c8b0
+    <hr class="featurette-divider">
+    <div class="row featurette hover01" id="Register">
       <div class="col-md-7">
         <h2 class="featurette-heading fw-normal lh-1 mt-3">Register your Business <span class="text-muted">Register now to stand at the top of the recommendation searches!</span></h2>
         <p class="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores quaerat, eligendi alias nulla facilis sit temporibus possimus, quis, culpa consequuntur quam neque. Impedit assumenda, eos harum est eum quisquam natus.
