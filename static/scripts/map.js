@@ -252,7 +252,7 @@ function addRouteMarkers() {
     }
     routeMarkers.push(m);
   });
-  fitMarkers(routeMarkers);
+  // fitMarkers(routeMarkers);
 }
 
 // Create Waypoints route:
@@ -338,7 +338,7 @@ function createRecWaypoints(cat, id) {
 }
 
 // Create a new waypoint route for the add to tour button:
-function createAddWaypoints(lat, lng, cat, id) {
+function createAddWaypoints(lat, lng, cat, id, verified) {
   // Check whether the cat and id exist in the in tourRouteData array:
   let exists = tourRouteData.find((e) => e.cat == cat && e.id == id);
   if (exists) {
@@ -350,7 +350,7 @@ function createAddWaypoints(lat, lng, cat, id) {
       curLatLang = [pos.coords.latitude, pos.coords.longitude];
       let latLng = [lat, lng];
       tourCoordinates = [curLatLang, latLng, ...tourCoordinates.slice(1)];
-      tourRouteData.push({ cat: cat, id: id });
+      tourRouteData.push({ cat: cat, id: id, verified });
       addRouteMarkers();
       let latLngArr = tourCoordinates;
       latLngArr = latLngArr.map((l) => L.latLng(...l));
@@ -421,7 +421,7 @@ function updateEditPanel(tourRouteData) {
         "afterbegin",
         `<div class="drop_card"  data-cat="${item.category}" data-id="${
           item.id
-        }">
+        }" data-verified="${e.verified}">
         <div class="drop_data">
             <img src="${item.type ? item.banner : item.image}" alt="${
           item.name
@@ -541,18 +541,6 @@ document.querySelector(".et-save").addEventListener("click", (e) => {
 
 // MAP API:
 
-// Get tour data by id:
-// function getTour(id) {
-//   const url = `${baseURL}/tour/${+id}`;
-//   fetch(url)
-//     .then((res) => res.json())
-//     .then((data) => {
-//       data = JSON.parse(data);
-//       return data;
-//     })
-//     .catch((err) => console.log(err));
-// }
-
 // POST request to get nearby locations:
 function getNearBy(cat) {
   // Category selector:
@@ -590,7 +578,6 @@ function getNearBy(cat) {
 // POST request to get nearby recommendations:
 function getRecommendations(cat) {
   tab = document.querySelector(`#pills-${cat}`);
-  if (recommendations[cat]) return;
   tab.innerHTML = `<div class="card">
   <div class="header">
     <div class="details">
@@ -627,6 +614,7 @@ function getRecommendations(cat) {
   })
     .then((res) => res.json())
     .then((data) => {
+      console.log(data);
       if (recommendations[cat]) recommendations[cat].push(...data);
       else recommendations[cat] = data;
       tab.innerHTML = "";
@@ -663,7 +651,7 @@ function getRecommendations(cat) {
             <button class="rec-btn" onClick="addRecommendationMarker('${cat}','${key}');">View</button>
             <button class="rec-btn" onClick="createAddWaypoints('${d.lat}','${
             d.lng
-          }','${cat}','${d.id}');">Add to tour</button>
+          }','${cat}','${d.id}',${d.type});">Add to tour</button>
           </div>
         </div>
         </div>`
@@ -745,14 +733,20 @@ function getSavedTour(id) {
   })
     .then((res) => res.json())
     .then((data) => {
-      overlay.style.display = "none";
       if (data.status === "success") {
-        console.log(data);
+        // Set a delay of 5secs to allow the map to load:
+        recommendations = Object.assign(recommendations, data.rec);
+        tourRouteData = data.route;
+        setTimeout(() => {
+          addRouteMarkers();
+          updateEditPanel(tourRouteData);
+          overlay.style.display = "none";
+        }, 5000);
       } else {
-        mapAlert("Something went wrong", "danger");
+        overlay.innerHTML = `<h3>Something Went Wrong!</h3>`;
       }
     })
-    .catch((err) => mapAlert(err.message, "danger"));
+    .catch((err) => (overlay.innerHTML = `<h3>Something Went Wrong!</h3>`));
 }
 
 // Edit Tour Panel sortable:
@@ -772,6 +766,7 @@ function reArrangeRoute() {
     let item = {
       cat: card.getAttribute("data-cat"),
       id: card.getAttribute("data-id"),
+      verified: card.getAttribute("data-verified") === "true" ? true : false,
     };
     sortedRouteData.push(item);
   });

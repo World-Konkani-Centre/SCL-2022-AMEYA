@@ -1,15 +1,15 @@
 .container-map {
-  height: calc(100vh - 50px);
-  margin-top: 50px;
+  height: calc(100vh - 60px);
+  margin-top: 60px;
   position: fixed;
 }
 #map {
-  height: calc(100vh - 50px);
+  height: calc(100vh - 60px);
   position: relative;
 }
 #recommendation-panel {
   background-color: #fff;
-  height: calc(100vh - 50px) !important;
+  height: calc(100vh - 60px) !important;
   transition: all 0.5s ease-in-out;
 }
 #recommendation-panel .nav-link {
@@ -142,13 +142,14 @@
 .map-nav .btn {
   width: fit-content;
   font-size: 12px;
-  border-radius: 15px;
+  border-radius: 50% !important;
   background-color: #1e1e1e !important;
   margin: 0 5px;
+  padding: 5px 6px;
   outline: none !important;
 }
 .map-nav .btn-wishlist img {
-  width: 20px;
+  width: 30px;
 }
 /* Recommendations Panel */
 #recommendation-panel .panel-tabs {
@@ -285,7 +286,7 @@
   top: 30vh !important;
 }
 /* Edit tour panel */
-.btn-edit-tour{
+.btn-edit-tour {
   display: none;
 }
 /*===== DRAG and DROP =====*/

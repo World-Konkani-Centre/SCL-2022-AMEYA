@@ -523,8 +523,20 @@ def getSavedTour(request):
     id=body['id']
     savedTour=SavedTour.objects.filter(id=id,user=request.user).values()[0]
     tourRoute=literal_eval(savedTour['tourRoute'])
-    print(tourRoute[0])
-    return JsonResponse({"status":"success"},safe=False)
+    tourRoute=[ x for x in tourRoute if not (x['cat'] == 'destination')]
+    recommendations={}
+    item=None
+    for rec in tourRoute:
+        if rec['verified']:
+            item=RegisteredBusiness.objects.filter(id=rec['id']).values()[0]
+            item['banner']="/media/"+item['banner']
+        else:
+            item=Business.objects.filter(id=rec['id']).values()[0]
+            item['image']="/media/"+item['image']
+        if rec['cat'] not in recommendations:
+            recommendations[rec['cat']]=[]
+        recommendations[rec['cat']].append(item)
+    return JsonResponse({"status":"success","rec":recommendations,"route":tourRoute},safe=False)
 
 # Error page:
 def error_404(request,exception):

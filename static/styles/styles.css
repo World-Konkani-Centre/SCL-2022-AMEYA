@@ -25,7 +25,7 @@ html {
   scroll-behavior: smooth;
 }
 body {
-  background-color: #E2DCC8;
+  background-color: #dfdfdf;
   font-size: 16px;
   line-height: 1.80857;
   font-weight: normal;
@@ -69,7 +69,7 @@ nav {
   background-color: #0f3d3e;
   color: #ffffff;
   z-index: 9999;
-  font-size: 18px;
+  font-size: 16px;
   padding-bottom: 2px;
   padding-top: 2px;
 }
