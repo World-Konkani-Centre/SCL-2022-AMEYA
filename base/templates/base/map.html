@@ -4,6 +4,9 @@
 {% endblock %} {% block content %}
 <div class="container-fluid container-map">
   <div class="row">
+    <div class="overlay">
+      <h3>Loading saved tour...</h3>
+    </div>
     {% include 'base/components/mapContainer.html' %}
     <div class="col-lg-3 col-md-4 col-sm-6" id="recommendation-panel">
       <div class="rec-bar">
@@ -53,10 +56,10 @@
       const editContainer = document.querySelector(".drop_container");
       if (screen.width > 768) {
         editContainer.style.height =
-        window.innerHeight - navHeight - recNavHeight - 70 + "px";
+          window.innerHeight - navHeight - recNavHeight - 70 + "px";
       } else {
         editContainer.style.height =
-        window.innerHeight * 0.7 - navHeight - recNavHeight - 85 + "px";
+          window.innerHeight * 0.7 - navHeight - recNavHeight - 85 + "px";
       }
     }, 500);
   };
@@ -78,6 +81,19 @@
     }
   };
   getCurrLoc();
-  createWaypoints(["{{tour.lat}}", "{{tour.lng}}"], "{{tour.id}}");
+  if ("{{saved}}" == "True") {
+    createWaypoints(
+      "{{tourCoords}}",
+      ["{{tour.lat}}", "{{tour.lng}}"],
+      "{{tourId}}"
+    );
+    getSavedTour("{{id}}");
+  } else {
+    createWaypoints(
+      ["{{tour.lat}}", "{{tour.lng}}"],
+      ["{{tour.lat}}", "{{tour.lng}}"],
+      "{{tour.id}}"
+    );
+  }
 </script>
 {% include 'base/alertMessages/msgTimeOut.html' %} {% endblock %}
