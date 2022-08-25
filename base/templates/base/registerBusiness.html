@@ -113,11 +113,9 @@
               >
                 <option value="restaurant" {% if business.category == 'restaurant' %} selected {% endif %}>Restaurant</option>
                 <option value="hotel" {% if business.category == 'hotel' %} selected {% endif %}>Hotel</option>
-                <!-- <option value="clinic">Clinic</option>
-                <option value="hospital">Hosptial</option>
-                <option value="pharmacy">Pharmacy</option>
-                <option value="repair">Repair Shop</option>
-                <option value="travel">Travel</option> -->
+                <option value="shoping" {% if business.category == 'shoping' %} selected {% endif %}>Shoping</option>
+                <option value="transport" {% if business.category == 'transport' %} selected {% endif %}>Transport</option>
+                <option value="gas" {% if business.category == 'gas' %} selected {% endif %}>Gas</option>
               </select>
             </div>
             <div class="form-group">

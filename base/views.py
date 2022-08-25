@@ -161,9 +161,9 @@ def recommendations(request):
 
 def contact(request):
     if request.method =="POST":
-        contact_name = request.POST['contact-name']
-        contact_email = request.POST['contact-email']
-        contact_message = request.POST['contact-message']
+        contact_name = request.POST['name']
+        contact_email = request.POST['email']
+        contact_message = request.POST['msg']
         # send email
         send_mail(
             'Message from ' + contact_name + ', regarding Yatra Mitra', # subject
@@ -173,7 +173,6 @@ def contact(request):
         )
         messages.add_message(request, messages.INFO, 'Your message has been sent successfully.')
         return redirect('/')
-   
     else:
         context={}
         return render(request,"base/contact.html",context)
@@ -598,7 +597,6 @@ def subscribe(request):
         'form':form
     }
     return render(request,'base/subscribe.html',context)
-
 
 def mail(request):
     emails=Subscribers.objects.all()

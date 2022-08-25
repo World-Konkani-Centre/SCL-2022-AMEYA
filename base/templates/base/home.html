@@ -238,18 +238,21 @@
           <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12">
             <div class="Follow">
               <h3>Contact</h3>
+              <form action="{% url 'contact' %}" method="post">
+                {% csrf_token %}
               <div class="row">
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
-                  <input class="Newsletter" placeholder="Name" type="text" />
+                  <input class="Newsletter" placeholder="Name" type="text" name="name"/>
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
-                  <input class="Newsletter" placeholder="Email" type="text" />
+                  <input class="Newsletter" placeholder="Email" type="text" name="email"/>
                 </div>
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                  <textarea class="textarea" style="width: 100%;" placeholder=" Comment" type="text"></textarea>
+                  <textarea class="textarea" style="width: 100%;" placeholder=" Comment" type="text" name="msg"></textarea>
                 </div>
               </div>
               <button class="btn btn-primary Subscribe">Submit</button>
+            </form>
             </div>
           </div>
         </div>
