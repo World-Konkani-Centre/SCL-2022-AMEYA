@@ -109,19 +109,19 @@
     <div class="container tm-pt-5 tm-pb-4">
         <div class="row text-center">
             <article class="col-sm-12 col-md-4 col-lg-4 col-xl-4 tm-article">                            
-                <i class="fa tm-fa-6x fa-legal tm-color-primary tm-margin-b-20" id="icon"></i>
-                <h3 class="tm-color-primary tm-article-title-1">Level HTML Template by Tooplate website</h3>
-                <p>You are allowed to download, edit and use this template for your business or client websites.</p>
+                <i class="fa tm-fa-6x fa-list-ul tm-color-primary tm-margin-b-20" id="icon"></i>
+                <h3 class="tm-color-primary tm-article-title-1">Best recommendations</h3>
+                <p>Get recommendations base on top ratings, reviews and best time to visit.</p>
             </article>
             <article class="col-sm-12 col-md-4 col-lg-4 col-xl-4 tm-article">                            
-                <i class="fa tm-fa-6x fa-plane tm-color-primary tm-margin-b-20" id="icon"></i>
-                <h3 class="tm-color-primary tm-article-title-1">Original Website Template Producer</h3>
-                <p>You are NOT allowed to re-distribute the downloadable template ZIP file on any website.</p>                          
+                <i class="fa tm-fa-6x fa-map tm-color-primary tm-margin-b-20" id="icon"></i>
+                <h3 class="tm-color-primary tm-article-title-1">Best Routes and Directions</h3>
+                <p>Get best routes with top recommendations and customization options to make your tour simple.</p>                          
             </article>
             <article class="col-sm-12 col-md-4 col-lg-4 col-xl-4 tm-article">                           
-                <i class="fa tm-fa-6x fa-life-saver tm-color-primary tm-margin-b-20" id="icon"></i>
+                <i class="fa tm-fa-6x fa-address-card tm-color-primary tm-margin-b-20" id="icon"></i>
                 <h3 class="tm-color-primary tm-article-title-1">Contact us if you have any question</h3>
-                <p>If you see this template being distributed on any other site, that is an illegal copy.</p>                         
+                <p>Mail us at yatramitra.app@gmail.com</p>                         
             </article>
         </div>        
     </div>
@@ -144,40 +144,19 @@
 
 
       <div class="row">
+        {% for tour in tours %}
         <div class="col-12 col-md-6 col-lg-4" data-aos="fade-down" data-aos-delay="150">
           <div class="card hover01">
-            <img src="{% static 'images/user/nature.jpg'%}" class="img-fluid" alt="..." />
+            <img src="/media/{{tour.image}}" class="card-image" alt="..." />
             <div class="card-body">
-              <h3 class="card-title">Best place</h3>
-              <p class="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci eligendi modi temporibus
-                alias iste. Accusantium?</p>
-              <p class="read-more"><a href="#" class="btn btn-warning mt-3">Read More</a></p>
+              <h3 class="card-title">{{tour.name}}</h3>
+              <p class="lead card-description">{{tour.description}}</p>
+              <p class="read-more"><a href="{% url 'tourDetails' tour.id %}" class="btn btn-warning mt-3">Read More</a></p>
             </div>
           </div>
         </div>
-        <div class="col-12 col-md-6 col-lg-4 data-aos=" fade-down" data-aos-delay="150"">
-          <div class="card hover01">
-          <img src="{% static 'images/user/nature.jpg'%}" class="img-fluid" alt="..." />
-          <div class="card-body">
-            <h3 class="card-title">Best place</h3>
-            <p class="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci eligendi modi temporibus
-              alias iste. Accusantium?</p>
-            <p><a href="#" class="btn btn-warning mt-3">Read More</a></p>
-          </div>
-        </div>
+        {% endfor %}
       </div>
-      <div class="col-12 col-md-6 col-lg-4 data-aos=" fade-down" data-aos-delay="250"">
-                <div class="card hover01">
-        <img src="{% static 'images/user/nature.jpg'%}" class="img-fluid" alt="..." />
-        <div class="card-body">
-          <h3 class="card-title">Best place</h3>
-          <p class="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci eligendi modi temporibus
-            alias iste. Accusantium?</p>
-          <p><a href="#" class="btn btn-warning mt-3">Read More</a></p>
-        </div>
-      </div>
-    </div>
-    </div>
     </div>
   </section>
   <!-- tourist section Ends -->
@@ -194,10 +173,10 @@
     <h1 class="text-center second-text">Features</h1>
     <hr class="border">
     <hr class="featurette-divider">
-    <div class="row featurette hover01" id="Register">
+    <div class="row featurette" id="Register">
       <div class="col-md-7">
         <h2 class="featurette-heading fw-normal lh-1 mt-3">Register your Business <span class="text-muted">Register now to stand at the top of the recommendation searches!</span></h2>
-        <p class="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores quaerat, eligendi alias nulla facilis sit temporibus possimus, quis, culpa consequuntur quam neque. Impedit assumenda, eos harum est eum quisquam natus.
+        <p class="lead">Register your business and get your business listed on our website. You can register multiple businesses across different locations. Get featured on top of the searches. </p>
         </p>
         <button class="btn registerbtn mt-5">
           <a href="{% url 'registerBusiness' %}" class="text">Register Now</a>
@@ -210,11 +189,10 @@
 
     <!-- <hr class="border"> -->
 
-    <div class="row featurette hover01">
+    <div class="row featurette">
       <div class="col-md-7 order-md-2">
-        <h2 class="featurette-heading fw-normal lh-1">Find the best route to travel <span class="text-muted">See for
-            yourself.</span></h2>
-        <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quasi quis in mollitia quaerat, quidem explicabo, iste officiis dolor harum laudantium, quam id? Tempora explicabo incidunt facere repellendus est doloribus pariatur.</p>
+        <h2 class="featurette-heading fw-normal lh-1">Find the best route to travel <span class="text-muted">Best Route</span></h2>
+        <p class="lead">Get best route to travel with directions, you can customize your route and add more stops to your map. Saved your map and access it anytime.</p>
       </div>
       <div class="col-md-5 order-md-1">
         <img src="{% static 'images/home/map-pic.png'%}" class="img-fluid map-pic" alt="...">
@@ -223,11 +201,11 @@
 
     <hr class="border">
 
-    <div class="row featurette hover01">
+    <div class="row featurette">
       <div class="col-md-7">
-        <h2 class="featurette-heading fw-normal lh-1">Recommendation Form<span class="text-muted">Checkmate.</span>
+        <h2 class="featurette-heading fw-normal lh-1">Recommendation Form<span class="text-muted">Get Top Recommendations</span>
         </h2>
-        <p class="lead">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Accusamus, quisquam ullam? Nostrum tenetur, reiciendis repellat magni animi veniam numquam commodi est et officiis minima distinctio ad tempora? Nisi, est incidunt!</p>
+        <p class="lead">Get customized recommendations based on ratings, category and best time to visit. </p>
       </div>
       <div class="col-md-5">
         <img src="{% static 'images/home/tourform.png'%}" class="img-fluid tour-img" alt="...">
@@ -271,7 +249,7 @@
                   <textarea class="textarea" style="width: 100%;" placeholder=" Comment" type="text"></textarea>
                 </div>
               </div>
-              <button class="Subscribe">Submit</button>
+              <button class="btn btn-primary Subscribe">Submit</button>
             </div>
           </div>
         </div>

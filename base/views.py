@@ -26,10 +26,18 @@ import datetime
 # Create your views here.
 
 def home(request):
-    context={'name':"Kishor"}
+    tours=Tour.objects.get_queryset()
+    # Calculate average rating for each tour
+    for tour in tours:
+        tour.calc_avg_rating()
+    # Sort tours by average rating
+    tours=tours.order_by('-rating')[:3]
+    context={"tours":tours}
     return render(request,"base/home.html",context)
 
 def map(request):
+    if not request.user.is_authenticated:
+        return redirect('/login')
     id=request.GET.get('id',1)
     tour=Tour.objects.get(id=id)
     context={'tour':tour}
@@ -124,15 +132,19 @@ def recommendations(request):
         category2=request.POST['place'] 
         start_date=request.POST['startdate']
         end_date=request.POST['enddate']
-        datem1 = datetime.datetime.strptime(start_date, "%Y-%m-%d")
-        datem2 = datetime.datetime.strptime(end_date, "%Y-%m-%d")
-        start_month=datem1.month
-        end_month=datem2.month
         tour_data = tour_data.filter(category=category1,place=category2)
-        if(start_month>end_month):
-            start_month=1
-        for i in range(start_month,end_month+1):
-            tour_data=tour_data.filter(date__icontains=i)
+        if start_date!='' and end_date!='':
+            datem1 = datetime.datetime.strptime(start_date, "%Y-%m-%d")
+            datem2 = datetime.datetime.strptime(end_date, "%Y-%m-%d")
+            start_month=datem1.month
+            end_month=datem2.month
+            filterMonths=[]
+            if(start_month>end_month):
+                filterMonths=list(range(start_month,13))+list(range(1,end_month))
+            else:
+                filterMonths=list(range(start_month,end_month+1))
+            for i in filterMonths:
+                tour_data=tour_data.filter(date__icontains=i)
 
         if not tour_data:
             messages.error(request,"Sorry! We couldn't find recommmendations of your choice!")
