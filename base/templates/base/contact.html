@@ -1,10 +1,100 @@
-{% extends 'main.html' %}
-{% load static %} 
-{% block styles %}
+{% extends 'main.html' %} {% load static %} {% block styles %}
 <!-- Replace {name} with the respective css file -->
 <link rel="stylesheet" href="{% static 'styles/{name}' %}" />
 {% endblock %}
+<div class="container-fluid">
+  <div class="container">
+    <div>
+      <h2 class="text-center mb-5 shadow-sm p-3">Contact Us</h2>
+    </div>
 
-{% block content %} 
+    <div class="row">
+      <div class="col-md-7 shadow rounded p-5">
+        <div class="row">
+          <div class="col mb-3">
+            <label class="form-label">First Name</label>
+            <input type="text" class="form-control" placeholder="First Name" />
+          </div>
+          <div class="col mb-3">
+            <label class="form-label">Last Name</label>
+            <input type="text" class="form-control" placeholder="Last Name" />
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="name@gmail.com"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Subject</label>
+          <input type="text" class="form-control" placeholder="Subject" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Message</label>
+          <textarea
+            name=""
+            class="form-control"
+            placeholder="Write your Message Here"
+            rows="3"
+          ></textarea>
+        </div>
+        <!-- Button trigger modal -->
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-bs-toggle="modal"
+          data-bs-target="#exampleModal"
+        >
+          Submit
+        </button>
+
+        <!-- Modal -->
+        <div
+          class="modal fade"
+          id="exampleModal"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Yatra Mitra</h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">Thank you</div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
+                  Close
+                </button>
+                <button type="button" class="btn btn-primary">Submit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-5">
+        <div class="ml-15">
+          <img src="./envelope.png" alt="image" class="img-fluid" />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% block content %}
 <!-- Add code from body here -->
 {% endblock %}

@@ -159,10 +159,6 @@ def recommendations(request):
     context={'tour_data':tour_data}
     return render(request,"base/recommendations.html",context)
 
-def aboutUs(request):
-    context={}
-    return render(request,"base/aboutUs.html",context)
-
 def contact(request):
     if request.method =="POST":
         contact_name = request.POST['contact-name']
