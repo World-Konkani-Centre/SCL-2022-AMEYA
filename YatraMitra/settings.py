@@ -139,7 +139,7 @@ MEDIA_URL = '/media/'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER= 'yatramitra.app@gmail.com'
-EMAIL_HOST_PASSWORD = 'dxigbxwyzpldoefy'
+EMAIL_HOST_PASSWORD = ''
 EMAIL_USE_TLS = True
 PASSWORD_RESET_TIMEOUT = 900 #  in seconds # 15 min 
 
