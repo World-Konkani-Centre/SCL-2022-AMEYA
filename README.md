@@ -47,6 +47,8 @@ makes your searching and travelling plans both easy and cool.
 
 [Documentaion](https://yatra-mitra.notion.site/yatra-mitra/Yatra-Mitra-2f40e1de5137416b91c96bdcc709125d)
 
+[Demo](https://drive.google.com/file/d/19RSY7km1JNUvTBVV_R4rjkhoBRjhkmuQ/view?usp=sharing)
+
 ### Setup Guide
 
 [Setup Guide](https://drive.google.com/drive/folders/1jzBBdeVNVFwFoedH8BUntDhUQIjzykV9)
