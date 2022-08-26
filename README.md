@@ -1,5 +1,5 @@
 <p align="center"> 
- <img src="https://i.ibb.co/XJcPKYv/FAAB99-2-removebg-preview.png" alt="LOGO" border="0" width=200 height=100/>&nbsp;</a></p>
+ <img src="https://i.ibb.co/XJcPKYv/FAAB99-2-removebg-preview.png" alt="LOGO" border="0" width=200/>&nbsp;</a></p>
 
 <p align="center">
 <a href="https://www.python.org/"><img src="https://forthebadge.com/images/badges/made-with-python.svg" border="0" title="Made with Python" />
@@ -35,11 +35,21 @@ makes your searching and travelling plans both easy and cool.
 <details open="open">
   <summary>Table of Contents</summary>
   <ol>
+    <li><a href="#documentation">Documentation</a></li>
+    <li><a href="#setup-guide">Setup Guide</a></li>
     <li><a href="#installation">Installation</a></li>
     <li><a href="#project-maintainers">Project Maintainers</a></li>
     <li><a href="#license">License</a></li>
   </ol>
 </details>
+
+### Documentation
+
+[Documentaion](https://yatra-mitra.notion.site/yatra-mitra/Yatra-Mitra-2f40e1de5137416b91c96bdcc709125d)
+
+### Setup Guide
+
+[Setup Guide](https://drive.google.com/drive/folders/1jzBBdeVNVFwFoedH8BUntDhUQIjzykV9)
 
 ### Installation
 
