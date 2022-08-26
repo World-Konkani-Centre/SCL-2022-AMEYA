@@ -244,7 +244,7 @@ def teamProfile(request):
 @login_required
 def deleteTourReview(request,id):
     user=request.user
-    tourId=NULL
+    tourId=None
     if TourReviews.objects.filter(id=id,user=user).exists():
         rev=TourReviews.objects.get(id=id,user=user)
         tourId=rev.tour.id
