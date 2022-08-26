@@ -280,7 +280,7 @@ function createWaypoints(latLngArr, destCoords, id) {
       routing = L.Routing.control({
         waypoints: latLngArr,
         lineOptions: {
-          styles: [{ color: "#65b5ff", opacity: 1, weight: 5 }],
+          styles: [{ color: "#3498DB", opacity: 1, weight: 7 }],
         },
         createMarker: function () {
           return null;
@@ -361,7 +361,7 @@ function createAddWaypoints(lat, lng, cat, id, verified) {
       routing = L.Routing.control({
         waypoints: latLngArr,
         lineOptions: {
-          styles: [{ color: "#65b5ff", opacity: 1, weight: 5 }],
+          styles: [{ color: "#3498DB", opacity: 1, weight: 7 }],
         },
         createMarker: function () {
           return null;
@@ -394,7 +394,7 @@ function recalculateRoute() {
   routing = L.Routing.control({
     waypoints: latLngArr,
     lineOptions: {
-      styles: [{ color: "#65b5ff", opacity: 1, weight: 5 }],
+      styles: [{ color: "#3498DB", opacity: 1, weight: 7 }],
     },
     createMarker: function () {
       return null;
